@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:moments/screens/login_screen.dart';
+import 'package:moments/screens/sign_up_screen.dart';
 
 import 'responsive/mobile_screen_layout.dart';
 import 'responsive/responsive_layout_screen.dart';
@@ -34,14 +35,21 @@ class MomentsApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Moments',
-        theme: ThemeData.light()
-            .copyWith(scaffoldBackgroundColor: mobileBackgroundColor),
-        home: LoginScreen(
-        // ResponsiveLayout(
-        //   mobileScreenLayout: MobileScreenLayout(),
-        //   webScreenLayout: WebScreenLayout(),
-        )
+      title: 'Moments',
+      theme: ThemeData.light()
+          .copyWith(scaffoldBackgroundColor: mobileBackgroundColor),
+      home: const SignUpScreen(),
+
+      //LoginScreen()
+
+      // ResponsiveLayout(
+      //   mobileScreenLayout: MobileScreenLayout(),
+      //   webScreenLayout: WebScreenLayout(),
+      initialRoute: '/login_screen',
+      routes: {
+        '/login_screen' : (context) => const LoginScreen(),
+        '/sign_up_screen': (context) => const SignUpScreen(),
+      },
     );
   }
 }
