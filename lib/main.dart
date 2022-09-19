@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:moments/screens/login_screen.dart';
 
 import 'responsive/mobile_screen_layout.dart';
 import 'responsive/responsive_layout_screen.dart';
@@ -34,11 +35,13 @@ class MomentsApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         title: 'Moments',
-        theme: ThemeData.dark()
+        theme: ThemeData.light()
             .copyWith(scaffoldBackgroundColor: mobileBackgroundColor),
-        home: const ResponsiveLayout(
-          mobileScreenLayout: MobileScreenLayout(),
-          webScreenLayout: WebScreenLayout(),
-        ));
+        home: LoginScreen(
+        // ResponsiveLayout(
+        //   mobileScreenLayout: MobileScreenLayout(),
+        //   webScreenLayout: WebScreenLayout(),
+        )
+    );
   }
 }
