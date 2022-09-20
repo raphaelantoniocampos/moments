@@ -1,8 +1,10 @@
+import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:moments/screens/login_screen.dart';
 import 'package:moments/screens/sign_up_screen.dart';
+import 'package:moments/widgets/camera.dart';
 
 import 'responsive/mobile_screen_layout.dart';
 import 'responsive/responsive_layout_screen.dart';
@@ -11,6 +13,9 @@ import 'utils/colors.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // final cameras = await availableCameras();
+  // final listCameras = cameras as List<CameraDescription>;
+  // print('PRINT-PRINT-PRINT\nPRINT-PRINT-PRINT\nPRINT-PRINT-PRINT\n${listCameras[0]}\nPRINT-PRINT-PRINT\nPRINT-PRINT-PRINT\nPRINT-PRINT-PRINT\n');
 
   if (kIsWeb) {
     await Firebase.initializeApp(
@@ -26,11 +31,16 @@ void main() async {
     await Firebase.initializeApp();
   }
 
-  runApp(const MomentsApp());
+  runApp(const MomentsApp(
+      // cameras: cameras,
+      ));
 }
 
 class MomentsApp extends StatelessWidget {
-  const MomentsApp({Key? key}) : super(key: key);
+  // final List<CameraDescription> cameras;
+  const MomentsApp({Key? key,
+    // required this.cameras
+  }) : super(key: key);
 
   // This widget is the root of your application.
   @override
@@ -39,7 +49,11 @@ class MomentsApp extends StatelessWidget {
       title: 'Moments',
       theme: ThemeData.light()
           .copyWith(scaffoldBackgroundColor: mobileBackgroundColor),
-      home: const SignUpScreen(),
+      home:
+
+      // const TakePictureScreen(),
+
+      const SignUpScreen(),
 
       //LoginScreen()
 
@@ -48,7 +62,7 @@ class MomentsApp extends StatelessWidget {
       //   webScreenLayout: WebScreenLayout(),
       initialRoute: '/login_screen',
       routes: {
-        '/login_screen' : (context) => const LoginScreen(),
+        '/login_screen': (context) => const LoginScreen(),
         '/sign_up_screen': (context) => const SignUpScreen(),
       },
     );
