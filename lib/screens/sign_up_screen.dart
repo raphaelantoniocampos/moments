@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:moments/resources/auth_method.dart';
 import 'package:moments/widgets/text_field_input.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -93,10 +94,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
             const SizedBox(
               height: 24,
             ),
-            //button login
+            //button signup
             ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
+              onPressed: () async {
+                String res = await AuthMethods().signUpUser(
+                    username: _usernameController.text,
+                    email: _emailController.text,
+                    password: _passwordController.text);
+                print(res);
               },
               child: Container(
                 width: double.infinity,
