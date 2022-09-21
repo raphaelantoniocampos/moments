@@ -58,15 +58,16 @@ class MomentsApp extends StatelessWidget {
               ColorScheme.fromSwatch().copyWith(secondary: greenColor)),
       home:
 
-          const CameraScreen(),
+      const CameraScreen(startCamera: 1,),
 
-          // const SignUpScreen(),
+      // const LoginScreen(),
 
-          // LoginScreen(),
+      // const SignUpScreen(),
 
       // ResponsiveLayout(
       //   mobileScreenLayout: MobileScreenLayout(),
       //   webScreenLayout: WebScreenLayout(),
+
       routes: {
         '/login_screen': (context) => const LoginScreen(),
         '/sign_up_screen': (context) => const SignUpScreen(),
