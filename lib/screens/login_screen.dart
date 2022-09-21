@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:moments/utils/colors.dart';
 import 'package:moments/widgets/text_field_input.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -38,7 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 //svg image
                 SvgPicture.asset(
                   'assets/moments_logo.svg',
-                  color: Colors.blue,
+                  color: primaryColor,
                   height: 200,
                 ),
                 //text field input email
@@ -69,7 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     alignment: Alignment.center,
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     decoration: const ShapeDecoration(
-                        color: Colors.blue,
+                        color: primaryColor,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.all(
                                 Radius.circular(4)))),
@@ -82,7 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 //   alignment: Alignment.center,
                 //   padding: const EdgeInsets.symmetric(vertical: 10),
                 //   decoration: const ShapeDecoration(
-                //       color: Colors.blue,
+                //       color: primaryColor,
                 //       shape: RoundedRectangleBorder(
                 //           borderRadius: BorderRadius.all(Radius.circular(4)))),
                 // ),

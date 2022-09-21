@@ -17,7 +17,6 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   cameras = await availableCameras();
 
-
   if (kIsWeb) {
     await Firebase.initializeApp(
       options: const FirebaseOptions(
@@ -39,7 +38,8 @@ Future<void> main() async {
 
 class MomentsApp extends StatelessWidget {
   // final List<CameraDescription> cameras;
-  const MomentsApp({Key? key,
+  const MomentsApp({
+    Key? key,
     // required this.cameras
   }) : super(key: key);
 
@@ -48,15 +48,21 @@ class MomentsApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Moments',
-      theme: ThemeData.light()
-          .copyWith(scaffoldBackgroundColor: mobileBackgroundColor),
+      theme: ThemeData.light().copyWith(
+          scaffoldBackgroundColor: mobileBackgroundColor,
+          primaryColor: greenColor,
+          elevatedButtonTheme: ElevatedButtonThemeData(
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(primaryColor))),
+          colorScheme:
+              ColorScheme.fromSwatch().copyWith(secondary: greenColor)),
       home:
 
-      const CameraScreen(),
+          const CameraScreen(),
 
-      // const SignUpScreen(),
+          // const SignUpScreen(),
 
-      //LoginScreen()
+          // LoginScreen(),
 
       // ResponsiveLayout(
       //   mobileScreenLayout: MobileScreenLayout(),

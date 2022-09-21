@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:moments/resources/auth_method.dart';
+import 'package:moments/utils/colors.dart';
 import 'package:moments/widgets/text_field_input.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -43,7 +44,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             //svg image
             SvgPicture.asset(
               'assets/moments_logo.svg',
-              color: Colors.blue,
+              color: primaryColor,
               height: 200,
             ),
             //add photo widget
@@ -58,7 +59,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     bottom: -10,
                     left: 90,
                     child: IconButton(
-                      color: Colors.blue,
+                      color: primaryColor,
                       iconSize: 25,
                       onPressed: () {},
                       icon: const Icon(Icons.add_a_photo),
@@ -108,22 +109,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 alignment: Alignment.center,
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 decoration: const ShapeDecoration(
-                    color: Colors.blue,
+                    color: primaryColor,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(4)))),
                 child: const Text('Sign up'),
               ),
             ),
-            // Container(
-            //   child: const Text('Log in'),
-            //   width: double.infinity,
-            //   alignment: Alignment.center,
-            //   padding: const EdgeInsets.symmetric(vertical: 10),
-            //   decoration: const ShapeDecoration(
-            //       color: Colors.blue,
-            //       shape: RoundedRectangleBorder(
-            //           borderRadius: BorderRadius.all(Radius.circular(4)))),
-            // ),
             const SizedBox(
               height: 12,
             ),
