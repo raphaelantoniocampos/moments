@@ -2,20 +2,21 @@ import 'package:camera/camera.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:moments/screens/camera_screen.dart';
 import 'package:moments/screens/login_screen.dart';
 import 'package:moments/screens/sign_up_screen.dart';
-import 'package:moments/widgets/camera.dart';
 
 import 'responsive/mobile_screen_layout.dart';
 import 'responsive/responsive_layout_screen.dart';
 import 'responsive/web_screen_layout.dart';
 import 'utils/colors.dart';
 
-void main() async {
+List<CameraDescription> cameras = [];
+
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // final cameras = await availableCameras();
-  // final listCameras = cameras as List<CameraDescription>;
-  // print('PRINT-PRINT-PRINT\nPRINT-PRINT-PRINT\nPRINT-PRINT-PRINT\n${listCameras[0]}\nPRINT-PRINT-PRINT\nPRINT-PRINT-PRINT\nPRINT-PRINT-PRINT\n');
+  cameras = await availableCameras();
+
 
   if (kIsWeb) {
     await Firebase.initializeApp(
@@ -51,16 +52,15 @@ class MomentsApp extends StatelessWidget {
           .copyWith(scaffoldBackgroundColor: mobileBackgroundColor),
       home:
 
-      // const TakePictureScreen(),
+      const CameraScreen(),
 
-      const SignUpScreen(),
+      // const SignUpScreen(),
 
       //LoginScreen()
 
       // ResponsiveLayout(
       //   mobileScreenLayout: MobileScreenLayout(),
       //   webScreenLayout: WebScreenLayout(),
-      initialRoute: '/login_screen',
       routes: {
         '/login_screen': (context) => const LoginScreen(),
         '/sign_up_screen': (context) => const SignUpScreen(),
