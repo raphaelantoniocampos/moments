@@ -21,6 +21,9 @@ class _CameraScreenState extends State<CameraScreen>
     with WidgetsBindingObserver {
   CameraController? controller;
   bool _isCameraInitialized = false;
+  double _minZoom = 1.0;
+  double _maxZoom = 1.0;
+  double _currentZoom = 1.0;
 
   final resolutionPresets = ResolutionPreset.values;
   ResolutionPreset currentResolutionPreset = ResolutionPreset.high;
@@ -62,6 +65,10 @@ class _CameraScreenState extends State<CameraScreen>
         _isCameraInitialized = controller!.value.isInitialized;
       });
     }
+
+    //Get zoom levels
+    cameraController.getMaxZoomLevel().then((value) => _maxZoom = value);
+    cameraController.getMinZoomLevel().then((value) => _minZoom = value);
   }
 
   @override
@@ -98,36 +105,98 @@ class _CameraScreenState extends State<CameraScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       body: _isCameraInitialized
-          ? AspectRatio(
-              aspectRatio: 1 / controller!.value.aspectRatio,
-              child: Stack(
-                children: [
-                  controller!.buildPreview(),
-                  DropdownButton(
-                    dropdownColor: blackTransparent,
-                    underline: Container(),
-                    value: currentResolutionPreset,
-                    items: [
-                      for (ResolutionPreset preset in resolutionPresets)
-                        DropdownMenuItem(
-                          value: preset,
-                          child: Text(
-                            preset.toString().split('.')[1].toUpperCase(),
-                            style: const TextStyle(color: Colors.white),
+          ? Center(
+              child: AspectRatio(
+                aspectRatio: 1 / controller!.value.aspectRatio,
+                child: Stack(
+                  children: [
+                    controller!.buildPreview(),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(
+                        16.0,
+                        8.0,
+                        16.0,
+                        8.0,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Align(
+                            alignment: Alignment.topRight,
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 8, left: 8),
+                              child: DropdownButton(
+                                dropdownColor: blackTransparent,
+                                underline: Container(),
+                                value: currentResolutionPreset,
+                                items: [
+                                  for (ResolutionPreset preset
+                                      in resolutionPresets)
+                                    DropdownMenuItem(
+                                      value: preset,
+                                      child: Text(
+                                        preset
+                                            .toString()
+                                            .split('.')[1]
+                                            .toUpperCase(),
+                                        style: const TextStyle(
+                                            color: Colors.white),
+                                      ),
+                                    )
+                                ],
+                                onChanged: (value) {
+                                  setState(() {
+                                    currentResolutionPreset =
+                                        value! as ResolutionPreset;
+                                    _isCameraInitialized = false;
+                                  });
+                                  onNewCameraSelected(controller!.description);
+                                },
+                                hint: const Text('Select item'),
+                              ),
+                            ),
                           ),
-                        )
-                    ],
-                    onChanged: (value) {
-                      setState(() {
-                        currentResolutionPreset = value! as ResolutionPreset;
-                        _isCameraInitialized = false;
-                      });
-                      onNewCameraSelected(controller!.description);
-                    },
-                    hint: const Text('Select item'),
-                  )
-                ],
+                          Padding(
+                            padding: const EdgeInsets.only(right: 8, left: 8),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Slider(
+                                      value: _currentZoom,
+                                      min: _minZoom,
+                                      max: _maxZoom,
+                                      activeColor: Colors.white,
+                                      inactiveColor: Colors.black12,
+                                      onChanged: (value) async {
+                                        setState(() {
+                                          _currentZoom = value;
+                                        });
+                                        await controller!.setZoomLevel(value);
+                                      }),
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                      color: Colors.black12,
+                                      borderRadius:
+                                          BorderRadius.circular(10)),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      '${_currentZoom.toStringAsFixed(1)}x',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
             )
           : Container(),
