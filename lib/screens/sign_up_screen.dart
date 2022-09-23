@@ -61,7 +61,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     child: IconButton(
                       color: primaryColor,
                       iconSize: 25,
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).pushNamed('/camera_screen');
+                      },
                       icon: const Icon(Icons.add_a_photo),
                     )),
               ],

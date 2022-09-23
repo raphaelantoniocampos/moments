@@ -112,7 +112,8 @@ class _CameraScreenState extends State<CameraScreen>
         .getMinExposureOffset()
         .then((value) => _minExposureOffset = value);
 
-    _currentFlashMode = controller!.value.flashMode;
+    // _currentFlashMode = controller!.value.flashMode;
+    _currentFlashMode = FlashMode.off;
   }
 
   Future<void> startVideoRecording() async {
