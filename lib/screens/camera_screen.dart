@@ -5,6 +5,7 @@ import 'package:moments/utils/colors.dart';
 import 'dart:async';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
+import 'package:video_player/video_player.dart';
 
 import '../main.dart';
 
@@ -20,6 +21,10 @@ class CameraScreen extends StatefulWidget {
 class _CameraScreenState extends State<CameraScreen>
     with WidgetsBindingObserver {
   CameraController? controller;
+  VideoPlayerController? videoController;
+
+  File? _imageFile;
+  File? _videoFile;
 
   final resolutionPresets = ResolutionPreset.values;
   ResolutionPreset currentResolutionPreset = ResolutionPreset.max;
@@ -125,6 +130,17 @@ class _CameraScreenState extends State<CameraScreen>
     }
   }
 
+  Future<void> _startVideoPlayer() async {
+    if (_videoFile != null) {
+      videoController = VideoPlayerController.file(_videoFile!);
+      await videoController!.initialize().then((_) {
+        setState(() {});
+      });
+      await videoController!.setLooping(true);
+      await videoController!.play();
+    }
+  }
+
   Future<XFile?> takePicture() async {
     final CameraController? cameraController = controller;
     if (cameraController!.value.isTakingPicture) {
@@ -150,6 +166,7 @@ class _CameraScreenState extends State<CameraScreen>
   @override
   void dispose() {
     controller?.dispose();
+    videoController?.dispose();
     super.dispose();
   }
 
@@ -284,33 +301,66 @@ class _CameraScreenState extends State<CameraScreen>
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const SizedBox(height: 50, width: 50),
+                              // Camera selector
+                              InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    _isCameraInitialized = false;
+                                  });
+                                  onNewCameraSelected(
+                                    cameras[_isRearCameraSelected ? 1 : 0],
+                                  );
+                                  setState(() {
+                                    _isRearCameraSelected =
+                                        !_isRearCameraSelected;
+                                  });
+                                },
+                                child: Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    const Icon(
+                                      Icons.circle,
+                                      color: Colors.black12,
+                                      size: 60,
+                                    ),
+                                    Icon(
+                                      _isRearCameraSelected
+                                          ? Icons.photo_camera_back
+                                          : Icons.camera_front,
+                                      color: Colors.white,
+                                      size: 30,
+                                    ),
+                                  ],
+                                ),
+                              ),
 
                               //TakePicture/Record
                               GestureDetector(
                                 onTap: () async {
                                   XFile? rawImage = await takePicture();
-                                  File imageFile = File(rawImage!.path);
+                                  _imageFile = File(rawImage!.path);
 
                                   int currentUnix =
                                       DateTime.now().millisecondsSinceEpoch;
 
                                   //Post image
                                   print(
-                                      'Post image: $imageFile at $currentUnix');
+                                      'Post image: $_imageFile at $currentUnix');
                                 },
                                 onLongPress: () async {
                                   await startVideoRecording();
                                 },
                                 onLongPressUp: () async {
                                   XFile? rawVideo = await stopVideoRecording();
-                                  File videoFile = File(rawVideo!.path);
+                                  _videoFile = File(rawVideo!.path);
                                   int currentUnix =
                                       DateTime.now().millisecondsSinceEpoch;
 
+                                  _startVideoPlayer();
+
                                   // post video
                                   print(
-                                      'Post video: $videoFile at $currentUnix');
+                                      'Post video: $_videoFile at $currentUnix');
                                 },
                                 child: Stack(
                                   alignment: Alignment.center,
@@ -332,38 +382,35 @@ class _CameraScreenState extends State<CameraScreen>
                                 ),
                               ),
 
-                              // Camera selector
-                              InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    _isCameraInitialized = false;
-                                  });
-                                  onNewCameraSelected(
-                                    cameras[_isRearCameraSelected ? 1 : 0],
-                                  );
-                                  setState(() {
-                                    _isRearCameraSelected =
-                                    !_isRearCameraSelected;
-                                  });
-                                },
-                                child: Stack(
-                                  alignment: Alignment.center,
-                                  children: [
-                                    const Icon(
-                                      Icons.circle,
-                                      color: Colors.black12,
-                                      size: 60,
-                                    ),
-                                    Icon(
-                                      _isRearCameraSelected
-                                          ? Icons.photo_camera_back
-                                          : Icons.camera_front,
-                                      color: Colors.white,
-                                      size: 30,
-                                    ),
-                                  ],
+                              //Preview files
+                              Container(
+                                width: 60,
+                                height: 60,
+                                decoration: BoxDecoration(
+                                  color: Colors.black,
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  border:
+                                      Border.all(color: Colors.white, width: 2),
+                                  image: _imageFile != null
+                                      ? DecorationImage(
+                                          image: FileImage(_imageFile!),
+                                          fit: BoxFit.cover,
+                                        )
+                                      : null,
                                 ),
-                              ),
+                                child: videoController != null &&
+                                        videoController!.value.isInitialized
+                                    ? ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                        child: AspectRatio(
+                                          aspectRatio: videoController!
+                                              .value.aspectRatio,
+                                          child: VideoPlayer(videoController!),
+                                        ),
+                                      )
+                                    : Container(),
+                              )
                             ],
                           ),
                         ],
@@ -373,7 +420,7 @@ class _CameraScreenState extends State<CameraScreen>
                 ),
               ),
 
-              //Zoom
+              //Flashmode selector
               Expanded(
                   child: Container(
                 color: Colors.black,
