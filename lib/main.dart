@@ -56,9 +56,9 @@ class MomentsApp extends StatelessWidget {
                   backgroundColor: MaterialStateProperty.all(primaryColor))),
           colorScheme:
               ColorScheme.fromSwatch().copyWith(secondary: greenColor)),
-      home:
-
-      const CameraScreen(startCamera: 1,),
+      home: CameraScreen(
+        startWithRearCamera: false,
+      ),
 
       // const LoginScreen(),
 
