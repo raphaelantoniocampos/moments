@@ -62,6 +62,13 @@ class AuthMethods {
       if(e.code== 'wrong-password'){
         res = 'Wrong password';
       }
+      if(e.code== 'invalid-email'){
+        res = 'Invalid email';
+      }
+      if(e.code== 'user-not-found'){
+        res = 'User not found';
+      }
+      print(e.code);
     }
     catch (err) {
       res = err.toString();

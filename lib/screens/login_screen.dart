@@ -5,6 +5,10 @@ import 'package:moments/utils/colors.dart';
 import 'package:moments/utils/utils.dart';
 import 'package:moments/widgets/text_field_input.dart';
 
+import '../responsive/mobile_screen_layout.dart';
+import '../responsive/responsive_layout_screen.dart';
+import '../responsive/web_screen_layout.dart';
+
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
@@ -33,6 +37,10 @@ class _LoginScreenState extends State<LoginScreen> {
         email: _emailController.text, password: _passwordController.text);
     if (res == 'Success') {
       showSnackBar(res, context);
+      Navigator.of(context).pushReplacement(MaterialPageRoute(
+          builder: (context) => const ResponsiveLayout(
+              webScreenLayout: WebScreenLayout(),
+              mobileScreenLayout: MobileScreenLayout())));
     } else {
       showSnackBar(res, context);
     }
@@ -133,7 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, '/sign_up_screen');
+                      Navigator.of(context).pushNamed('/sign_up_screen');
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 8),

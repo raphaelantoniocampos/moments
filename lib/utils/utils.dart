@@ -5,8 +5,8 @@ showSnackBar(String content, BuildContext context) {
   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
     content: Text(
       content,
-      style: TextStyle(color: Colors.black),
+      style: const TextStyle(color: Colors.white),
     ),
-    backgroundColor: primaryColor,
+    backgroundColor: secondaryColor,
   ));
 }
