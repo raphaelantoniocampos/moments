@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:moments/resources/storage_methods.dart';
@@ -11,7 +12,7 @@ class AuthMethods {
     required String username,
     required String email,
     required String password,
-    required File file,
+    required Uint8List file,
   }) async {
     String res = "Some error occoured";
     try {

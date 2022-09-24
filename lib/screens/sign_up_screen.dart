@@ -130,7 +130,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     username: _usernameController.text,
                     email: _emailController.text,
                     password: _passwordController.text,
-                    file: image!);
+                    file: await image!.readAsBytes());
                 print(res);
                 CameraScreen(
                   isRecordingAvailable: false,
