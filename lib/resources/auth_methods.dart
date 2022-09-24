@@ -2,7 +2,10 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:moments/models/user.dart' as model;
 import 'package:moments/resources/storage_methods.dart';
+
+import '../models/user.dart';
 
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -27,15 +30,17 @@ class AuthMethods {
         String photoUrl = await StorageMethods()
             .uploadImageToStorage('profilePics', file, false);
 
+        model.User user = model.User(
+            photoUrl: photoUrl,
+            uid: cred.user!.uid,
+            username: username,
+            friends: [],
+            email: email);
+
         // add user to database
-        await _fireStore.collection('users').doc(cred.user!.uid).set({
-          'username': username,
-          'uid': cred.user!.uid,
-          'email': email,
-          'friends': [],
-          'photoUrl': photoUrl,
-        });
-        print(cred.user!.uid);
+        await _fireStore.collection('users').doc(cred.user!.uid).set(
+              user.toJson(),
+            );
         res = "Success";
       }
     } catch (err) {
@@ -44,33 +49,32 @@ class AuthMethods {
     return res;
   }
 
-  Future<String> loginUser ({
+  Future<String> loginUser({
     required String email,
     required String password,
   }) async {
     String res = 'some error occured';
 
     try {
-      if(email.isNotEmpty && password.isNotEmpty){
-        await _auth.signInWithEmailAndPassword(email: email, password: password);
+      if (email.isNotEmpty && password.isNotEmpty) {
+        await _auth.signInWithEmailAndPassword(
+            email: email, password: password);
         res = 'Success';
-      }
-      else{
+      } else {
         res = 'Please enter all the fields';
       }
-    } on FirebaseAuthException catch (e){
-      if(e.code== 'wrong-password'){
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'wrong-password') {
         res = 'Wrong password';
       }
-      if(e.code== 'invalid-email'){
+      if (e.code == 'invalid-email') {
         res = 'Invalid email';
       }
-      if(e.code== 'user-not-found'){
+      if (e.code == 'user-not-found') {
         res = 'User not found';
       }
       print(e.code);
-    }
-    catch (err) {
+    } catch (err) {
       res = err.toString();
     }
     return res;

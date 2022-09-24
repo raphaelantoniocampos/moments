@@ -112,16 +112,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     : const Text('Log in'),
               ),
             ),
-            // Container(
-            //   child: const Text('Log in'),
-            //   width: double.infinity,
-            //   alignment: Alignment.center,
-            //   padding: const EdgeInsets.symmetric(vertical: 10),
-            //   decoration: const ShapeDecoration(
-            //       color: primaryColor,
-            //       shape: RoundedRectangleBorder(
-            //           borderRadius: BorderRadius.all(Radius.circular(4)))),
-            // ),
+
             const SizedBox(
               height: 12,
             ),
@@ -129,6 +120,7 @@ class _LoginScreenState extends State<LoginScreen> {
               flex: 2,
               child: Container(),
             ),
+
             //transitioning to signing up
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -141,7 +133,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.of(context).pushNamed('/sign_up_screen');
+                      Navigator.of(context).pushNamed('/new_profile_picture_screen');
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 8),

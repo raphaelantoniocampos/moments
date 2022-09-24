@@ -11,7 +11,9 @@ import '../responsive/responsive_layout_screen.dart';
 import '../utils/utils.dart';
 
 class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({Key? key}) : super(key: key);
+  final File image;
+
+  const SignUpScreen({Key? key, required this.image}) : super(key: key);
 
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
@@ -22,7 +24,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _bioController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
-  File? image;
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
 
@@ -44,23 +45,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
         username: _usernameController.text,
         email: _emailController.text,
         password: _passwordController.text,
-        file: await image!.readAsBytes());
+        file: await widget.image.readAsBytes());
     setState(() {
       _isLoading = false;
     });
-    if (res != 'sucess') {
+    if (res == 'Success') {
       showSnackBar(res, context);
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => const ResponsiveLayout(
               webScreenLayout: WebScreenLayout(),
               mobileScreenLayout: MobileScreenLayout())));
     }
+    showSnackBar(res, context);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       body: SafeArea(
           child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 32),
@@ -77,45 +78,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
               'assets/moments_logo.svg',
               color: primaryColor,
               height: 200,
-            ),
-
-            // add photo widget
-            Stack(
-              children: [
-                image != null
-                    ? CircleAvatar(
-                        radius: 64,
-                        backgroundImage: FileImage(File(image!.path)))
-                    : const CircleAvatar(
-                        backgroundColor: Colors.white38,
-                        radius: 64,
-                        backgroundImage: NetworkImage(
-                            'https://www.pngall.com/wp-content/uploads/5/Profile-PNG-File.png'),
-                      ),
-                Positioned(
-                    bottom: -10,
-                    left: 90,
-                    child: IconButton(
-                      color: primaryColor,
-                      iconSize: 25,
-                      onPressed: () async {
-                        final getingImage = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => CameraScreen(
-                                      isRecordingAvailable: false,
-                                    )));
-                        print('print image: ${getingImage.toString()}');
-                        setState(() {
-                          image = getingImage;
-                        });
-                      },
-                      icon: const Icon(Icons.add_a_photo),
-                    )),
-              ],
-            ),
-            const SizedBox(
-              height: 24,
             ),
 
             //text field input username

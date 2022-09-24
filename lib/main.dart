@@ -4,6 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:moments/screens/camera_screen.dart';
+import 'package:moments/screens/loading_screen.dart';
 import 'package:moments/screens/login_screen.dart';
 import 'package:moments/screens/new_profile_picture_screen.dart';
 import 'package:moments/screens/sign_up_screen.dart';
@@ -86,9 +87,9 @@ class MomentsApp extends StatelessWidget {
 
       routes: {
     '/login_screen': (context) => const LoginScreen(),
-    '/sign_up_screen': (context) => const SignUpScreen(),
     '/camera_screen': (context) => CameraScreen(),
     '/new_profile_picture_screen': (context) => const NewProfilePicture(),
+    'loading_screen': (context) => const LoadingScreen(),
     },
     );
   }

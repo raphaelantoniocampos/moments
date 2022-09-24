@@ -1,6 +1,6 @@
 
 adaptations:
 - sign_up_screen
-    use camera_screen
+    overflow
 
     
