@@ -16,18 +16,16 @@ class AuthMethods {
   }) async {
     String res = "Some error occoured";
     try {
-      if (username.isNotEmpty &&
-          email.isNotEmpty &&
-          password.isNotEmpty
+      if (username.isNotEmpty && email.isNotEmpty && password.isNotEmpty
           // && file != null
           ) {
-
         // register user
         UserCredential cred = await _auth.createUserWithEmailAndPassword(
             email: email, password: password);
         print('print file - auth method: $file');
 
-        String photoUrl = await StorageMethods().uploadImageToStorage('profilePics', file, false);
+        String photoUrl = await StorageMethods()
+            .uploadImageToStorage('profilePics', file, false);
 
         // add user to database
         await _fireStore.collection('users').doc(cred.user!.uid).set({
@@ -35,12 +33,37 @@ class AuthMethods {
           'uid': cred.user!.uid,
           'email': email,
           'friends': [],
-          'photoUrl' : photoUrl,
+          'photoUrl': photoUrl,
         });
         print(cred.user!.uid);
         res = "Success";
       }
     } catch (err) {
+      res = err.toString();
+    }
+    return res;
+  }
+
+  Future<String> loginUser ({
+    required String email,
+    required String password,
+  }) async {
+    String res = 'some error occured';
+
+    try {
+      if(email.isNotEmpty && password.isNotEmpty){
+        await _auth.signInWithEmailAndPassword(email: email, password: password);
+        res = 'Success';
+      }
+      else{
+        res = 'Please enter all the fields';
+      }
+    } on FirebaseAuthException catch (e){
+      if(e.code== 'wrong-password'){
+        res = 'Wrong password';
+      }
+    }
+    catch (err) {
       res = err.toString();
     }
     return res;

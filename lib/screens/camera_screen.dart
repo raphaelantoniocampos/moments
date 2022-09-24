@@ -431,7 +431,7 @@ class _CameraScreenState extends State<CameraScreen>
                                         Icon(
                                           Icons.circle,
                                           color: _isRecordingInProgress
-                                              ? greenColor
+                                              ? primaryColor
                                               : Colors.white38,
                                           size: 65,
                                         ),
@@ -497,7 +497,7 @@ class _CameraScreenState extends State<CameraScreen>
                             child: Icon(
                               Icons.flash_off,
                               color: _currentFlashMode == FlashMode.off
-                                  ? greenColor
+                                  ? primaryColor
                                   : Colors.white,
                             ),
                           ),
@@ -511,7 +511,7 @@ class _CameraScreenState extends State<CameraScreen>
                             child: Icon(
                               Icons.flash_auto,
                               color: _currentFlashMode == FlashMode.auto
-                                  ? greenColor
+                                  ? primaryColor
                                   : Colors.white,
                             ),
                           ),
@@ -525,7 +525,7 @@ class _CameraScreenState extends State<CameraScreen>
                             child: Icon(
                               Icons.flash_on,
                               color: _currentFlashMode == FlashMode.always
-                                  ? greenColor
+                                  ? primaryColor
                                   : Colors.white,
                             ),
                           ),
@@ -539,7 +539,7 @@ class _CameraScreenState extends State<CameraScreen>
                             child: Icon(
                               Icons.highlight,
                               color: _currentFlashMode == FlashMode.torch
-                                  ? greenColor
+                                  ? primaryColor
                                   : Colors.white,
                             ),
                           ),
