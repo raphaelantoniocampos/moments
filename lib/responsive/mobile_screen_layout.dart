@@ -32,8 +32,8 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Text('This is mobile\nThis is your username: $username'),
+      body: const Center(
+        child: Text('This is mobile'),
       ),
       floatingActionButton: FloatingActionButton(onPressed: () {
         Navigator.of(context).pushNamed('/login_screen');

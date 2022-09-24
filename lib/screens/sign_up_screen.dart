@@ -3,7 +3,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:moments/resources/auth_methods.dart';
 import 'package:moments/responsive/mobile_screen_layout.dart';
 import 'package:moments/responsive/web_screen_layout.dart';
-import 'package:moments/screens/camera_screen.dart';
 import 'package:moments/utils/colors.dart';
 import 'dart:io';
 

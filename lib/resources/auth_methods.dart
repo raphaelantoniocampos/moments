@@ -1,16 +1,23 @@
-import 'dart:io';
 import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:moments/models/user.dart' as model;
 import 'package:moments/resources/storage_methods.dart';
 
-import '../models/user.dart';
-
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
 
+  Future<model.User> getUserDetails() async {
+    User currentUser = _auth.currentUser!;
+
+    DocumentSnapshot snap = (await _fireStore.collection('users').doc(currentUser.uid).get());
+
+    return model.User.fromSnap(snap);
+  }
+
+
+  //sign up user
   Future<String> signUpUser({
     required String username,
     required String email,
@@ -49,6 +56,8 @@ class AuthMethods {
     return res;
   }
 
+
+  //login user
   Future<String> loginUser({
     required String email,
     required String password,

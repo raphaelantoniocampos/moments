@@ -3,4 +3,8 @@ adaptations:
 - sign_up_screen
     overflow
 
+-database
+    usernames unique value
+
+-web version photos not work
     
