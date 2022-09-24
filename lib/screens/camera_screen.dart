@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,13 +7,17 @@ import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:video_player/video_player.dart';
 import 'package:permission_handler/permission_handler.dart';
-
 import '../main.dart';
 
 class CameraScreen extends StatefulWidget {
   bool startWithRearCamera;
+  bool isRecordingAvailable;
 
-  CameraScreen({Key? key, this.startWithRearCamera = false}) : super(key: key);
+  CameraScreen(
+      {Key? key,
+      this.startWithRearCamera = false,
+      this.isRecordingAvailable = true})
+      : super(key: key);
 
   @override
   State<CameraScreen> createState() => _CameraScreenState();
@@ -26,8 +28,8 @@ class _CameraScreenState extends State<CameraScreen>
   CameraController? controller;
   VideoPlayerController? videoController;
 
-  File? _imageFile;
-  File? _videoFile;
+  File? imageFile;
+  File? videoFile;
 
   final resolutionPresets = ResolutionPreset.values;
   ResolutionPreset currentResolutionPreset = ResolutionPreset.max;
@@ -150,8 +152,8 @@ class _CameraScreenState extends State<CameraScreen>
   }
 
   Future<void> _startVideoPlayer() async {
-    if (_videoFile != null) {
-      videoController = VideoPlayerController.file(_videoFile!);
+    if (videoFile != null) {
+      videoController = VideoPlayerController.file(videoFile!);
       await videoController!.initialize().then((_) {
         setState(() {});
       });
@@ -172,6 +174,23 @@ class _CameraScreenState extends State<CameraScreen>
       print('Error occured while taking picture: $err');
       return null;
     }
+  }
+
+  Future<void> saveImage(BuildContext context, VoidCallback onSuccess) async {
+    XFile? rawImage = await takePicture();
+    imageFile = File(rawImage!.path);
+    int currentUnix = DateTime.now().millisecondsSinceEpoch;
+    onSuccess.call();
+  }
+
+  Future<void> saveVideo(BuildContext context, VoidCallback onSuccess) async {
+    if (widget.isRecordingAvailable) {
+      XFile? rawVideo = await stopVideoRecording();
+      videoFile = File(rawVideo!.path);
+      int currentUnix = DateTime.now().millisecondsSinceEpoch;
+      _startVideoPlayer();
+    }
+    onSuccess.call();
   }
 
   void onViewFinderTap(TapDownDetails details, BoxConstraints constraints) {
@@ -383,32 +402,22 @@ class _CameraScreenState extends State<CameraScreen>
 
                                   //TakePicture/Record
                                   GestureDetector(
-                                    onTap: () async {
-                                      XFile? rawImage = await takePicture();
-                                      _imageFile = File(rawImage!.path);
-
-                                      int currentUnix =
-                                          DateTime.now().millisecondsSinceEpoch;
-
-                                      //Post image
-                                      print(
-                                          'Post image: $_imageFile at $currentUnix');
+                                    onTap: () {
+                                      saveImage(context, () {
+                                        // if(mounted) return;
+                                        Navigator.pop(context, imageFile);
+                                      });
                                     },
                                     onLongPress: () async {
-                                      await startVideoRecording();
+                                      if (widget.isRecordingAvailable) {
+                                        await startVideoRecording();
+                                      }
                                     },
-                                    onLongPressUp: () async {
-                                      XFile? rawVideo =
-                                          await stopVideoRecording();
-                                      _videoFile = File(rawVideo!.path);
-                                      int currentUnix =
-                                          DateTime.now().millisecondsSinceEpoch;
-
-                                      _startVideoPlayer();
-
-                                      // post video
-                                      print(
-                                          'Post video: $_videoFile at $currentUnix');
+                                    onLongPressUp: () {
+                                      saveVideo(context, () {
+                                        // if(mounted) return;
+                                        Navigator.pop(context, videoFile);
+                                      });
                                     },
                                     child: Stack(
                                       alignment: Alignment.center,
@@ -439,9 +448,9 @@ class _CameraScreenState extends State<CameraScreen>
                                       borderRadius: BorderRadius.circular(10.0),
                                       border: Border.all(
                                           color: Colors.white, width: 2),
-                                      image: _imageFile != null
+                                      image: imageFile != null
                                           ? DecorationImage(
-                                              image: FileImage(_imageFile!),
+                                              image: FileImage(imageFile!),
                                               fit: BoxFit.cover,
                                             )
                                           : null,

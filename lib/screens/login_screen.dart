@@ -95,24 +95,27 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Container(),
                 ),
                 //transitioning to signing up
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: const Text("Don't have an account? "),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(context, '/sign_up_screen');
-                      },
-                      child: Container(
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
                         padding: const EdgeInsets.symmetric(vertical: 8),
-                        child: const Text('Sign up',
-                            style: TextStyle(fontWeight: FontWeight.bold)),
+                        child: const Text("Don't have an account? "),
                       ),
-                    ),
-                  ],
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, '/sign_up_screen');
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          child: const Text('Sign up',
+                              style: TextStyle(fontWeight: FontWeight.bold)),
+                        ),
+                      ),
+                    ],
+                  ),
                 )
               ],
             ),

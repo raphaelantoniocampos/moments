@@ -1,8 +1,14 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:moments/resources/auth_method.dart';
+import 'package:moments/screens/camera_screen.dart';
 import 'package:moments/utils/colors.dart';
+import 'package:moments/utils/image_picker.dart';
 import 'package:moments/widgets/text_field_input.dart';
+import 'dart:io';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -16,6 +22,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _bioController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
+  File? image;
 
   @override
   void dispose() {
@@ -47,22 +54,37 @@ class _SignUpScreenState extends State<SignUpScreen> {
               color: primaryColor,
               height: 200,
             ),
-            //add photo widget
+
+            // add photo widget
             Stack(
               children: [
-                const CircleAvatar(
-                  radius: 64,
-                  backgroundImage: NetworkImage(
-                      'https://images.unsplash.com/photo-1663550910420-97605cfa81ee?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80'),
-                ),
+                image != null
+                    ? CircleAvatar(
+                        radius: 64,
+                        backgroundImage: FileImage(File(image!.path)))
+                    : const CircleAvatar(
+                        backgroundColor: Colors.white38,
+                        radius: 64,
+                        backgroundImage: NetworkImage(
+                            'https://www.pngall.com/wp-content/uploads/5/Profile-PNG-File.png'),
+                      ),
                 Positioned(
                     bottom: -10,
                     left: 90,
                     child: IconButton(
                       color: primaryColor,
                       iconSize: 25,
-                      onPressed: () {
-                        Navigator.of(context).pushNamed('/camera_screen');
+                      onPressed: () async {
+                        final getingImage = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => CameraScreen(
+                                      isRecordingAvailable: false,
+                                    )));
+                        print('print image: ${getingImage.toString()}');
+                        setState(() {
+                          image = getingImage;
+                        });
                       },
                       icon: const Icon(Icons.add_a_photo),
                     )),
@@ -71,6 +93,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             const SizedBox(
               height: 24,
             ),
+
             //text field input username
             TextFieldInput(
                 hintText: 'Enter your username',
@@ -79,6 +102,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             const SizedBox(
               height: 24,
             ),
+
             //text field input email
             TextFieldInput(
                 hintText: 'Enter your email',
@@ -87,6 +111,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             const SizedBox(
               height: 24,
             ),
+
             //text field input password
             TextFieldInput(
               hintText: 'Enter your password',
@@ -97,14 +122,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
             const SizedBox(
               height: 24,
             ),
+
             //button signup
             ElevatedButton(
               onPressed: () async {
                 String res = await AuthMethods().signUpUser(
                     username: _usernameController.text,
                     email: _emailController.text,
-                    password: _passwordController.text);
+                    password: _passwordController.text,
+                    file: image!);
                 print(res);
+                CameraScreen(
+                  isRecordingAvailable: false,
+                );
               },
               child: Container(
                 width: double.infinity,
