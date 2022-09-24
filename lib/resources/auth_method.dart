@@ -38,7 +38,7 @@ class AuthMethods {
           'photoUrl' : photoUrl,
         });
         print(cred.user!.uid);
-        res = "success";
+        res = "Success";
       }
     } catch (err) {
       res = err.toString();
