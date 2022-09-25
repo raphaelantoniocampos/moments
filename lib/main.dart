@@ -3,16 +3,18 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:moments/providers/user_provider.dart';
 import 'package:moments/screens/camera_screen.dart';
 import 'package:moments/screens/loading_screen.dart';
 import 'package:moments/screens/login_screen.dart';
 import 'package:moments/screens/new_profile_picture_screen.dart';
-import 'package:moments/screens/sign_up_screen.dart';
 
 import 'responsive/mobile_screen_layout.dart';
 import 'responsive/responsive_layout_screen.dart';
 import 'responsive/web_screen_layout.dart';
 import 'utils/colors.dart';
+import 'package:provider/provider.dart';
+
 
 List<CameraDescription> cameras = [];
 
@@ -35,8 +37,8 @@ Future<void> main() async {
   }
 
   runApp(const MomentsApp(
-    // cameras: cameras,
-  ));
+      // cameras: cameras,
+      ));
 }
 
 class MomentsApp extends StatelessWidget {
@@ -49,48 +51,59 @@ class MomentsApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Moments',
-      theme: ThemeData.light().copyWith(
-          scaffoldBackgroundColor: mobileBackgroundColor,
-          primaryColor: greenColor,
-          elevatedButtonTheme: ElevatedButtonThemeData(
-              style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(primaryColor))),
-          colorScheme:
-          ColorScheme.fromSwatch().copyWith(secondary: greenColor)),
-      home: StreamBuilder(
-        stream: FirebaseAuth.instance.idTokenChanges(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.active) {
-            if (snapshot.hasData) {
-              return const ResponsiveLayout(
-                  mobileScreenLayout: MobileScreenLayout(),
-                  webScreenLayout: WebScreenLayout());
-            } else if (snapshot.hasError) {
-              return Center(child: Text('${snapshot.error}'),);
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => UserProvider(),
+        ),
+      ],
+      child: MaterialApp(
+        title: 'Moments',
+        theme: ThemeData.light().copyWith(
+            scaffoldBackgroundColor: mobileBackgroundColor,
+            primaryColor: greenColor,
+            elevatedButtonTheme: ElevatedButtonThemeData(
+                style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(primaryColor))),
+            colorScheme:
+                ColorScheme.fromSwatch().copyWith(secondary: greenColor)),
+        home: StreamBuilder(
+          stream: FirebaseAuth.instance.idTokenChanges(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.active) {
+              if (snapshot.hasData) {
+                return const ResponsiveLayout(
+                    mobileScreenLayout: MobileScreenLayout(),
+                    webScreenLayout: WebScreenLayout());
+              } else if (snapshot.hasError) {
+                return Center(
+                  child: Text('${snapshot.error}'),
+                );
+              }
+            } else if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                ),
+              );
             }
-          } else if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(color: Colors.white,),);
-          }
-          return const LoginScreen();
+            return const LoginScreen();
+          },
+        ),
+
+        // const LoginScreen(),
+
+        // CameraScreen(startWithRearCamera: false,),
+
+        // const SignUpScreen(),
+
+        routes: {
+          '/login_screen': (context) => const LoginScreen(),
+          '/camera_screen': (context) => CameraScreen(),
+          '/new_profile_picture_screen': (context) => const NewProfilePicture(),
+          'loading_screen': (context) => const LoadingScreen(),
         },
       ),
-
-      // const LoginScreen(),
-
-      // CameraScreen(startWithRearCamera: false,),
-
-      // const SignUpScreen(),
-
-
-      routes: {
-    '/login_screen': (context) => const LoginScreen(),
-    '/camera_screen': (context) => CameraScreen(),
-    '/new_profile_picture_screen': (context) => const NewProfilePicture(),
-    'loading_screen': (context) => const LoadingScreen(),
-    },
     );
   }
 }
