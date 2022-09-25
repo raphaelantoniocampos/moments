@@ -61,12 +61,12 @@ class MomentsApp extends StatelessWidget {
         title: 'Moments',
         theme: ThemeData.light().copyWith(
             scaffoldBackgroundColor: mobileBackgroundColor,
-            primaryColor: greenColor,
+            primaryColor: primaryColor,
             elevatedButtonTheme: ElevatedButtonThemeData(
                 style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all(primaryColor))),
             colorScheme:
-                ColorScheme.fromSwatch().copyWith(secondary: greenColor)),
+                ColorScheme.fromSwatch().copyWith(secondary: primaryColor)),
         home: StreamBuilder(
           stream: FirebaseAuth.instance.idTokenChanges(),
           builder: (context, snapshot) {

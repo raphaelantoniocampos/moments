@@ -267,101 +267,76 @@ class _CameraScreenState extends State<CameraScreen>
                             8.0,
                           ),
                           child: Column(
+                            verticalDirection: VerticalDirection.up,
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               // Quality selector
-                              Align(
-                                alignment: Alignment.topRight,
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.only(right: 8, left: 8),
-                                  child: DropdownButton(
-                                    dropdownColor: Colors.black12,
-                                    underline: Container(),
-                                    value: currentResolutionPreset,
-                                    items: [
-                                      for (ResolutionPreset preset
-                                          in resolutionPresets)
-                                        DropdownMenuItem(
-                                          value: preset,
-                                          child: Text(
-                                            preset
-                                                .toString()
-                                                .split('.')[1]
-                                                .toUpperCase(),
-                                            style: const TextStyle(
-                                                color: Colors.white),
-                                          ),
-                                        )
-                                    ],
-                                    onChanged: (value) {
-                                      setState(() {
-                                        currentResolutionPreset =
-                                            value! as ResolutionPreset;
-                                        _isCameraInitialized = false;
-                                      });
-                                      onNewCameraSelected(
-                                          controller!.description);
-                                    },
-                                    hint: const Text('Select item'),
-                                  ),
-                                ),
-                              ),
+                              // Align(
+                              //   alignment: Alignment.topRight,
+                              //   child: Padding(
+                              //     padding:
+                              //         const EdgeInsets.only(right: 8, left: 8),
+                              //     child: DropdownButton(
+                              //       dropdownColor: Colors.black12,
+                              //       underline: Container(),
+                              //       value: currentResolutionPreset,
+                              //       items: [
+                              //         for (ResolutionPreset preset
+                              //             in resolutionPresets)
+                              //           DropdownMenuItem(
+                              //             value: preset,
+                              //             child: Text(
+                              //               preset
+                              //                   .toString()
+                              //                   .split('.')[1]
+                              //                   .toUpperCase(),
+                              //               style: const TextStyle(
+                              //                   color: Colors.white),
+                              //             ),
+                              //           )
+                              //       ],
+                              //       onChanged: (value) {
+                              //         setState(() {
+                              //           currentResolutionPreset =
+                              //               value! as ResolutionPreset;
+                              //           _isCameraInitialized = false;
+                              //         });
+                              //         onNewCameraSelected(
+                              //             controller!.description);
+                              //       },
+                              //       hint: const Text('Select item'),
+                              //     ),
+                              //   ),
+                              // ),
 
                               //Exposure text
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: ValueToStringContainer(
-                                    value: _currentExposureOffset),
-                              ),
+                              // Padding(
+                              //   padding: const EdgeInsets.all(8.0),
+                              //   child: ValueToStringContainer(
+                              //       value: _currentExposureOffset),
+                              // ),
 
                               // Exposure slider
-                              Expanded(
-                                  child: RotatedBox(
-                                quarterTurns: 3,
-                                child: Container(
-                                  height: 30,
-                                  child: Slider(
-                                      value: _currentExposureOffset,
-                                      min: _minExposureOffset,
-                                      max: _maxExposureOffset,
-                                      activeColor: Colors.white,
-                                      inactiveColor: Colors.black12,
-                                      onChanged: (value) async {
-                                        setState(() {
-                                          _currentExposureOffset = value;
-                                        });
-                                        await controller!
-                                            .setExposureOffset(value);
-                                      }),
-                                ),
-                              )),
-
-                              //Zoom slider
-                              Padding(
-                                padding:
-                                    const EdgeInsets.only(right: 8, left: 8),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: Slider(
-                                          value: _currentZoom,
-                                          min: _minZoom,
-                                          max: _maxZoom,
-                                          activeColor: Colors.white,
-                                          inactiveColor: Colors.black12,
-                                          onChanged: (value) async {
-                                            setState(() {
-                                              _currentZoom = value;
-                                            });
-                                            await controller!
-                                                .setZoomLevel(value);
-                                          }),
-                                    ),
-                                    ValueToStringContainer(value: _currentZoom)
-                                  ],
-                                ),
-                              ),
+                              // Expanded(
+                              //     child: RotatedBox(
+                              //   quarterTurns: 3,
+                              //   child: Container(
+                              //     height: 30,
+                              //     child: Slider(
+                              //         value: _currentExposureOffset,
+                              //         min: _minExposureOffset,
+                              //         max: _maxExposureOffset,
+                              //         activeColor: Colors.white,
+                              //         inactiveColor: Colors.black12,
+                              //         onChanged: (value) async {
+                              //           setState(() {
+                              //             _currentExposureOffset = value;
+                              //           });
+                              //           await controller!
+                              //               .setExposureOffset(value);
+                              //         }),
+                              //   ),
+                              // )),
 
                               Row(
                                 mainAxisAlignment:
@@ -401,75 +376,114 @@ class _CameraScreenState extends State<CameraScreen>
                                   ),
 
                                   //TakePicture/Record
-                                  GestureDetector(
-                                    onTap: () {
-                                      saveImage(context, () {
-                                        // if(mounted) return;
-                                        Navigator.pop(context, imageFile);
-                                      });
-                                    },
-                                    onLongPress: () async {
-                                      if (widget.isRecordingAvailable) {
-                                        await startVideoRecording();
-                                      }
-                                    },
-                                    onLongPressUp: () {
-                                      saveVideo(context, () {
-                                        // if(mounted) return;
-                                        Navigator.pop(context, videoFile);
-                                      });
-                                    },
-                                    child: Stack(
-                                      alignment: Alignment.center,
-                                      children: [
-                                        const Icon(
-                                          Icons.circle,
-                                          color: Colors.white38,
-                                          // color: Colors.white38,
-                                          size: 80,
+                                  Column(
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          saveImage(context, () {
+                                            // if(mounted) return;
+                                            Navigator.pop(context, imageFile);
+                                          });
+                                        },
+                                        onLongPress: () async {
+                                          if (widget.isRecordingAvailable) {
+                                            await startVideoRecording();
+                                          }
+                                        },
+                                        onLongPressUp: () {
+                                          saveVideo(context, () {
+                                            // if(mounted) return;
+                                            Navigator.pop(context, videoFile);
+                                          });
+                                        },
+                                        child: Stack(
+                                          alignment: Alignment.center,
+                                          children: [
+                                            const Icon(
+                                              Icons.circle,
+                                              color: Colors.white38,
+                                              // color: Colors.white38,
+                                              size: 80,
+                                            ),
+                                            Icon(
+                                              Icons.circle,
+                                              color: _isRecordingInProgress
+                                                  ? primaryColor
+                                                  : Colors.white38,
+                                              size: 65,
+                                            ),
+                                          ],
                                         ),
-                                        Icon(
-                                          Icons.circle,
-                                          color: _isRecordingInProgress
-                                              ? primaryColor
-                                              : Colors.white38,
-                                          size: 65,
-                                        ),
-                                      ],
-                                    ),
+                                      ),
+                                      const Text(
+                                        'Tap for photo, hold for video',
+                                        style: TextStyle(
+                                            color: mobileBackgroundColor),
+                                      )
+                                    ],
                                   ),
 
-                                  //Preview files
                                   Container(
                                     width: 60,
                                     height: 60,
-                                    decoration: BoxDecoration(
-                                      color: Colors.black,
-                                      borderRadius: BorderRadius.circular(10.0),
-                                      border: Border.all(
-                                          color: Colors.white, width: 2),
-                                      image: imageFile != null
-                                          ? DecorationImage(
-                                              image: FileImage(imageFile!),
-                                              fit: BoxFit.cover,
-                                            )
-                                          : null,
-                                    ),
-                                    child: videoController != null &&
-                                            videoController!.value.isInitialized
-                                        ? ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(8.0),
-                                            child: AspectRatio(
-                                              aspectRatio: videoController!
-                                                  .value.aspectRatio,
-                                              child:
-                                                  VideoPlayer(videoController!),
-                                            ),
-                                          )
-                                        : Container(),
                                   )
+                                  //Preview files
+                                  // Container(
+                                  //   width: 60,
+                                  //   height: 60,
+                                  //   decoration: BoxDecoration(
+                                  //     color: Colors.black,
+                                  //     borderRadius: BorderRadius.circular(10.0),
+                                  //     border: Border.all(
+                                  //         color: Colors.white, width: 2),
+                                  //     image: imageFile != null
+                                  //         ? DecorationImage(
+                                  //             image: FileImage(imageFile!),
+                                  //             fit: BoxFit.cover,
+                                  //           )
+                                  //         : null,
+                                  //   ),
+                                  //   child: videoController != null &&
+                                  //           videoController!.value.isInitialized
+                                  //       ? ClipRRect(
+                                  //           borderRadius:
+                                  //               BorderRadius.circular(8.0),
+                                  //           child: AspectRatio(
+                                  //             aspectRatio: videoController!
+                                  //                 .value.aspectRatio,
+                                  //             child:
+                                  //                 VideoPlayer(videoController!),
+                                  //           ),
+                                  //         )
+                                  //       : Container(),
+                                  // ),
                                 ],
+                              ),
+
+                              //Zoom slider
+                              Padding(
+                                padding:
+                                    const EdgeInsets.only(right: 8, left: 8),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Slider(
+                                          value: _currentZoom,
+                                          min: _minZoom,
+                                          max: _maxZoom,
+                                          activeColor: Colors.white,
+                                          inactiveColor: Colors.black12,
+                                          onChanged: (value) async {
+                                            setState(() {
+                                              _currentZoom = value;
+                                            });
+                                            await controller!
+                                                .setZoomLevel(value);
+                                          }),
+                                    ),
+                                    ValueToStringContainer(value: _currentZoom)
+                                  ],
+                                ),
                               ),
                             ],
                           ),

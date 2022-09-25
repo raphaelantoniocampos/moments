@@ -35,7 +35,7 @@ class AuthMethods {
         print('print file - auth method: $file');
 
         String photoUrl = await StorageMethods()
-            .uploadImageToStorage('profilePics', file, false);
+            .uploadImageToStorage('profilePics', file);
 
         model.User user = model.User(
             photoUrl: photoUrl,

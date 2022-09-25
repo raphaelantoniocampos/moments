@@ -4,7 +4,6 @@ class User {
   final String email;
   final String uid;
   final String photoUrl;
-
   final String username;
   final List friends;
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:moments/providers/user_provider.dart';
 
-import '../utils/dimensions.dart';
+import '../utils/global_variables.dart';
 import 'package:provider/provider.dart';
 
 
