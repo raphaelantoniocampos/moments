@@ -15,7 +15,6 @@ import 'responsive/web_screen_layout.dart';
 import 'utils/colors.dart';
 import 'package:provider/provider.dart';
 
-
 List<CameraDescription> cameras = [];
 
 Future<void> main() async {
@@ -42,10 +41,8 @@ Future<void> main() async {
 }
 
 class MomentsApp extends StatelessWidget {
-  // final List<CameraDescription> cameras;
   const MomentsApp({
     Key? key,
-    // required this.cameras
   }) : super(key: key);
 
   // This widget is the root of your application.
@@ -72,13 +69,12 @@ class MomentsApp extends StatelessWidget {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.active) {
               if (snapshot.hasData) {
+                print('print snapshot.data: ${snapshot.data}');
                 return const ResponsiveLayout(
                     mobileScreenLayout: MobileScreenLayout(),
                     webScreenLayout: WebScreenLayout());
               } else if (snapshot.hasError) {
-                return Center(
-                  child: Text('print : ${snapshot.error}'),
-                );
+                return const LoginScreen();
               }
             } else if (snapshot.connectionState == ConnectionState.waiting) {
               return const LoadingScreen();
@@ -86,13 +82,6 @@ class MomentsApp extends StatelessWidget {
             return const LoginScreen();
           },
         ),
-
-        // const LoginScreen(),
-
-        // CameraScreen(startWithRearCamera: false,),
-
-        // const SignUpScreen(),
-
         routes: {
           '/login_screen': (context) => const LoginScreen(),
           '/camera_screen': (context) => CameraScreen(),
