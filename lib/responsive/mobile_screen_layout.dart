@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
@@ -33,7 +32,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
     String profImage,
   ) async {
     try {
-      setState((){
+      setState(() {
         _isLoading = true;
       });
       String res = await FirestoreMethods()
@@ -47,7 +46,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
     } catch (err) {
       showSnackBar(err.toString(), context);
     }
-    setState((){
+    setState(() {
       _isLoading = false;
     });
   }
@@ -80,6 +79,14 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
     return _isLoading
         ? const LoadingScreen()
         : Scaffold(
+            appBar: AppBar(
+              backgroundColor: primaryColor,
+              leading: IconButton(
+                  onPressed: () {
+                    Navigator.of(context).pushReplacementNamed('/login_screen');
+                  },
+                  icon: Icon(Icons.exit_to_app)),
+            ),
             body: PageView(
               controller: pageController,
               onPageChanged: onPageChanged,
@@ -126,7 +133,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
 
                 createPost(user.uid, user.username, user.photoUrl);
               },
-              child: Icon(
+              child: const Icon(
                 Icons.add,
                 size: 30,
               ),

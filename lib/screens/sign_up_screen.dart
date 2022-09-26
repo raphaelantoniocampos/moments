@@ -5,7 +5,9 @@ import 'package:moments/responsive/mobile_screen_layout.dart';
 import 'package:moments/responsive/web_screen_layout.dart';
 import 'package:moments/utils/colors.dart';
 import 'dart:io';
+import 'package:moments/responsive/mobile_screen_layout.dart';
 
+import '../resources/firestore_methods.dart';
 import '../responsive/responsive_layout_screen.dart';
 import '../utils/utils.dart';
 
@@ -40,11 +42,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
     setState(() {
       _isLoading = true;
     });
+
     String res = await AuthMethods().signUpUser(
         username: _usernameController.text,
         email: _emailController.text,
         password: _passwordController.text,
         file: await widget.image.readAsBytes());
+
     setState(() {
       _isLoading = false;
     });

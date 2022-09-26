@@ -77,15 +77,11 @@ class MomentsApp extends StatelessWidget {
                     webScreenLayout: WebScreenLayout());
               } else if (snapshot.hasError) {
                 return Center(
-                  child: Text('${snapshot.error}'),
+                  child: Text('print : ${snapshot.error}'),
                 );
               }
             } else if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(
-                  color: Colors.white,
-                ),
-              );
+              return const LoadingScreen();
             }
             return const LoginScreen();
           },

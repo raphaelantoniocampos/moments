@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:moments/models/user.dart' as model;
 import 'package:moments/resources/storage_methods.dart';
 
+import 'firestore_methods.dart';
+
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
@@ -35,7 +37,8 @@ class AuthMethods {
         print('print file - auth method: $file');
 
         String photoUrl = await StorageMethods()
-            .uploadImageToStorage('profilePics', file);
+            .uploadFileToStorage('profilePics', file);
+
 
         model.User user = model.User(
             photoUrl: photoUrl,
@@ -48,6 +51,11 @@ class AuthMethods {
         await _fireStore.collection('users').doc(cred.user!.uid).set(
               user.toJson(),
             );
+
+        //post first picture
+        await FirestoreMethods()
+            .uploadPost('I created my Moments account', file, user.uid, user.username, user.photoUrl);
+
         res = "Success";
       }
     } catch (err) {
