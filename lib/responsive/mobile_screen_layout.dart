@@ -79,14 +79,6 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
     return _isLoading
         ? const LoadingScreen()
         : Scaffold(
-            appBar: AppBar(
-              backgroundColor: primaryColor,
-              leading: IconButton(
-                  onPressed: () {
-                    Navigator.of(context).pushReplacementNamed('/login_screen');
-                  },
-                  icon: Icon(Icons.exit_to_app)),
-            ),
             body: PageView(
               controller: pageController,
               onPageChanged: onPageChanged,

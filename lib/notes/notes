@@ -1,7 +1,4 @@
-
-adaptations:
-- sign_up_screen
-    overflow
+to do:
 
 -database
     usernames unique value
