@@ -12,15 +12,6 @@ class FeedScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // leading: Container(
-        //   height: 0.5,
-        //   width: 0.5,
-        //   child: CircleAvatar(
-        //     radius: 5,
-        //     backgroundImage: NetworkImage(
-        //         'https://dl.memuplay.com/new_market/img/com.vicman.newprofilepic.icon.2022-06-07-21-33-07.png'),
-        //   ),
-        // ),
         backgroundColor: primaryColor,
         centerTitle: true,
         title: SvgPicture.asset(
