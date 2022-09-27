@@ -1,5 +1,6 @@
 import 'package:intl/intl.dart';
 import 'package:moments/resources/firestore_methods.dart';
+import 'package:moments/screens/comments_screen.dart';
 import 'package:moments/widgets/like_animation.dart';
 import 'package:flutter/material.dart';
 import 'package:moments/utils/colors.dart';
@@ -209,7 +210,9 @@ class _PostCardState extends State<PostCard> {
                       fontStyle: FontStyle.italic),
                 ),
                 InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => CommentsScreen()));
+                  },
                   child: Row(
                     children: [
                       const Icon(
