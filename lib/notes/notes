@@ -1,17 +1,21 @@
 to do:
 
--database
-    usernames unique value
+- web version photos not work
 
--web version photos not work
+- profile picture selection
 
--storage methods
-    post and store videos
+- storage adjusts
+    -format posts and users collection firestore
+    -post storing profImage during post
+    -post and store videos
+    -usernames unique value
 
--profile picture selection
+- click to view image and video
 
--post storing profImage during post
+- camera adjusts
+    -rotate photo
+    -gesture zoom
 
--click to view image and video
+- exibition name and username
 
--exibition name
+- cascate comments

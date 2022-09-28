@@ -216,7 +216,7 @@ class _PostCardState extends State<PostCard> {
                   child: Row(
                     children: [
                       const Icon(
-                        Icons.insert_comment,
+                        Icons.mode_comment_outlined,
                         color: secondaryColor,
                         size: 30,
                       ),
