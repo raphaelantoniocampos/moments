@@ -77,7 +77,8 @@ class _PostCardState extends State<PostCard> {
                                     child: Container(
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 12, horizontal: 16),
-                                      child: const Text('Use as profile picture'),
+                                      child:
+                                          const Text('Use as profile picture'),
                                     ),
                                   ),
                                   InkWell(
@@ -211,7 +212,13 @@ class _PostCardState extends State<PostCard> {
                 ),
                 InkWell(
                   onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => CommentsScreen()));
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => CommentsScreen(
+                          snap: widget.snap['postId'].toString(),
+                        ),
+                      ),
+                    );
                   },
                   child: Row(
                     children: [

@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:moments/resources/firestore_methods.dart';
 import 'package:moments/utils/colors.dart';
+import 'package:moments/utils/utils.dart';
+import 'package:provider/provider.dart';
+import '../models/user.dart';
+import '../providers/user_provider.dart';
+
 
 import '../widgets/comment_card.dart';
 
 class CommentsScreen extends StatefulWidget {
-  const CommentsScreen({Key? key}) : super(key: key);
+  final snap;
+  const CommentsScreen({Key? key, required this.snap}) : super(key: key);
 
   @override
   State<CommentsScreen> createState() => _CommentsScreenState();
@@ -15,10 +22,12 @@ class _CommentsScreenState extends State<CommentsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final User user = Provider.of<UserProvider>(context).getUser;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryColor,
-        title: Text('Comments'),
+        title: const Text('Comments'),
         centerTitle: false,
       ),
       body: CommentCard(),
@@ -32,7 +41,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
             children: [
               CircleAvatar(
                 backgroundImage: NetworkImage(
-                    'https://firebasestorage.googleapis.com/v0/b/moments-a47d4.appspot.com/o/posts%2Fh4vKe4Je6NecCkP1K9ARG9clHVM2%2F4ee20160-3d91-11ed-9c6d-75b9c6f65e65?alt=media&token=4ef24f00-44d2-4f65-aee7-a2ca72bde860'),
+                    user.photoUrl),
                 radius: 18,
               ),
               Expanded(
@@ -40,7 +49,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: TextField(
                     controller: _commentController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: 'Comment',
                       border: InputBorder.none,
                       hintStyle: TextStyle(color: secondaryColor),
@@ -49,7 +58,11 @@ class _CommentsScreenState extends State<CommentsScreen> {
                 ),
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: () async {
+                  String? res = '';
+                  res = await FirestoreMethods().postComment(widget.snap['postId'], _commentController.text, widget.snap['uid']);
+                  showSnackBar(res!, context);
+                },
                 icon: const Icon(
                   Icons.send,
                   color: secondaryColor,

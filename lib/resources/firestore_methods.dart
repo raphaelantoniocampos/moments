@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:moments/resources/storage_methods.dart';
+import 'package:moments/utils/utils.dart';
 import 'package:uuid/uuid.dart';
 
 import '../models/post.dart';
@@ -48,8 +49,7 @@ class FirestoreMethods {
         _firestore.collection('posts').doc(postId).update({
           'likes': FieldValue.arrayRemove([uid]),
         });
-      }
-      else {
+      } else {
         _firestore.collection('posts').doc(postId).update({
           'likes': FieldValue.arrayUnion([uid]),
         });
@@ -57,5 +57,31 @@ class FirestoreMethods {
     } catch (err) {
       print('likePost error: ${err.toString()}');
     }
+  }
+
+  Future<String?> postComment(String postId, String uid, String text) async {
+    String res;
+    try {
+      if (text.isNotEmpty) {
+        String commentId = const Uuid().v1();
+        await _firestore
+            .collection('posts')
+            .doc(postId)
+            .collection('comments')
+            .doc(commentId)
+            .set({
+          'uid': uid,
+          'text': text,
+          'commentId': commentId,
+          'datePublished': DateTime.now(),
+        });
+        res = 'Success';
+      } else {
+        res = 'Text is empty';
+      }
+    } catch (err) {
+      res = err.toString();
+    }
+    return res;
   }
 }
