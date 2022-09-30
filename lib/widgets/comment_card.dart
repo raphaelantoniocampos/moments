@@ -1,7 +1,10 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:moments/resources/auth_methods.dart';
+import 'package:moments/resources/firestore_methods.dart';
+import 'package:moments/utils/colors.dart';
 
 import '../models/user.dart' as model;
 
@@ -15,15 +18,22 @@ class CommentCard extends StatefulWidget {
 }
 
 class _CommentCardState extends State<CommentCard> {
+  // late final DocumentSnapshot userSnap;
 
-  // void getUser() async {
-  //   DocumentSnapshot snap = (await FirebaseFirestore.instance
+  // @override
+  // void initState() {
+  //   userSnap = getUser() as DocumentSnapshot<Object?>;
+  //   super.initState();
+  // }
+
+  // Future<DocumentSnapshot<Object?>> getUser() async {
+  //   return await FirebaseFirestore.instance
   //       .collection('users')
   //       .doc(widget.snap['uid'])
-  //       .get());
+  //       .get();
   //
-  //   user = model.User.fromSnap(snap);
-  //   print(snap);
+  //   // final user = model.User.fromSnap(snap);
+  //   // print('print user snap ${snap.data()}');
   // }
 
   @override
@@ -39,7 +49,8 @@ class _CommentCardState extends State<CommentCard> {
                 children: [
                   //Profile pic
                   CircleAvatar(
-                    backgroundImage: NetworkImage(''),
+                    backgroundImage: NetworkImage(
+                        'https://firebasestorage.googleapis.com/v0/b/moments-a47d4.appspot.com/o/posts%2Fh4vKe4Je6NecCkP1K9ARG9clHVM2%2F815e4400-40cf-11ed-8b2c-3d3ecfb6ff6b?alt=media&token=37238dd1-0ab3-4b1c-a5d8-30a1e296e552'),
                   ),
 
                   //Username
@@ -61,30 +72,35 @@ class _CommentCardState extends State<CommentCard> {
               ),
             ],
           ),
-          Container(
-            // color: Colors.pink,
-            height: 40,
-            alignment: Alignment.centerLeft,
-            child: Text(widget.snap['text']),
-          ),
           Row(
             children: [
-              InkWell(
-                onTap: () {},
-                child: const Icon(
-                  Icons.favorite_border,
-                  size: 15,
+              Container(
+                width: 330,
+                height: 40,
+                alignment: Alignment.centerLeft,
+                child: Text(widget.snap['text']),
+              ),
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    FirestoreMethods().likeComment(
+                        widget.snap['postId'],
+                        widget.snap['uid'],
+                        widget.snap['commentId'],
+                        widget.snap['likes']);
+                  },
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.favorite_border,
+                        size: 20,
+                        color: widget.snap['likes'].contains(widget.snap['uid']) ? Colors.pinkAccent : secondaryColor,
+                      ),
+                      Text(' ${widget.snap['likes'].length}'),
+                    ],
+                  ),
                 ),
               ),
-              Text(' 15'),
-              const SizedBox(
-                width: 15,
-              ),
-              const Icon(
-                Icons.mode_comment_outlined,
-                size: 15,
-              ),
-              Text(' 20'),
             ],
           ),
         ],

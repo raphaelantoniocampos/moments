@@ -70,9 +70,11 @@ class FirestoreMethods {
             .collection('comments')
             .doc(commentId)
             .set({
+          'postId' : postId,
           'uid': uid,
           'text': text,
           'commentId': commentId,
+          'likes' : [],
           'datePublished': DateTime.now(),
         });
         res = 'Posted';
@@ -83,5 +85,21 @@ class FirestoreMethods {
       res = err.toString();
     }
     return res;
+  }
+
+  Future<void> likeComment(String postId, String uid, String commentId, List likes) async {
+    try {
+      if (likes.contains(uid)) {
+        _firestore.collection('posts').doc(postId).collection('comments').doc(commentId).update({
+          'likes': FieldValue.arrayRemove([uid]),
+        });
+      } else {
+        _firestore.collection('posts').doc(postId).collection('comments').doc(commentId).update({
+          'likes': FieldValue.arrayUnion([uid]),
+        });
+      }
+    } catch (err) {
+      print('likePost error: ${err.toString()}');
+    }
   }
 }
