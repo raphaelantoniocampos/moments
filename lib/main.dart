@@ -35,9 +35,9 @@ Future<void> main() async {
     await Firebase.initializeApp();
   }
 
-  runApp(const MomentsApp(
-      // cameras: cameras,
-      ));
+  runApp(
+    const MomentsApp(),
+  );
 }
 
 class MomentsApp extends StatelessWidget {
@@ -69,7 +69,6 @@ class MomentsApp extends StatelessWidget {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.active) {
               if (snapshot.hasData) {
-                print('print snapshot.data: ${snapshot.data}');
                 return const ResponsiveLayout(
                     mobileScreenLayout: MobileScreenLayout(),
                     webScreenLayout: WebScreenLayout());

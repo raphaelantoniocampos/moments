@@ -75,8 +75,8 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
 
   @override
   Widget build(BuildContext context) {
-    final model.User user = Provider.of<UserProvider>(context).getUser;
-    return _isLoading
+    final model.User? user = Provider.of<UserProvider>(context).getUser;
+    return user == null || _isLoading
         ? const LoadingScreen()
         : Scaffold(
             body: PageView(

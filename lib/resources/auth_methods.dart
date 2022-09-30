@@ -18,7 +18,6 @@ class AuthMethods {
     return model.User.fromSnap(snap);
   }
 
-
   //sign up user
   Future<String> signUpUser({
     required String username,
@@ -97,3 +96,5 @@ class AuthMethods {
     return res;
   }
 }
+
+

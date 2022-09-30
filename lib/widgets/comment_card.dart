@@ -1,13 +1,31 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:moments/resources/auth_methods.dart';
+
+import '../models/user.dart' as model;
 
 class CommentCard extends StatefulWidget {
-  const CommentCard({Key? key}) : super(key: key);
+  final snap;
+
+  const CommentCard({Key? key, required this.snap}) : super(key: key);
 
   @override
   State<CommentCard> createState() => _CommentCardState();
 }
 
 class _CommentCardState extends State<CommentCard> {
+
+  // void getUser() async {
+  //   DocumentSnapshot snap = (await FirebaseFirestore.instance
+  //       .collection('users')
+  //       .doc(widget.snap['uid'])
+  //       .get());
+  //
+  //   user = model.User.fromSnap(snap);
+  //   print(snap);
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -19,11 +37,9 @@ class _CommentCardState extends State<CommentCard> {
             children: [
               Row(
                 children: [
-
                   //Profile pic
                   CircleAvatar(
-                    backgroundImage: NetworkImage(
-                        'https://firebasestorage.googleapis.com/v0/b/moments-a47d4.appspot.com/o/posts%2Fh4vKe4Je6NecCkP1K9ARG9clHVM2%2F16605d30-3e60-11ed-879a-5599bceda250?alt=media&token=d9039393-db3e-4c57-8230-be14e942438f'),
+                    backgroundImage: NetworkImage(''),
                   ),
 
                   //Username
@@ -31,7 +47,7 @@ class _CommentCardState extends State<CommentCard> {
                     padding: const EdgeInsets.only(left: 8),
                     child: Text(
                       'username',
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
                 ],
@@ -39,31 +55,32 @@ class _CommentCardState extends State<CommentCard> {
               //Datetime
               Padding(
                 padding: const EdgeInsets.only(right: 8.0),
-                child: Text('22/09/2022 - 13:54'),
+                child: Text(DateFormat.yMd()
+                    .add_Hm()
+                    .format(widget.snap['datePublished'].toDate())),
               ),
             ],
           ),
           Container(
             // color: Colors.pink,
-            height: 50,
+            height: 40,
             alignment: Alignment.centerLeft,
-            child: Text(
-                'photo comment até 100 caracteres tbm pra nao perder a vibe pode ser? ainda nao deu 100, opa ta quase'),
+            child: Text(widget.snap['text']),
           ),
           Row(
             children: [
               InkWell(
                 onTap: () {},
-                child: Icon(
+                child: const Icon(
                   Icons.favorite_border,
                   size: 15,
                 ),
               ),
               Text(' 15'),
-              SizedBox(
+              const SizedBox(
                 width: 15,
               ),
-              Icon(
+              const Icon(
                 Icons.mode_comment_outlined,
                 size: 15,
               ),
