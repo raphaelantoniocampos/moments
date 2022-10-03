@@ -10,10 +10,10 @@ class LoadingScreen extends StatelessWidget {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        color: primaryColor,
+        color: Colors.transparent,
         child: const Center(
           child: CircularProgressIndicator(
-            color: Colors.white,
+            color: primaryColor,
           ),
         ),
       ),

@@ -45,6 +45,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                   .collection('posts')
                   .doc(widget.snap['postId'])
                   .collection('comments')
+                  .orderBy('datePublished')
                   .snapshots(),
               builder: (context,
                   AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
@@ -87,8 +88,8 @@ class _CommentsScreenState extends State<CommentsScreen> {
                     IconButton(
                       onPressed: () async {
                         String res = await FirestoreMethods().postComment(
-                            widget.snap['postId'],
                             user.uid,
+                            widget.snap['postId'],
                             _commentController.text);
                         showSnackBar(res, context);
                         setState(() {

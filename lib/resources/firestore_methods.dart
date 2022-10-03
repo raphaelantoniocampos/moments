@@ -6,6 +6,7 @@ import 'package:moments/utils/utils.dart';
 import 'package:uuid/uuid.dart';
 
 import '../models/post.dart';
+import '../models/user.dart';
 
 class FirestoreMethods {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -59,7 +60,7 @@ class FirestoreMethods {
     }
   }
 
-  Future<String> postComment(String postId, String uid, String text) async {
+  Future<String> postComment(String uid, String postId, String text) async {
     String res = '';
     try {
       if (text.isNotEmpty) {
@@ -70,8 +71,9 @@ class FirestoreMethods {
             .collection('comments')
             .doc(commentId)
             .set({
+          // 'user' : user,
+          'uid' : uid,
           'postId' : postId,
-          'uid': uid,
           'text': text,
           'commentId': commentId,
           'likes' : [],

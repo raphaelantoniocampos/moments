@@ -5,6 +5,8 @@ import 'package:moments/screens/loading_screen.dart';
 import 'package:moments/utils/colors.dart';
 import 'package:moments/widgets/post_card.dart';
 
+import 'login_screen.dart';
+
 class FeedScreen extends StatelessWidget {
   const FeedScreen({Key? key}) : super(key: key);
 
@@ -12,6 +14,12 @@ class FeedScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+            onPressed: () {
+              Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(builder: (context) => const LoginScreen()));
+            },
+            icon: const Icon(Icons.close)),
         backgroundColor: primaryColor,
         centerTitle: true,
         title: SvgPicture.asset(
@@ -21,7 +29,7 @@ class FeedScreen extends StatelessWidget {
         ),
       ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('posts').snapshots(),
+        stream: FirebaseFirestore.instance.collection('posts').orderBy('datePublished', descending: true).snapshots(),
         builder: (context,
             AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -30,8 +38,8 @@ class FeedScreen extends StatelessWidget {
           return ListView.builder(
               itemCount: snapshot.data!.docs.length,
               itemBuilder: (context, index) => PostCard(
-                snap: snapshot.data!.docs[index].data(),
-              ));
+                    snap: snapshot.data!.docs[index].data(),
+                  ));
         },
       ),
     );

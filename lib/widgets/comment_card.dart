@@ -1,12 +1,13 @@
-import 'dart:math';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:moments/resources/firestore_methods.dart';
 import 'package:moments/utils/colors.dart';
+import 'package:provider/provider.dart';
 
-import '../models/user.dart' as model;
+import '../models/user.dart';
+import '../providers/user_provider.dart';
+import '../screens/loading_screen.dart';
 
 class CommentCard extends StatefulWidget {
   final snap;
@@ -18,92 +19,129 @@ class CommentCard extends StatefulWidget {
 }
 
 class _CommentCardState extends State<CommentCard> {
-  // late final DocumentSnapshot userSnap;
+  Future<DocumentSnapshot> getUser() async {
+    DocumentSnapshot snap = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(widget.snap['uid'])
+        .get();
 
-  // @override
-  // void initState() {
-  //   userSnap = getUser() as DocumentSnapshot<Object?>;
-  //   super.initState();
-  // }
-
-  // Future<DocumentSnapshot<Object?>> getUser() async {
-  //   return await FirebaseFirestore.instance
-  //       .collection('users')
-  //       .doc(widget.snap['uid'])
-  //       .get();
-  //
-  //   // final user = model.User.fromSnap(snap);
-  //   // print('print user snap ${snap.data()}');
-  // }
+    return snap;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  //Profile pic
-                  CircleAvatar(
-                    backgroundImage: NetworkImage(
-                        'https://firebasestorage.googleapis.com/v0/b/moments-a47d4.appspot.com/o/posts%2Fh4vKe4Je6NecCkP1K9ARG9clHVM2%2F815e4400-40cf-11ed-8b2c-3d3ecfb6ff6b?alt=media&token=37238dd1-0ab3-4b1c-a5d8-30a1e296e552'),
-                  ),
-
-                  //Username
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8),
-                    child: Text(
-                      'username',
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                ],
-              ),
-              //Datetime
-              Padding(
-                padding: const EdgeInsets.only(right: 8.0),
-                child: Text(DateFormat.yMd()
-                    .add_Hm()
-                    .format(widget.snap['datePublished'].toDate())),
-              ),
-            ],
-          ),
-          Row(
-            children: [
-              Container(
-                width: 330,
-                height: 40,
-                alignment: Alignment.centerLeft,
-                child: Text(widget.snap['text']),
-              ),
-              Expanded(
-                child: GestureDetector(
-                  onTap: () {
-                    FirestoreMethods().likeComment(
-                        widget.snap['postId'],
-                        widget.snap['uid'],
-                        widget.snap['commentId'],
-                        widget.snap['likes']);
-                  },
-                  child: Row(
+    final User? user = Provider.of<UserProvider>(context).getUser;
+    return user == null
+        ? const LoadingScreen()
+        : FutureBuilder<DocumentSnapshot>(
+            future: getUser(),
+            builder: (BuildContext context,
+                AsyncSnapshot<DocumentSnapshot> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const LoadingCard();
+              }
+              if (snapshot.hasData && !snapshot.data!.exists) {
+                return const LoadingCard();
+              }
+              if (snapshot.connectionState == ConnectionState.done) {
+                Map<String, dynamic> snap =
+                    snapshot.data!.data() as Map<String, dynamic>;
+                return Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  child: Column(
                     children: [
-                      Icon(
-                        Icons.favorite_border,
-                        size: 20,
-                        color: widget.snap['likes'].contains(widget.snap['uid']) ? Colors.pinkAccent : secondaryColor,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              //Profile pic
+                              CircleAvatar(
+                                backgroundImage:
+
+                                    // NetworkImage(userSnap['photoUrl']),
+
+                                    NetworkImage(snap['photoUrl']),
+                              ),
+
+                              //Username
+                              Padding(
+                                padding: const EdgeInsets.only(left: 8),
+                                child: Text(
+                                  snap['username'],
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          //Datetime
+                          Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: Text(DateFormat.yMd()
+                                .add_Hm()
+                                .format(widget.snap['datePublished'].toDate())),
+                          ),
+                        ],
                       ),
-                      Text(' ${widget.snap['likes'].length}'),
+                      Row(
+                        children: [
+                          Container(
+                            width: 330,
+                            height: 40,
+                            alignment: Alignment.centerLeft,
+                            child: Text(widget.snap['text']),
+                          ),
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                FirestoreMethods().likeComment(
+                                    widget.snap['postId'],
+                                    user.uid,
+                                    widget.snap['commentId'],
+                                    widget.snap['likes']);
+                              },
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.favorite_border,
+                                    size: 20,
+                                    color: widget.snap['likes']
+                                            .contains(user.uid)
+                                        ? Colors.pinkAccent
+                                        : secondaryColor,
+                                  ),
+                                  Text(' ${widget.snap['likes'].length}'),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
-                ),
-              ),
-            ],
-          ),
-        ],
+                );
+              }
+              return const LoadingCard();
+            });
+  }
+}
+
+class LoadingCard extends StatelessWidget {
+  const LoadingCard({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+      const SizedBox(
+      height: 90,
+      width: 300,
+      child: Center(
+        child: CircularProgressIndicator(
+          color: primaryColor,
+        ),
       ),
     );
   }
