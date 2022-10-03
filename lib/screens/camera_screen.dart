@@ -342,37 +342,9 @@ class _CameraScreenState extends State<CameraScreen>
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  // Camera selector
-                                  InkWell(
-                                    onTap: () {
-                                      setState(() {
-                                        _isCameraInitialized = false;
-                                      });
-                                      onNewCameraSelected(
-                                        cameras[_isRearCameraSelected ? 1 : 0],
-                                      );
-                                      setState(() {
-                                        _isRearCameraSelected =
-                                            !_isRearCameraSelected;
-                                      });
-                                    },
-                                    child: Stack(
-                                      alignment: Alignment.center,
-                                      children: [
-                                        const Icon(
-                                          Icons.circle,
-                                          color: Colors.black12,
-                                          size: 60,
-                                        ),
-                                        Icon(
-                                          _isRearCameraSelected
-                                              ? Icons.photo_camera_back
-                                              : Icons.camera_front,
-                                          color: Colors.white,
-                                          size: 30,
-                                        ),
-                                      ],
-                                    ),
+                                  const SizedBox(
+                                    width: 60,
+                                    height: 60,
                                   ),
 
                                   //TakePicture/Record
@@ -423,10 +395,39 @@ class _CameraScreenState extends State<CameraScreen>
                                     ],
                                   ),
 
-                                  Container(
-                                    width: 60,
-                                    height: 60,
-                                  )
+                                  // Camera selector
+                                  InkWell(
+                                    onTap: () {
+                                      setState(() {
+                                        _isCameraInitialized = false;
+                                      });
+                                      onNewCameraSelected(
+                                        cameras[_isRearCameraSelected ? 1 : 0],
+                                      );
+                                      setState(() {
+                                        _isRearCameraSelected =
+                                            !_isRearCameraSelected;
+                                      });
+                                    },
+                                    child: Stack(
+                                      alignment: Alignment.center,
+                                      children: [
+                                        const Icon(
+                                          Icons.circle,
+                                          color: Colors.black12,
+                                          size: 60,
+                                        ),
+                                        Icon(
+                                          _isRearCameraSelected
+                                              ? Icons.photo_camera_back
+                                              : Icons.camera_front,
+                                          color: Colors.white,
+                                          size: 30,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+
                                   //Preview files
                                   // Container(
                                   //   width: 60,

@@ -104,4 +104,15 @@ class FirestoreMethods {
       print('likePost error: ${err.toString()}');
     }
   }
+
+  Future<String> deletePost(String postId) async {
+    String res = '';
+    try {
+      await _firestore.collection('posts').doc(postId).delete();
+      res = 'Post deleted';
+    } catch (err) {
+      res = err.toString();
+    }
+    return res;
+  }
 }

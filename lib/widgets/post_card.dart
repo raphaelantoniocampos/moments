@@ -9,6 +9,7 @@ import 'package:moments/utils/colors.dart';
 import 'package:provider/provider.dart';
 import '../models/user.dart';
 import '../providers/user_provider.dart';
+import '../screens/delete_post_screen.dart';
 
 class PostCard extends StatefulWidget {
   final snap;
@@ -53,7 +54,6 @@ class _PostCardState extends State<PostCard> {
             builder: (BuildContext context,
                 AsyncSnapshot<Future<QuerySnapshot<Map<String, dynamic>>>>
                     snapshot) {
-
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const LoadingScreen();
               }
@@ -126,7 +126,15 @@ class _PostCardState extends State<PostCard> {
                                               ),
                                             ),
                                             InkWell(
-                                              onTap: () {},
+                                              onTap: () async {
+                                                Navigator.of(context).push(
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            DeletePostScreen()));
+                                                // FirestoreMethods().deletePost(
+                                                //     widget.snap['postId']);
+                                                // Navigator.of(context).pop();
+                                              },
                                               child: Container(
                                                 padding:
                                                     const EdgeInsets.symmetric(
