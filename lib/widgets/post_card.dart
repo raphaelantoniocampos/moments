@@ -127,13 +127,16 @@ class _PostCardState extends State<PostCard> {
                                             ),
                                             InkWell(
                                               onTap: () async {
-                                                Navigator.of(context).push(
-                                                    MaterialPageRoute(
-                                                        builder: (context) =>
-                                                            DeletePostScreen()));
-                                                // FirestoreMethods().deletePost(
-                                                //     widget.snap['postId']);
-                                                // Navigator.of(context).pop();
+                                                await Navigator.of(context).push(
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        DeletePostScreen(
+                                                      postId:
+                                                          widget.snap['postId'],
+                                                    ),
+                                                  ),
+                                                );
+                                                Navigator.of(context).pop();
                                               },
                                               child: Container(
                                                 padding:

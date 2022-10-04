@@ -1,28 +1,85 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+
+import '../resources/firestore_methods.dart';
+import '../utils/colors.dart';
 
 class DeletePostScreen extends StatefulWidget {
-  const DeletePostScreen({Key? key}) : super(key: key);
+  final String postId;
+  const DeletePostScreen({Key? key, required this.postId}) : super(key: key);
 
   @override
   State<DeletePostScreen> createState() => _DeletePostScreenState();
 }
 
 class _DeletePostScreenState extends State<DeletePostScreen> {
-  double value = 1;
+  double maxTime = 2;
+  double currentTime = 0;
 
   void waitToDelete() {
-    Timer.periodic(const Duration(milliseconds: 1), (Timer timer) {
+    Timer.periodic(const Duration(milliseconds: 100), (Timer timer) {
       setState(() {
-        if (value <= 0) {
+        if (currentTime >= maxTime) {
           timer.cancel();
-          Navigator.of(context).pop();
+          confirmDelete();
+          // Navigator.of(context).pop();
         } else {
-          value = value - 0.0001;
+          currentTime += 0.1;
         }
       });
     });
+  }
+
+  void confirmDelete() {
+    showDialog(
+        context: context,
+        builder: (context) => Dialog(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Text(
+                      'Confirm delete',
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(backgroundColor: primaryColor),
+                          onPressed: () {
+                            FirestoreMethods().deletePost(
+                                widget.postId);
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text(
+                            'Delete',
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(backgroundColor: secondaryColor),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text(
+                            'Cancel',
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ));
   }
 
   @override
@@ -36,10 +93,26 @@ class _DeletePostScreenState extends State<DeletePostScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        child: Center(
-          child: CircularProgressIndicator(
-            value: value,
-          ),
+        width: double.infinity,
+        color: Colors.transparent,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              height: 250,
+              child: Center(
+                child: CircularProgressIndicator(
+                  color: primaryColor,
+                  value: currentTime / maxTime,
+                ),
+              ),
+            ),
+            Text(
+              NumberFormat('###.##', "en_US").format(currentTime),
+              style: const TextStyle(fontSize: 20),
+            ),
+          ],
         ),
       ),
     );
