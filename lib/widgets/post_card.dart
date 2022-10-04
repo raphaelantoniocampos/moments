@@ -127,7 +127,7 @@ class _PostCardState extends State<PostCard> {
                                             ),
                                             InkWell(
                                               onTap: () async {
-                                                await Navigator.of(context).push(
+                                                Navigator.of(context).push(
                                                   MaterialPageRoute(
                                                     builder: (context) =>
                                                         DeletePostScreen(
@@ -135,8 +135,8 @@ class _PostCardState extends State<PostCard> {
                                                           widget.snap['postId'],
                                                     ),
                                                   ),
-                                                );
-                                                Navigator.of(context).pop();
+                                                ).then((value) => Navigator.of(context).pop());
+
                                               },
                                               child: Container(
                                                 padding:

@@ -3,9 +3,15 @@ import 'package:moments/screens/feed_screen.dart';
 
 const webScreenSize = 600;
 
-const HomeScreenItems = [
+const homeScreenItems = [
   FeedScreen(),
-  Center(child: Text('Search')),
-  Center(child: Text('Notifications')),
-  Center(child: Text('Profile')),
+  Center(
+    child: Text('Notifications'),
+  ),
+  Center(
+    child: Text('Profile'),
+  ),
+  // Center(
+  //   child: Text('Search'),
+  // ),
 ];

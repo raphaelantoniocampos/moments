@@ -55,6 +55,7 @@ class MomentsApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Moments',
         theme: ThemeData.light().copyWith(
             scaffoldBackgroundColor: mobileBackgroundColor,

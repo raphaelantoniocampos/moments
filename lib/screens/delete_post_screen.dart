@@ -8,6 +8,7 @@ import '../utils/colors.dart';
 
 class DeletePostScreen extends StatefulWidget {
   final String postId;
+
   const DeletePostScreen({Key? key, required this.postId}) : super(key: key);
 
   @override
@@ -52,11 +53,13 @@ class _DeletePostScreenState extends State<DeletePostScreen> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(backgroundColor: primaryColor),
-                          onPressed: () {
-                            FirestoreMethods().deletePost(
-                                widget.postId);
-                            Navigator.of(context).pop();
+                          style:
+                              ElevatedButton.styleFrom(primary: primaryColor),
+                          onPressed: () async {
+                            await FirestoreMethods().deletePost(widget.postId);
+                            Navigator.of(context)
+                              ..pop()
+                              ..pop();
                           },
                           child: const Text(
                             'Delete',
@@ -66,9 +69,12 @@ class _DeletePostScreenState extends State<DeletePostScreen> {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(backgroundColor: secondaryColor),
+                          style:
+                              ElevatedButton.styleFrom(primary: secondaryColor),
                           onPressed: () {
-                            Navigator.of(context).pop();
+                            Navigator.of(context)
+                              ..pop()
+                              ..pop();
                           },
                           child: const Text(
                             'Cancel',
@@ -99,7 +105,7 @@ class _DeletePostScreenState extends State<DeletePostScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
+            SizedBox(
               height: 250,
               child: Center(
                 child: CircularProgressIndicator(
