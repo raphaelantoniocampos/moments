@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:moments/providers/user_provider.dart';
@@ -27,7 +28,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   final searchTextController = TextEditingController();
   bool _showingSearchField = false;
   Uint8List? _file;
-  int _page = 0;
+  int _page = 1;
   late PageController pageController;
   bool _isLoading = false;
 
@@ -56,7 +57,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
     });
   }
 
-  void NavigationTapped(int page) {
+  void changePageTo(int page) {
     pageController.jumpToPage(page);
   }
 
@@ -69,7 +70,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   @override
   void initState() {
     super.initState();
-    pageController = PageController();
+    pageController = PageController(initialPage: 1);
   }
 
   @override
@@ -105,12 +106,12 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
               title: _showingSearchField
                   ? TextFormField(
                       onChanged: (text) {
-                        print(text);
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => const SearchScreen(),
-                          ),
-                        );
+                        if (_page != 0) {
+                          changePageTo(0);
+                          onPageChanged(0);
+                        } else {
+                          print(text);
+                        }
                       },
                       textAlign: TextAlign.center,
                       textAlignVertical: TextAlignVertical.bottom,
@@ -172,7 +173,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
                 BottomNavigationBarItem(
                     icon: Icon(
                       Icons.home,
-                      color: _page == 0 ? primaryColor : secondaryColor,
+                      color: _page == 1 ? primaryColor : secondaryColor,
                     ),
                     label: '',
                     backgroundColor: primaryColor),
@@ -186,19 +187,19 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
                 BottomNavigationBarItem(
                     icon: Icon(
                       Icons.notifications,
-                      color: _page == 1 ? primaryColor : secondaryColor,
+                      color: _page == 2 ? primaryColor : secondaryColor,
                     ),
                     label: '',
                     backgroundColor: primaryColor),
                 BottomNavigationBarItem(
                     icon: Icon(
                       Icons.person,
-                      color: _page == 2 ? primaryColor : secondaryColor,
+                      color: _page == 3 ? primaryColor : secondaryColor,
                     ),
                     label: '',
                     backgroundColor: primaryColor),
               ],
-              onTap: NavigationTapped,
+              onTap: changePageTo,
             ),
             floatingActionButton: FloatingActionButton(
               onPressed: () async {
