@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:moments/screens/feed_screen.dart';
+import 'package:moments/screens/search_screen.dart';
 
 const webScreenSize = 600;
 
-const homeScreenItems = [
+String? searchText;
+
+List<Widget> homeScreenItems = [
   Center(
-    child: Text('Search'),
+    child: SearchScreen(searchText: searchText),
   ),
   FeedScreen(),
   Center(

@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 
 import '../models/user.dart' as model;
 import '../screens/camera_screen.dart';
+import '../screens/feed_screen.dart';
 import '../screens/login_screen.dart';
 import '../utils/global_variables.dart';
 import '../utils/utils.dart';
@@ -25,18 +26,16 @@ class MobileScreenLayout extends StatefulWidget {
 }
 
 class _MobileScreenLayoutState extends State<MobileScreenLayout> {
-  final searchTextController = TextEditingController();
+  final searchController = TextEditingController();
   bool _showingSearchField = false;
   Uint8List? _file;
   int _page = 1;
   late PageController pageController;
   bool _isLoading = false;
 
-  void createPost(
-    String uid,
-    String username,
-    String profImage,
-  ) async {
+  void createPost(String uid,
+      String username,
+      String profImage,) async {
     try {
       setState(() {
         _isLoading = true;
@@ -77,143 +76,149 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   void dispose() {
     super.dispose();
     pageController.dispose();
-    searchTextController.dispose();
+    searchController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final model.User? user = Provider.of<UserProvider>(context).getUser;
+    final model.User? user = Provider
+        .of<UserProvider>(context)
+        .getUser;
     return user == null || _isLoading
         ? const LoadingScreen()
         : Scaffold(
-            appBar: AppBar(
-              backgroundColor: primaryColor,
-              centerTitle: true,
-              leading: IconButton(
-                onPressed: () {
-                  if (_showingSearchField) {
-                    setState(() {
-                      _showingSearchField = false;
-                    });
-                  } else {
-                    setState(() {
-                      _showingSearchField = true;
-                    });
-                  }
-                },
-                icon: const Icon(Icons.search),
-              ),
-              title: _showingSearchField
-                  ? TextFormField(
-                      onChanged: (text) {
-                        if (_page != 0) {
-                          changePageTo(0);
-                          onPageChanged(0);
-                        } else {
-                          print(text);
-                        }
-                      },
-                      textAlign: TextAlign.center,
-                      textAlignVertical: TextAlignVertical.bottom,
-                      controller: searchTextController,
-                      textInputAction: TextInputAction.search,
-                      style: const TextStyle(color: Colors.white),
-                      decoration: const InputDecoration(
-                        hintText: 'Search for username',
-                        hintStyle: TextStyle(color: Colors.white),
-                      ),
-                    )
-                  : SvgPicture.asset(
-                      'assets/moments_logo.svg',
-                      color: Colors.white,
-                      height: 50,
-                    ),
-              actions: [
-                IconButton(
-                    onPressed: () {
-                      showDialog(
-                        barrierColor: blackTransparent,
-                        context: context,
-                        builder: (context) => Dialog(
-                          child: ListView(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 16,
-                            ),
-                            shrinkWrap: true,
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  Navigator.of(context).pushReplacement(
-                                    MaterialPageRoute(
-                                      builder: (context) => const LoginScreen(),
-                                    ),
-                                  );
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 12, horizontal: 16),
-                                  child: const Text('Log out'),
-                                ),
-                              ),
-                            ],
+      appBar: AppBar(
+        backgroundColor: primaryColor,
+        centerTitle: true,
+        leading: IconButton(
+          onPressed: () {
+            if (_showingSearchField) {
+              setState(() {
+                _showingSearchField = false;
+              });
+            } else {
+              setState(() {
+                _showingSearchField = true;
+              });
+            }
+          },
+          icon: const Icon(Icons.search),
+        ),
+        title: _showingSearchField
+            ? TextFormField(
+          onChanged: (text) {
+            if (_page != 0) {
+              changePageTo(0);
+              onPageChanged(0);
+            } else {
+            }
+            searchText = text;
+          },
+          textAlign: TextAlign.center,
+          textAlignVertical: TextAlignVertical.bottom,
+          controller: searchController,
+          textInputAction: TextInputAction.search,
+          style: const TextStyle(color: Colors.white),
+          decoration: const InputDecoration(
+            hintText: 'Search for username',
+            hintStyle: TextStyle(color: Colors.white),
+          ),
+        )
+            : SvgPicture.asset(
+          'assets/moments_logo.svg',
+          color: Colors.white,
+          height: 50,
+        ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                showDialog(
+                  barrierColor: blackTransparent,
+                  context: context,
+                  builder: (context) =>
+                      Dialog(
+                        child: ListView(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 16,
                           ),
+                          shrinkWrap: true,
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                    builder: (context) => const LoginScreen(),
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 12, horizontal: 16),
+                                child: const Text('Log out'),
+                              ),
+                            ),
+                          ],
                         ),
-                      );
-                    },
-                    icon: const Icon(Icons.settings))
-              ],
-            ),
-            body: PageView(
-              controller: pageController,
-              onPageChanged: onPageChanged,
-              children: homeScreenItems,
-            ),
-            bottomNavigationBar: CupertinoTabBar(
-              items: [
-                BottomNavigationBarItem(
-                    icon: Icon(
-                      Icons.home,
-                      color: _page == 1 ? primaryColor : secondaryColor,
-                    ),
-                    label: '',
-                    backgroundColor: primaryColor),
-                // BottomNavigationBarItem(
-                //     icon: Icon(
-                //       Icons.search,
-                //       color: _page == 1 ? primaryColor : secondaryColor,
-                //     ),
-                //     label: '',
-                //     backgroundColor: primaryColor),
-                BottomNavigationBarItem(
-                    icon: Icon(
-                      Icons.notifications,
-                      color: _page == 2 ? primaryColor : secondaryColor,
-                    ),
-                    label: '',
-                    backgroundColor: primaryColor),
-                BottomNavigationBarItem(
-                    icon: Icon(
-                      Icons.person,
-                      color: _page == 3 ? primaryColor : secondaryColor,
-                    ),
-                    label: '',
-                    backgroundColor: primaryColor),
-              ],
-              onTap: changePageTo,
-            ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () async {
-                final gettingFile = await Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => CameraScreen()));
-                _file = await gettingFile.readAsBytes();
-
-                createPost(user.uid, user.username, user.photoUrl);
+                      ),
+                );
               },
-              child: const Icon(
-                Icons.add,
-                size: 30,
+              icon: const Icon(Icons.settings))
+        ],
+      ),
+      body: PageView(
+        controller: pageController,
+        onPageChanged: onPageChanged,
+        children: homeScreenItems,
+      ),
+      bottomNavigationBar: CupertinoTabBar(
+        items: [
+          BottomNavigationBarItem(
+              icon: Icon(
+                Icons.home,
+                color: _page == 1 ? primaryColor : secondaryColor,
               ),
-            ),
-          );
+              label: '',
+              backgroundColor: primaryColor),
+          // BottomNavigationBarItem(
+          //     icon: Icon(
+          //       Icons.search,
+          //       color: _page == 1 ? primaryColor : secondaryColor,
+          //     ),
+          //     label: '',
+          //     backgroundColor: primaryColor),
+          BottomNavigationBarItem(
+              icon: Icon(
+                Icons.notifications,
+                color: _page == 2 ? primaryColor : secondaryColor,
+              ),
+              label: '',
+              backgroundColor: primaryColor),
+          BottomNavigationBarItem(
+              icon: Icon(
+                Icons.person,
+                color: _page == 3 ? primaryColor : secondaryColor,
+              ),
+              label: '',
+              backgroundColor: primaryColor),
+        ],
+        onTap: changePageTo,
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          final gettingFile = await Navigator.push(context,
+              MaterialPageRoute(builder: (context) => CameraScreen()));
+          _file = await gettingFile.readAsBytes();
+
+          createPost(user.uid, user.username, user.photoUrl);
+        },
+        child: const Icon(
+          Icons.add,
+          size: 30,
+        ),
+      ),
+    );
   }
 }
+
+
+
