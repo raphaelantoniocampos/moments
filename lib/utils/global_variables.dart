@@ -4,11 +4,9 @@ import 'package:moments/screens/search_screen.dart';
 
 const webScreenSize = 600;
 
-String? searchText;
-
 List<Widget> homeScreenItems = [
   Center(
-    child: SearchScreen(searchText: searchText),
+    child: SearchScreen(),
   ),
   FeedScreen(),
   Center(

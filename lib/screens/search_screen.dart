@@ -1,35 +1,165 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+
+import '../utils/colors.dart';
+import 'loading_screen.dart';
+import 'login_screen.dart';
 
 class SearchScreen extends StatefulWidget {
-  final String? searchText;
-
-  const SearchScreen({Key? key, required this.searchText}) : super(key: key);
+  const SearchScreen({Key? key}) : super(key: key);
 
   @override
   State<SearchScreen> createState() => _SearchScreenState();
 }
 
 class _SearchScreenState extends State<SearchScreen> {
+  final TextEditingController searchController = TextEditingController();
+  bool showUsers = false;
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: FirebaseFirestore.instance
-            .collection('users')
-            .where('username', isGreaterThanOrEqualTo: widget.searchText)
-            .get(),
-        builder: (context, snapshot) {
-          if (!snapshot.hasData) {
-            return Container();
-          }
-          return ListView.builder(
-              itemCount: (snapshot.data! as dynamic).docs.length,
-              itemBuilder: (context, index) {
-                print('print searchtext: ${widget.searchText}');
-                return ListTile(
-                  leading: CircleAvatar(backgroundImage: NetworkImage('url'),)
-                );
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: primaryColor,
+        centerTitle: true,
+        leading: const Icon(Icons.search),
+        title: TextFormField(
+          onChanged: (text) {
+            if(text.length < 3){
+              setState(() {
+                showUsers = false;
               });
-        });
+            } else {
+              setState(() {
+                showUsers = true;
+              });
+            }
+          },
+          textAlign: TextAlign.center,
+          textAlignVertical: TextAlignVertical.bottom,
+          controller: searchController,
+          textInputAction: TextInputAction.search,
+          style: const TextStyle(color: Colors.white),
+          decoration: const InputDecoration(
+            hintText: 'Search for username',
+            hintStyle: TextStyle(color: Colors.white),
+          ),
+        ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                showDialog(
+                  barrierColor: blackTransparent,
+                  context: context,
+                  builder: (context) => Dialog(
+                    child: ListView(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 16,
+                      ),
+                      shrinkWrap: true,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (context) => const LoginScreen(),
+                              ),
+                            );
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 12, horizontal: 16),
+                            child: const Text('Log out'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.settings)),
+        ],
+      ),
+      body: showUsers
+          ? FutureBuilder(
+              future: FirebaseFirestore.instance
+                  .collection('users')
+                  .where('username',
+                      isGreaterThanOrEqualTo: searchController.text)
+                  .get(),
+              builder: (context,
+                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+                print("print searchtext: ${searchController.text}");
+                if (!snapshot.hasData) {
+                  return const LoadingScreen();
+                }
+                print('print snapshot data ${snapshot.data}');
+                return ListView.builder(
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        leading: CircleAvatar(
+                          backgroundImage: NetworkImage(
+                              (snapshot.data! as dynamic).docs[index]
+                                  ['photoUrl']),
+                        ),
+                        title: Text((snapshot.data! as dynamic).docs[index]
+                            ['username']),
+                      );
+                    });
+              })
+          : FutureBuilder(
+              future: FirebaseFirestore.instance.collection('posts').get(),
+              builder: (context,
+                  AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+                if (!snapshot.hasData) {
+                  return const LoadingScreen();
+                }
+                return
+                    // GridView.custom(
+                    //   gridDelegate: SliverQuiltedGridDelegate(
+                    //     crossAxisCount: 4,
+                    //     mainAxisSpacing: 1,
+                    //     crossAxisSpacing: 1,
+                    //     repeatPattern: QuiltedGridRepeatPattern.inverted,
+                    //     pattern: const [
+                    //       QuiltedGridTile(2, 2),
+                    //       QuiltedGridTile(1, 1),
+                    //       QuiltedGridTile(1, 1),
+                    //       QuiltedGridTile(1, 2),
+                    //     ],
+                    //   ),
+                    //   childrenDelegate: SliverChildBuilderDelegate(
+                    //         (context, index) => Image.network(
+                    //     (snapshot.data! as dynamic).docs[index]['postUrl'],
+                    //   ),
+                    //     childCount: (snapshot.data! as dynamic).docs.length
+                    //   ),
+                    // );
+
+                    MasonryGridView.count(
+                  crossAxisCount: 3,
+                  itemCount: (snapshot.data! as dynamic).docs.length,
+                  itemBuilder: (context, index) => SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.35,
+                    width: double.infinity,
+                    child: Image.network(
+                      (snapshot.data! as dynamic).docs[index]['postUrl'],
+                    ),
+                  ),
+                  mainAxisSpacing: 0,
+                  crossAxisSpacing: 0,
+                );
+              }),
+    );
   }
 }

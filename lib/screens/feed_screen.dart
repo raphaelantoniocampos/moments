@@ -15,6 +15,50 @@ class FeedScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: primaryColor,
+        centerTitle: true,
+        title: SvgPicture.asset(
+          'assets/moments_logo.svg',
+          color: Colors.white,
+          height: 50,
+        ),
+        actions: [
+          IconButton(
+              onPressed: () {
+                showDialog(
+                  barrierColor: blackTransparent,
+                  context: context,
+                  builder: (context) =>
+                      Dialog(
+                        child: ListView(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 16,
+                          ),
+                          shrinkWrap: true,
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                    builder: (context) => const LoginScreen(),
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 12, horizontal: 16),
+                                child: const Text('Log out'),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                );
+              },
+              icon: const Icon(Icons.settings))
+        ],
+      ),
       body: StreamBuilder(
         stream: FirebaseFirestore.instance
             .collection('posts')
@@ -35,3 +79,5 @@ class FeedScreen extends StatelessWidget {
     );
   }
 }
+
+

@@ -2,15 +2,22 @@ to do:
 
 - web version photos not work
 
-- profile picture selection
+- feed screen:
+    - profile picture selection
+    - click to view image and video
+    - number of comments bugged
+    - delete only your posts
 
-- storage adjusts
-    -format posts and users collection firestore
-    -post storing profImage during post
-    -post and store videos
-    -usernames unique value
+- search screen:
+    - public posts on SearchScreen
 
-- click to view image and video
+- storage adjusts:
+    - format posts and users collection firestore
+    - post storing profImage during post
+    - post and store videos
+    - usernames unique value
+    - public posts
+
 
 - camera adjusts
     -rotate photo
@@ -18,8 +25,5 @@ to do:
 
 - exibition name and username
 
-- cascate comments
-
-- number of comments bugged
-
-- delete only your posts
+- comment screen:
+    - cascate comments

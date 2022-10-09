@@ -16,7 +16,7 @@ class DeletePostScreen extends StatefulWidget {
 }
 
 class _DeletePostScreenState extends State<DeletePostScreen> {
-  double maxTime = 2;
+  double maxTime = 5;
   double currentTime = 0;
 
   void waitToDelete() {
