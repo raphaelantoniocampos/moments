@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:moments/screens/feed_screen.dart';
 import 'package:moments/screens/search_screen.dart';
 
+import '../screens/profile_screen.dart';
+
 const webScreenSize = 600;
 
 List<Widget> homeScreenItems = [
-  Center(
+  const Center(
     child: SearchScreen(),
   ),
-  FeedScreen(),
-  Center(
+  const FeedScreen(),
+  const Center(
     child: Text('Notifications'),
   ),
-  Center(
-    child: Text('Profile'),
-  ),
+  const ProfileScreen(),
 ];

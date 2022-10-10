@@ -34,7 +34,7 @@ class _SearchScreenState extends State<SearchScreen> {
         leading: const Icon(Icons.search),
         title: TextFormField(
           onChanged: (text) {
-            if(text.length < 3){
+            if (text.isEmpty) {
               setState(() {
                 showUsers = false;
               });
@@ -99,7 +99,8 @@ class _SearchScreenState extends State<SearchScreen> {
               builder: (context,
                   AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
                 print("print searchtext: ${searchController.text}");
-                if (!snapshot.hasData) {
+                if (!snapshot.hasData) {}
+                if (snapshot.connectionState == ConnectionState.waiting) {
                   return const LoadingScreen();
                 }
                 print('print snapshot data ${snapshot.data}');
@@ -124,29 +125,13 @@ class _SearchScreenState extends State<SearchScreen> {
                 if (!snapshot.hasData) {
                   return const LoadingScreen();
                 }
-                return
-                    // GridView.custom(
-                    //   gridDelegate: SliverQuiltedGridDelegate(
-                    //     crossAxisCount: 4,
-                    //     mainAxisSpacing: 1,
-                    //     crossAxisSpacing: 1,
-                    //     repeatPattern: QuiltedGridRepeatPattern.inverted,
-                    //     pattern: const [
-                    //       QuiltedGridTile(2, 2),
-                    //       QuiltedGridTile(1, 1),
-                    //       QuiltedGridTile(1, 1),
-                    //       QuiltedGridTile(1, 2),
-                    //     ],
-                    //   ),
-                    //   childrenDelegate: SliverChildBuilderDelegate(
-                    //         (context, index) => Image.network(
-                    //     (snapshot.data! as dynamic).docs[index]['postUrl'],
-                    //   ),
-                    //     childCount: (snapshot.data! as dynamic).docs.length
-                    //   ),
-                    // );
-
-                    MasonryGridView.count(
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const LoadingScreen();
+                }
+                if (snapshot.connectionState == ConnectionState.none) {
+                  return const LoadingScreen();
+                }
+                return MasonryGridView.count(
                   crossAxisCount: 3,
                   itemCount: (snapshot.data! as dynamic).docs.length,
                   itemBuilder: (context, index) => SizedBox(
