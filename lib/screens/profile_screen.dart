@@ -1,22 +1,59 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:moments/utils/colors.dart';
+import 'package:moments/utils/utils.dart';
 
 import '../widgets/follow_button.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({Key? key}) : super(key: key);
+  final String uid;
+
+  const ProfileScreen({Key? key, required this.uid}) : super(key: key);
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  var userData = {};
+  int postLen = 0;
+  int friends = 0;
+
+  @override
+  void initState() {
+    print('print uid ${widget.uid}');
+    getData();
+    super.initState();
+  }
+
+  getData() async {
+    try {
+      var userSnap = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(widget.uid)
+          .get();
+
+      var postSnap = await FirebaseFirestore.instance
+          .collection('posts')
+          .where('uid', isEqualTo: widget.uid)
+          .get();
+
+      userData = userSnap.data()!;
+      friends = userData['friends'].length;
+      postLen = postSnap.docs.length;
+
+      setState(() {});
+    } catch (err) {
+      showSnackBar(err.toString(), context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: primaryColor,
-        title: Text('username'),
+        title: Text(userData['username']),
         centerTitle: false,
       ),
       body: ListView(
@@ -29,10 +66,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   children: [
                     CircleAvatar(
                       backgroundColor: secondaryColor,
-                      backgroundImage: NetworkImage(
-                          'https://firebasestorage.googleapis.com/v0/b/moments-a47d4.appspot.com'
-                          '/o/posts%2Fh4vKe4Je6NecCkP1K9ARG9clHVM2%2F4ee20160-3d91-11ed-9c6d-'
-                          '75b9c6f65e65?alt=media&token=4ef24f00-44d2-4f65-aee7-a2ca72bde860'),
+                      backgroundImage: NetworkImage(userData['photoUrl']),
                       radius: 40,
                     ),
                     Expanded(
@@ -43,8 +77,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              buildStatColumn(5, 'posts'),
-                              buildStatColumn(73, 'friends'),
+                              buildStatColumn(postLen, 'posts'),
+                              buildStatColumn(friends, 'friends'),
                               buildStatColumn(30, 'followers'),
                             ],
                           ),
@@ -69,19 +103,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   alignment: Alignment.centerLeft,
                   padding: const EdgeInsets.only(top: 1),
                   child: Text(
-                    'username',
+                    userData['username'],
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
-                Container(
-                  alignment: Alignment.centerLeft,
-                  padding: const EdgeInsets.only(top: 1),
-                  child: Text(
-                    'description',
-                  ),
-                ),
+                // Container(
+                //   alignment: Alignment.centerLeft,
+                //   padding: const EdgeInsets.only(top: 1),
+                //   child: Text(
+                //     'description',
+                //   ),
+                // ),
               ],
             ),
           ),

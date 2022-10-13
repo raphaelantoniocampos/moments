@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:moments/screens/feed_screen.dart';
 import 'package:moments/screens/search_screen.dart';
@@ -14,5 +15,7 @@ List<Widget> homeScreenItems = [
   const Center(
     child: Text('Notifications'),
   ),
-  const ProfileScreen(),
+  ProfileScreen(
+    uid: FirebaseAuth.instance.currentUser!.uid,
+  ),
 ];
