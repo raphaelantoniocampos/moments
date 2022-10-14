@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:moments/screens/profile_screen.dart';
 
 import '../utils/colors.dart';
 import 'loading_screen.dart';
@@ -98,23 +99,30 @@ class _SearchScreenState extends State<SearchScreen> {
                   .get(),
               builder: (context,
                   AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-                print("print searchtext: ${searchController.text}");
                 if (!snapshot.hasData) {}
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const LoadingScreen();
                 }
-                print('print snapshot data ${snapshot.data}');
                 return ListView.builder(
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (context, index) {
-                      return ListTile(
-                        leading: CircleAvatar(
-                          backgroundImage: NetworkImage(
-                              (snapshot.data! as dynamic).docs[index]
-                                  ['photoUrl']),
+                      return InkWell(
+                        onTap: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => ProfileScreen(
+                                uid: (snapshot.data! as dynamic).docs[index]
+                                    ['uid']),
+                          ),
                         ),
-                        title: Text((snapshot.data! as dynamic).docs[index]
-                            ['username']),
+                        child: ListTile(
+                          leading: CircleAvatar(
+                            backgroundImage: NetworkImage(
+                                (snapshot.data! as dynamic).docs[index]
+                                    ['photoUrl']),
+                          ),
+                          title: Text((snapshot.data! as dynamic).docs[index]
+                              ['username']),
+                        ),
                       );
                     });
               })

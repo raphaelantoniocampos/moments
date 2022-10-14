@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import '../models/user.dart';
 import '../providers/user_provider.dart';
 import '../screens/delete_post_screen.dart';
+import '../screens/profile_screen.dart';
 
 class PostCard extends StatefulWidget {
   final snap;
@@ -72,97 +73,104 @@ class _PostCardState extends State<PostCard> {
                               .copyWith(right: 0),
                       child: Column(
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              CircleAvatar(
-                                radius: 16,
-                                backgroundImage: NetworkImage(
-                                  widget.snap['profImage'],
-                                ),
+                          InkWell(
+                            onTap: () => Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) => ProfileScreen(uid: widget.snap['uid']),
                               ),
-                              Expanded(
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 2),
-                                  child: Text(
-                                    widget.snap['username'],
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                CircleAvatar(
+                                  radius: 16,
+                                  backgroundImage: NetworkImage(
+                                    widget.snap['profImage'],
                                   ),
                                 ),
-                              ),
-                              IconButton(
-                                  onPressed: () {
-                                    showDialog(
-                                      barrierColor: blackTransparent,
-                                      context: context,
-                                      builder: (context) => Dialog(
-                                        child: ListView(
-                                          padding: const EdgeInsets.symmetric(
-                                            vertical: 16,
-                                          ),
-                                          shrinkWrap: true,
-                                          children: [
-                                            InkWell(
-                                              onTap: () {},
-                                              child: Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 12,
-                                                        horizontal: 16),
-                                                child: const Text(
-                                                    'Add description'),
-                                              ),
+                                Expanded(
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(left: 2),
+                                    child: Text(
+                                      widget.snap['username'],
+                                      style: const TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                ),
+                                IconButton(
+                                    onPressed: () {
+                                      showDialog(
+                                        barrierColor: blackTransparent,
+                                        context: context,
+                                        builder: (context) => Dialog(
+                                          child: ListView(
+                                            padding: const EdgeInsets.symmetric(
+                                              vertical: 16,
                                             ),
-                                            InkWell(
-                                              onTap: () {},
-                                              child: Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 12,
-                                                        horizontal: 16),
-                                                child: const Text(
-                                                    'Use as profile picture'),
+                                            shrinkWrap: true,
+                                            children: [
+                                              InkWell(
+                                                onTap: () {},
+                                                child: Container(
+                                                  padding:
+                                                      const EdgeInsets.symmetric(
+                                                          vertical: 12,
+                                                          horizontal: 16),
+                                                  child: const Text(
+                                                      'Add description'),
+                                                ),
                                               ),
-                                            ),
-                                            InkWell(
-                                              onTap: () async {
-                                                Navigator.of(context).push(
-                                                  MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        DeletePostScreen(
-                                                      postId:
-                                                          widget.snap['postId'],
+                                              InkWell(
+                                                onTap: () {},
+                                                child: Container(
+                                                  padding:
+                                                      const EdgeInsets.symmetric(
+                                                          vertical: 12,
+                                                          horizontal: 16),
+                                                  child: const Text(
+                                                      'Use as profile picture'),
+                                                ),
+                                              ),
+                                              InkWell(
+                                                onTap: () async {
+                                                  Navigator.of(context).push(
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          DeletePostScreen(
+                                                        postId:
+                                                            widget.snap['postId'],
+                                                      ),
                                                     ),
-                                                  ),
-                                                ).then((value) => Navigator.of(context).pop());
+                                                  ).then((value) => Navigator.of(context).pop());
 
-                                              },
-                                              child: Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 12,
-                                                        horizontal: 16),
-                                                child: const Text('Delete'),
+                                                },
+                                                child: Container(
+                                                  padding:
+                                                      const EdgeInsets.symmetric(
+                                                          vertical: 12,
+                                                          horizontal: 16),
+                                                  child: const Text('Delete'),
+                                                ),
                                               ),
-                                            ),
-                                            InkWell(
-                                              onTap: () {},
-                                              child: Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 12,
-                                                        horizontal: 16),
-                                                child: const Text('Report'),
+                                              InkWell(
+                                                onTap: () {},
+                                                child: Container(
+                                                  padding:
+                                                      const EdgeInsets.symmetric(
+                                                          vertical: 12,
+                                                          horizontal: 16),
+                                                  child: const Text('Report'),
+                                                ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
-                                      ),
-                                    );
-                                  },
-                                  icon: const Icon(Icons.more_vert)),
-                            ],
+                                      );
+                                    },
+                                    icon: const Icon(Icons.more_vert)),
+                              ],
+                            ),
                           ),
                           //Description
                           SizedBox(
