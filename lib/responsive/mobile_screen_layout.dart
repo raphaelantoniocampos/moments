@@ -27,7 +27,6 @@ class MobileScreenLayout extends StatefulWidget {
 
 class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   final searchController = TextEditingController();
-  bool _showingSearchField = false;
   Uint8List? _file;
   int _page = 1;
   late PageController pageController;

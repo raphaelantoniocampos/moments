@@ -6,6 +6,8 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:moments/screens/profile_screen.dart';
 
 import '../utils/colors.dart';
+import '../utils/global_variables.dart';
+import '../widgets/config_button.dart';
 import 'loading_screen.dart';
 import 'login_screen.dart';
 
@@ -28,11 +30,14 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: primaryColor,
         centerTitle: true,
-        leading: const Icon(Icons.search),
+        leading: const Icon(
+          Icons.search,
+          color: primaryColor,
+        ),
         title: TextFormField(
           onChanged: (text) {
             if (text.isEmpty) {
@@ -49,45 +54,14 @@ class _SearchScreenState extends State<SearchScreen> {
           textAlignVertical: TextAlignVertical.bottom,
           controller: searchController,
           textInputAction: TextInputAction.search,
-          style: const TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.black),
           decoration: const InputDecoration(
             hintText: 'Search for username',
-            hintStyle: TextStyle(color: Colors.white),
+            hintStyle: TextStyle(color: secondaryColor),
           ),
         ),
-        actions: [
-          IconButton(
-              onPressed: () {
-                showDialog(
-                  barrierColor: blackTransparent,
-                  context: context,
-                  builder: (context) => Dialog(
-                    child: ListView(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 16,
-                      ),
-                      shrinkWrap: true,
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                builder: (context) => const LoginScreen(),
-                              ),
-                            );
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 12, horizontal: 16),
-                            child: const Text('Log out'),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-              icon: const Icon(Icons.settings)),
+        actions: width > webScreenSize? null : [
+          ConfigButton(),
         ],
       ),
       body: showUsers
@@ -99,7 +73,9 @@ class _SearchScreenState extends State<SearchScreen> {
                   .get(),
               builder: (context,
                   AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-                if (!snapshot.hasData) {}
+                if (!snapshot.hasData) {
+                  return const LoadingScreen();
+                }
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const LoadingScreen();
                 }

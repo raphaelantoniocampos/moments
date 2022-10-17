@@ -1,11 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:moments/resources/firestore_methods.dart';
 import 'package:moments/screens/loading_screen.dart';
 import 'package:moments/utils/colors.dart';
 import 'package:moments/utils/utils.dart';
 
+import '../utils/global_variables.dart';
 import '../widgets/follow_button.dart';
+import '../widgets/post_card.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String uid;
@@ -25,7 +28,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   void initState() {
-    print('print uid ${widget.uid}');
     getData();
     super.initState();
   }
@@ -67,8 +69,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ? const LoadingScreen()
         : Scaffold(
             appBar: AppBar(
-              backgroundColor: primaryColor,
-              title: Text(userData['username']),
+              title: Text(
+                userData['username'],
+                style: const TextStyle(color: primaryColor),
+              ),
               centerTitle: false,
             ),
             body: ListView(
@@ -114,20 +118,40 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                           )
                                         : isFriend
                                             ? FollowButton(
-                                                text: 'Unfriend',
+                                                text: 'Remove friend',
                                                 textColor: Colors.black,
                                                 backGroundColor:
                                                     mobileBackgroundColor,
                                                 borderColor: secondaryColor,
-                                                function: () {},
+                                                function: () async {
+                                                  await FirestoreMethods()
+                                                      .addFriend(
+                                                          FirebaseAuth.instance
+                                                              .currentUser!.uid,
+                                                          widget.uid);
+                                                  setState(() {
+                                                    isFriend = false;
+                                                    friends--;
+                                                  });
+                                                },
                                               )
                                             : FollowButton(
-                                                text: 'Add Friend',
+                                                text: 'Add friend',
                                                 textColor: Colors.white,
-                                                backGroundColor: secondaryColor,
+                                                backGroundColor: primaryColor,
                                                 borderColor: secondaryColor,
-                                                function: () {},
-                                              )
+                                                function: () async {
+                                                  await FirestoreMethods()
+                                                      .addFriend(
+                                                          FirebaseAuth.instance
+                                                              .currentUser!.uid,
+                                                          widget.uid);
+                                                  setState(() {
+                                                    isFriend = true;
+                                                    friends++;
+                                                  });
+                                                },
+                                              ),
                                   ],
                                 ),
                               ],
@@ -140,7 +164,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         padding: const EdgeInsets.only(top: 1),
                         child: Text(
                           userData['username'],
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -156,6 +180,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                 ),
                 const Divider(),
+                SizedBox(
+                  height: 500,
+                  // width: double.infinity,
+                  child: StreamBuilder(
+                    stream: FirebaseFirestore.instance
+                        .collection('posts')
+                        .where('uid', isEqualTo: widget.uid)
+                        .orderBy('datePublished', descending: true)
+                        .snapshots(),
+                    builder: (context,
+                        AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                            snapshot) {
+                      if (!snapshot.hasData) {
+                        return const LoadingScreen();
+                      }
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const LoadingScreen();
+                      }
+                      return ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        itemCount: (snapshot.data! as dynamic).docs.length,
+                        itemBuilder: (context, index) => PostCard(
+                          snap: (snapshot.data! as dynamic).docs[index].data(),
+                        ),
+                      );
+                    },
+                  ),
+                ),
               ],
             ),
           );

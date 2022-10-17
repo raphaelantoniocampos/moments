@@ -8,6 +8,7 @@ import 'package:moments/screens/camera_screen.dart';
 import 'package:moments/screens/loading_screen.dart';
 import 'package:moments/screens/login_screen.dart';
 import 'package:moments/screens/new_profile_picture_screen.dart';
+import 'package:moments/utils/global_variables.dart';
 
 import 'responsive/mobile_screen_layout.dart';
 import 'responsive/responsive_layout_screen.dart';
@@ -58,13 +59,20 @@ class MomentsApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Moments',
         theme: ThemeData.light().copyWith(
-            scaffoldBackgroundColor: mobileBackgroundColor,
-            primaryColor: primaryColor,
-            elevatedButtonTheme: ElevatedButtonThemeData(
-                style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(primaryColor))),
-            colorScheme:
-                ColorScheme.fromSwatch().copyWith(secondary: primaryColor)),
+          scaffoldBackgroundColor: mobileBackgroundColor,
+          primaryColor: primaryColor,
+          appBarTheme: AppBarTheme(
+              backgroundColor: mobileBackgroundColor,
+              elevation: appBarElevation,
+              foregroundColor: primaryColor),
+          elevatedButtonTheme: ElevatedButtonThemeData(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(primaryColor),
+            ),
+          ),
+          colorScheme:
+              ColorScheme.fromSwatch().copyWith(secondary: primaryColor),
+        ),
         home: StreamBuilder(
           stream: FirebaseAuth.instance.idTokenChanges(),
           builder: (context, snapshot) {

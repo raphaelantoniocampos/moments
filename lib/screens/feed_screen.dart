@@ -7,6 +7,8 @@ import 'package:moments/screens/loading_screen.dart';
 import 'package:moments/utils/colors.dart';
 import 'package:moments/widgets/post_card.dart';
 
+import '../utils/global_variables.dart';
+import '../widgets/config_button.dart';
 import 'login_screen.dart';
 
 class FeedScreen extends StatelessWidget {
@@ -14,49 +16,22 @@ class FeedScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery
+        .of(context)
+        .size
+        .width;
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: primaryColor,
+      appBar: width > webScreenSize
+          ? null
+          : AppBar(
         centerTitle: true,
         title: SvgPicture.asset(
           'assets/moments_logo.svg',
-          color: Colors.white,
+          color: primaryColor,
           height: 50,
         ),
-        actions: [
-          IconButton(
-              onPressed: () {
-                showDialog(
-                  barrierColor: blackTransparent,
-                  context: context,
-                  builder: (context) =>
-                      Dialog(
-                        child: ListView(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 16,
-                          ),
-                          shrinkWrap: true,
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(
-                                    builder: (context) => const LoginScreen(),
-                                  ),
-                                );
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 12, horizontal: 16),
-                                child: const Text('Log out'),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                );
-              },
-              icon: const Icon(Icons.settings))
+        actions: const [
+          ConfigButton(),
         ],
       ),
       body: StreamBuilder(
@@ -70,14 +45,19 @@ class FeedScreen extends StatelessWidget {
             return const LoadingScreen();
           }
           return ListView.builder(
-              itemCount: snapshot.data!.docs.length,
-              itemBuilder: (context, index) => PostCard(
+            itemCount: snapshot.data!.docs.length,
+            itemBuilder: (context, index) =>
+                Container(
+                  margin: EdgeInsets.symmetric(
+                      horizontal: width > webScreenSize ? width * 0.3 : 0,
+                      vertical: width > webScreenSize ? 15 : 0),
+                  child: PostCard(
                     snap: snapshot.data!.docs[index].data(),
-                  ));
+                  ),
+                ),
+          );
         },
       ),
     );
   }
 }
-
-

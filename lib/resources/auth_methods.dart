@@ -13,7 +13,8 @@ class AuthMethods {
   Future<model.User> getUserDetails() async {
     User currentUser = _auth.currentUser!;
 
-    DocumentSnapshot snap = (await _fireStore.collection('users').doc(currentUser.uid).get());
+    DocumentSnapshot snap =
+        (await _fireStore.collection('users').doc(currentUser.uid).get());
 
     return model.User.fromSnap(snap);
   }
@@ -35,9 +36,8 @@ class AuthMethods {
             email: email, password: password);
         print('print file - auth method: $file');
 
-        String photoUrl = await StorageMethods()
-            .uploadFileToStorage('profilePics', file);
-
+        String photoUrl =
+            await StorageMethods().uploadFileToStorage('profilePics', file);
 
         model.User user = model.User(
             photoUrl: photoUrl,
@@ -52,8 +52,8 @@ class AuthMethods {
             );
 
         //post first picture
-        await FirestoreMethods()
-            .uploadPost('I created my Moments account', file, user.uid, user.username, user.photoUrl);
+        await FirestoreMethods().uploadPost('I created my Moments account',
+            file, user.uid, user.username, user.photoUrl);
 
         res = "Success";
       }
@@ -62,7 +62,6 @@ class AuthMethods {
     }
     return res;
   }
-
 
   //login user
   Future<String> loginUser({
@@ -95,6 +94,8 @@ class AuthMethods {
     }
     return res;
   }
+
+  Future<void> signOut() async {
+    await _auth.signOut();
+  }
 }
-
-

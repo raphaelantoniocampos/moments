@@ -72,11 +72,11 @@ class FirestoreMethods {
             .doc(commentId)
             .set({
           // 'user' : user,
-          'uid' : uid,
-          'postId' : postId,
+          'uid': uid,
+          'postId': postId,
           'text': text,
           'commentId': commentId,
-          'likes' : [],
+          'likes': [],
           'datePublished': DateTime.now(),
         });
         res = 'Posted';
@@ -89,14 +89,25 @@ class FirestoreMethods {
     return res;
   }
 
-  Future<void> likeComment(String postId, String uid, String commentId, List likes) async {
+  Future<void> likeComment(
+      String postId, String uid, String commentId, List likes) async {
     try {
       if (likes.contains(uid)) {
-        _firestore.collection('posts').doc(postId).collection('comments').doc(commentId).update({
+        _firestore
+            .collection('posts')
+            .doc(postId)
+            .collection('comments')
+            .doc(commentId)
+            .update({
           'likes': FieldValue.arrayRemove([uid]),
         });
       } else {
-        _firestore.collection('posts').doc(postId).collection('comments').doc(commentId).update({
+        _firestore
+            .collection('posts')
+            .doc(postId)
+            .collection('comments')
+            .doc(commentId)
+            .update({
           'likes': FieldValue.arrayUnion([uid]),
         });
       }
@@ -114,5 +125,32 @@ class FirestoreMethods {
       res = err.toString();
     }
     return res;
+  }
+
+  Future<void> addFriend(String uid, String friendId) async {
+    try {
+      DocumentSnapshot snap =
+          await _firestore.collection('users').doc(uid).get();
+      List friends = (snap.data()! as dynamic)['friends'];
+      if (friends.contains(friendId)) {
+        await _firestore.collection('users').doc(friendId).update({
+          'friends': FieldValue.arrayRemove([uid])
+        });
+
+        await _firestore.collection('users').doc(uid).update({
+          'friends': FieldValue.arrayRemove([friendId])
+        });
+      } else {
+        await _firestore.collection('users').doc(friendId).update({
+          'friends': FieldValue.arrayUnion([uid])
+        });
+
+        await _firestore.collection('users').doc(uid).update({
+          'friends': FieldValue.arrayUnion([friendId])
+        });
+      }
+    } catch (err) {
+      print(err.toString());
+    }
   }
 }
