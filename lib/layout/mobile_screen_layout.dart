@@ -1,9 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:moments/providers/user_provider.dart';
 import 'package:moments/resources/firestore_methods.dart';
 import 'package:moments/screens/loading_screen.dart';
@@ -12,11 +10,8 @@ import 'package:provider/provider.dart';
 
 import '../models/user.dart' as model;
 import '../screens/camera_screen.dart';
-import '../screens/feed_screen.dart';
-import '../screens/login_screen.dart';
 import '../utils/global_variables.dart';
 import '../utils/utils.dart';
-import 'package:moments/screens/search_screen.dart';
 
 class MobileScreenLayout extends StatefulWidget {
   const MobileScreenLayout({Key? key}) : super(key: key);
@@ -67,8 +62,14 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
 
   @override
   void initState() {
-    super.initState();
     pageController = PageController(initialPage: 1);
+    addData();
+    super.initState();
+  }
+
+  addData() async{
+    UserProvider userProvider = Provider.of(context, listen: false);
+    await userProvider.refreshUser();
   }
 
   @override

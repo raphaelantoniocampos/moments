@@ -4,15 +4,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:moments/providers/user_provider.dart';
-import 'package:moments/screens/camera_screen.dart';
 import 'package:moments/screens/loading_screen.dart';
 import 'package:moments/screens/login_screen.dart';
-import 'package:moments/screens/new_profile_picture_screen.dart';
 import 'package:moments/utils/global_variables.dart';
 
-import 'responsive/mobile_screen_layout.dart';
-import 'responsive/responsive_layout_screen.dart';
-import 'responsive/web_screen_layout.dart';
+import 'layout/mobile_screen_layout.dart';
 import 'utils/colors.dart';
 import 'package:provider/provider.dart';
 
@@ -59,10 +55,10 @@ class MomentsApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Moments',
         theme: ThemeData.light().copyWith(
-          scaffoldBackgroundColor: mobileBackgroundColor,
+          scaffoldBackgroundColor: backgroundColor,
           primaryColor: primaryColor,
-          appBarTheme: AppBarTheme(
-              backgroundColor: mobileBackgroundColor,
+          appBarTheme: const AppBarTheme(
+              backgroundColor: backgroundColor,
               elevation: appBarElevation,
               foregroundColor: primaryColor),
           elevatedButtonTheme: ElevatedButtonThemeData(
@@ -78,9 +74,7 @@ class MomentsApp extends StatelessWidget {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.active) {
               if (snapshot.hasData) {
-                return const ResponsiveLayout(
-                    mobileScreenLayout: MobileScreenLayout(),
-                    webScreenLayout: WebScreenLayout());
+                return const MobileScreenLayout();
               } else if (snapshot.hasError) {
                 return const LoginScreen();
               }
@@ -90,12 +84,6 @@ class MomentsApp extends StatelessWidget {
             return const LoginScreen();
           },
         ),
-        routes: {
-          '/login_screen': (context) => const LoginScreen(),
-          '/camera_screen': (context) => CameraScreen(),
-          '/new_profile_picture_screen': (context) => const NewProfilePicture(),
-          'loading_screen': (context) => const LoadingScreen(),
-        },
       ),
     );
   }

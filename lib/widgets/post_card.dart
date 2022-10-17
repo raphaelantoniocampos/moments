@@ -11,7 +11,6 @@ import '../models/user.dart';
 import '../providers/user_provider.dart';
 import '../screens/delete_post_screen.dart';
 import '../screens/profile_screen.dart';
-import '../utils/global_variables.dart';
 
 class PostCard extends StatefulWidget {
   final snap;
@@ -45,7 +44,6 @@ class _PostCardState extends State<PostCard> {
   @override
   Widget build(BuildContext context) {
     final User? user = Provider.of<UserProvider>(context).getUser;
-    final width = MediaQuery.of(context).size.width;
     return user == null
         ? const LoadingScreen()
         : StreamBuilder(
@@ -61,16 +59,10 @@ class _PostCardState extends State<PostCard> {
                 return const LoadingScreen();
               }
               if (snapshot.connectionState == ConnectionState.done) {
-                print(snapshot);
               }
               return Container(
-                decoration: BoxDecoration(
-                  color: mobileBackgroundColor,
-                  border: Border.all(
-                    color: width > webScreenSize
-                        ? secondaryColor
-                        : mobileBackgroundColor,
-                  ),
+                decoration: const BoxDecoration(
+                  color: backgroundColor,
                 ),
                 padding: const EdgeInsets.symmetric(vertical: 10),
                 child: Column(

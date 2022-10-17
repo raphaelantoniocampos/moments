@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:moments/resources/auth_methods.dart';
-import 'package:moments/responsive/mobile_screen_layout.dart';
-import 'package:moments/responsive/web_screen_layout.dart';
+import 'package:moments/layout/mobile_screen_layout.dart';
 import 'package:moments/utils/colors.dart';
 import 'dart:io';
-import 'package:moments/responsive/mobile_screen_layout.dart';
 
-import '../resources/firestore_methods.dart';
-import '../responsive/responsive_layout_screen.dart';
 import '../utils/utils.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -54,10 +50,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
     });
     if (res == 'Success') {
       showSnackBar(res, context);
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => const ResponsiveLayout(
-              webScreenLayout: WebScreenLayout(),
-              mobileScreenLayout: MobileScreenLayout())));
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => const MobileScreenLayout(),
+        ),
+      );
     }
     showSnackBar(res, context);
   }

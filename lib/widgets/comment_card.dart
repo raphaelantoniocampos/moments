@@ -135,14 +135,5 @@ class LoadingCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container();
-      const SizedBox(
-      height: 90,
-      width: 300,
-      child: Center(
-        child: CircularProgressIndicator(
-          color: primaryColor,
-        ),
-      ),
-    );
   }
 }

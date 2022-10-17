@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:moments/utils/colors.dart';
 import 'dart:async';
 import 'dart:io';
-import 'package:image_picker/image_picker.dart';
+import 'package:moments/utils/utils.dart';
 import 'package:video_player/video_player.dart';
 import 'package:permission_handler/permission_handler.dart';
 import '../main.dart';
@@ -38,15 +38,15 @@ class _CameraScreenState extends State<CameraScreen>
   bool _isCameraInitialized = false;
   double _minZoom = 1.0;
   double _maxZoom = 1.0;
-  double _minExposureOffset = 0.0;
-  double _maxExposureOffset = 0.0;
+  // double _minExposureOffset = 0.0;
+  // double _maxExposureOffset = 0.0;
   bool _isRearCameraSelected = true;
   bool _isRecordingInProgress = false;
   bool _isCameraPermissionGranted = false;
 
   //current values
 
-  double _currentExposureOffset = 0.0;
+  // double _currentExposureOffset = 0.0;
   double _currentZoom = 1.0;
   FlashMode? _currentFlashMode;
 
@@ -54,18 +54,18 @@ class _CameraScreenState extends State<CameraScreen>
     await Permission.camera.request();
     var status = await Permission.camera.status;
     if (status.isGranted) {
-      print('Camera Permission: Granted');
+      debugPrint('Camera Permission: Granted');
       setState(() {
         _isCameraPermissionGranted = true;
       });
       onNewCameraSelected(cameras[widget.startWithRearCamera ? 0 : 1]);
     } else {
-      print('Camera Permission: Denied');
+      debugPrint('Camera Permission: Denied');
     }
   }
 
   void onNewCameraSelected(CameraDescription cameraDescription) async {
-    final previousCameraControler = controller;
+    final previousCameraController = controller;
     final CameraController cameraController = CameraController(
       cameraDescription,
       currentResolutionPreset,
@@ -73,7 +73,7 @@ class _CameraScreenState extends State<CameraScreen>
     );
 
     // Dispose previous controller
-    await previousCameraControler?.dispose();
+    await previousCameraController?.dispose();
 
     //Replace with new controller
     if (mounted) {
@@ -93,7 +93,7 @@ class _CameraScreenState extends State<CameraScreen>
     try {
       await cameraController.initialize();
     } on CameraException catch (err) {
-      print('Error initializing camera: $err');
+      debugPrint('Error initializing camera: $err');
     }
 
     if (mounted) {
@@ -107,12 +107,12 @@ class _CameraScreenState extends State<CameraScreen>
     cameraController.getMinZoomLevel().then((value) => _minZoom = value);
 
     //Get exposure levels
-    cameraController
-        .getMaxExposureOffset()
-        .then((value) => _maxExposureOffset = value);
-    cameraController
-        .getMinExposureOffset()
-        .then((value) => _minExposureOffset = value);
+    // cameraController
+    //     .getMaxExposureOffset()
+    //     .then((value) => _maxExposureOffset = value);
+    // cameraController
+    //     .getMinExposureOffset()
+    //     .then((value) => _minExposureOffset = value);
 
     // _currentFlashMode = controller!.value.flashMode;
     _currentFlashMode = FlashMode.off;
@@ -127,10 +127,10 @@ class _CameraScreenState extends State<CameraScreen>
       await cameraController!.startVideoRecording();
       setState(() {
         _isRecordingInProgress = true;
-        print('Recording');
+        showSnackBar('Recording', context);
       });
     } on CameraException catch (err) {
-      print('Error starting to record video: $err');
+      showSnackBar('Error starting to record video: $err', context);
     }
   }
 
@@ -142,11 +142,11 @@ class _CameraScreenState extends State<CameraScreen>
       XFile file = await controller!.stopVideoRecording();
       setState(() {
         _isRecordingInProgress = false;
-        print('Stopped recording');
+        debugPrint('Stopped recording');
       });
       return file;
     } on CameraException catch (err) {
-      print('Error stopping video recording: $err');
+      debugPrint('Error stopping video recording: $err');
       return null;
     }
   }
@@ -171,7 +171,7 @@ class _CameraScreenState extends State<CameraScreen>
       XFile file = await cameraController.takePicture();
       return file;
     } on CameraException catch (err) {
-      print('Error occured while taking picture: $err');
+      debugPrint('Error occurred while taking picture: $err');
       return null;
     }
   }
@@ -179,7 +179,6 @@ class _CameraScreenState extends State<CameraScreen>
   Future<void> saveImage(BuildContext context, VoidCallback onSuccess) async {
     XFile? rawImage = await takePicture();
     imageFile = File(rawImage!.path);
-    int currentUnix = DateTime.now().millisecondsSinceEpoch;
     onSuccess.call();
   }
 
@@ -187,7 +186,6 @@ class _CameraScreenState extends State<CameraScreen>
     if (widget.isRecordingAvailable) {
       XFile? rawVideo = await stopVideoRecording();
       videoFile = File(rawVideo!.path);
-      int currentUnix = DateTime.now().millisecondsSinceEpoch;
       _startVideoPlayer();
     }
     onSuccess.call();
@@ -390,7 +388,7 @@ class _CameraScreenState extends State<CameraScreen>
                                       const Text(
                                         'Tap for photo, hold for video',
                                         style: TextStyle(
-                                            color: mobileBackgroundColor),
+                                            color: backgroundColor),
                                       )
                                     ],
                                   ),
@@ -493,7 +491,7 @@ class _CameraScreenState extends State<CameraScreen>
                     ),
                   ),
 
-                  //Flashmode selector
+                  //Flash mode selector
                   Expanded(
                       child: Container(
                     color: Colors.black,
@@ -568,16 +566,16 @@ class _CameraScreenState extends State<CameraScreen>
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Row(),
-                Text(
+                const Text(
                   'Permission denied',
                   style: TextStyle(color: Colors.white),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 16,
                 ),
                 ElevatedButton(
                     onPressed: getPermissionStatus,
-                    child: Text('Give Permission')),
+                    child: const Text('Give Permission')),
               ],
             ),
     );

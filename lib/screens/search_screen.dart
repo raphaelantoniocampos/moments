@@ -1,15 +1,11 @@
-import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:moments/screens/profile_screen.dart';
 
 import '../utils/colors.dart';
-import '../utils/global_variables.dart';
 import '../widgets/config_button.dart';
 import 'loading_screen.dart';
-import 'login_screen.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({Key? key}) : super(key: key);
@@ -30,7 +26,6 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -60,7 +55,7 @@ class _SearchScreenState extends State<SearchScreen> {
             hintStyle: TextStyle(color: secondaryColor),
           ),
         ),
-        actions: width > webScreenSize? null : [
+        actions: const [
           ConfigButton(),
         ],
       ),

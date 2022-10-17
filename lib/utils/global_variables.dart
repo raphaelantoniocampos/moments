@@ -5,7 +5,6 @@ import 'package:moments/screens/search_screen.dart';
 
 import '../screens/profile_screen.dart';
 
-const webScreenSize = 600;
 const appBarElevation = 0.0;
 
 List<Widget> homeScreenItems = [

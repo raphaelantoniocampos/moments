@@ -2,13 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:moments/resources/auth_methods.dart';
 import 'package:moments/utils/colors.dart';
-import 'package:moments/utils/global_variables.dart';
 import 'package:moments/utils/utils.dart';
 import 'package:moments/widgets/text_field_input.dart';
 
-import '../responsive/mobile_screen_layout.dart';
-import '../responsive/responsive_layout_screen.dart';
-import '../responsive/web_screen_layout.dart';
+import '../layout/mobile_screen_layout.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -40,10 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
       showSnackBar(res, context);
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
-          builder: (context) => const ResponsiveLayout(
-            webScreenLayout: WebScreenLayout(),
-            mobileScreenLayout: MobileScreenLayout(),
-          ),
+          builder: (context) => const MobileScreenLayout(),
         ),
       );
     } else {
@@ -59,10 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       body: SafeArea(
           child: Container(
-        padding: MediaQuery.of(context).size.width > webScreenSize
-            ? EdgeInsets.symmetric(
-                horizontal: MediaQuery.of(context).size.width / 3)
-            : const EdgeInsets.symmetric(horizontal: 32),
+        padding: const EdgeInsets.symmetric(horizontal: 32),
         width: double.infinity,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -130,31 +121,29 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
 
             //transitioning to signing up
-            MediaQuery.of(context).size.width < webScreenSize
-                ? Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          child: const Text("Don't have an account? "),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.of(context)
-                                .pushNamed('/new_profile_picture_screen');
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(vertical: 8),
-                            child: const Text('Sign up',
-                                style: TextStyle(fontWeight: FontWeight.bold)),
-                          ),
-                        ),
-                      ],
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    child: const Text("Don't have an account? "),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context)
+                          .pushNamed('/new_profile_picture_screen');
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: const Text('Sign up',
+                          style: TextStyle(fontWeight: FontWeight.bold)),
                     ),
-                  )
-                : Container(),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       )),

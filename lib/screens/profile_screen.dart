@@ -6,7 +6,6 @@ import 'package:moments/screens/loading_screen.dart';
 import 'package:moments/utils/colors.dart';
 import 'package:moments/utils/utils.dart';
 
-import '../utils/global_variables.dart';
 import '../widgets/follow_button.dart';
 import '../widgets/post_card.dart';
 
@@ -112,7 +111,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             text: 'Edit Profile',
                                             textColor: Colors.black,
                                             backGroundColor:
-                                                mobileBackgroundColor,
+                                                backgroundColor,
                                             borderColor: secondaryColor,
                                             function: () {},
                                           )
@@ -121,7 +120,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                 text: 'Remove friend',
                                                 textColor: Colors.black,
                                                 backGroundColor:
-                                                    mobileBackgroundColor,
+                                                    backgroundColor,
                                                 borderColor: secondaryColor,
                                                 function: () async {
                                                   await FirestoreMethods()
@@ -181,7 +180,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 const Divider(),
                 SizedBox(
-                  height: 500,
+                  height: 600,
                   // width: double.infinity,
                   child: StreamBuilder(
                     stream: FirebaseFirestore.instance
