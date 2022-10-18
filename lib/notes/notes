@@ -1,7 +1,5 @@
 to do:
 
-- web version photos not work
-
 - feed screen:
     - profile picture selection
     - click to view image and video
@@ -17,13 +15,10 @@ to do:
     - post and store videos
     - usernames unique value
     - public posts
-
+    - exibition name and username
 
 - camera adjusts
     -rotate photo
     -gesture zoom
 
-- exibition name and username
-
-- comment screen:
-    - cascate comments
+- optimize comment screen
