@@ -4,18 +4,23 @@ to do:
     - profile picture selection
     - click to view image and video
     - number of comments bugged
+        -use future builder instead of stream builder
     - delete only your posts
 
 - search screen:
     - public posts on SearchScreen
 
+- change friends to connections
+    - connecting vs connected
+
 - storage adjusts:
+    - use MVC infrastructure
     - format posts and users collection firestore
     - post storing profImage during post
     - post and store videos
     - usernames unique value
-    - public posts
-    - exibition name and username
+    - one public posts per person
+    - exhibition name and username
 
 - camera adjusts
     -rotate photo
