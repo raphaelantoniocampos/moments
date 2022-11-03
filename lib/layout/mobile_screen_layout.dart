@@ -132,7 +132,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
               MaterialPageRoute(builder: (context) => CameraScreen()));
           _file = await gettingFile.readAsBytes();
 
-          createPost(user.uid, user.username, user.photoUrl);
+          createPost(user.uid, user.username, user.profilePic);
         },
         child: const Icon(
           Icons.add,

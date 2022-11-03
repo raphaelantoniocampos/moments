@@ -7,6 +7,8 @@ to do:
         -use future builder instead of stream builder
     - delete only your posts
 
+- dark theme
+
 - search screen:
     - public posts on SearchScreen
 
@@ -16,7 +18,7 @@ to do:
 - storage adjusts:
     - use MVC infrastructure
     - format posts and users collection firestore
-    - post storing profImage during post
+        - post storing profImage during post
     - post and store videos
     - usernames unique value
     - one public posts per person

@@ -29,7 +29,6 @@ class AuthMethods {
     String res = "Some error occoured";
     try {
       if (username.isNotEmpty && email.isNotEmpty && password.isNotEmpty
-          // && file != null
           ) {
         // register user
         UserCredential cred = await _auth.createUserWithEmailAndPassword(
@@ -40,10 +39,11 @@ class AuthMethods {
             await StorageMethods().uploadFileToStorage('profilePics', file);
 
         model.User user = model.User(
-            photoUrl: photoUrl,
+            profilePic: photoUrl,
             uid: cred.user!.uid,
             username: username,
-            friends: [],
+            connecting: [],
+            connections: [],
             email: email);
 
         // add user to database
@@ -53,7 +53,7 @@ class AuthMethods {
 
         //post first picture
         await FirestoreMethods().uploadPost('I created my Moments account',
-            file, user.uid, user.username, user.photoUrl);
+            file, user.uid, user.username, user.profilePic);
 
         res = "Success";
       }

@@ -7,7 +7,9 @@ import 'package:moments/providers/user_provider.dart';
 import 'package:moments/screens/loading_screen.dart';
 import 'package:moments/screens/login_screen.dart';
 import 'package:moments/utils/global_variables.dart';
+import 'package:get/get.dart';
 
+import 'controllers/auth_controller.dart';
 import 'layout/mobile_screen_layout.dart';
 import 'utils/colors.dart';
 import 'package:provider/provider.dart';
@@ -18,19 +20,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   cameras = await availableCameras();
 
-  if (kIsWeb) {
-    await Firebase.initializeApp(
-      options: const FirebaseOptions(
-        apiKey: 'AIzaSyAAndnjO5rVDsxJjCFFN2Bu988ulLGAd5Y',
-        appId: '1:118833269793:web:de2f30e93d00f9820f6760',
-        messagingSenderId: '118833269793',
-        projectId: 'moments-a47d4',
-        storageBucket: "moments-a47d4.appspot.com",
-      ),
-    );
-  } else {
-    await Firebase.initializeApp();
-  }
+  await Firebase.initializeApp().then((value) => Get.put(AuthController()));
 
   runApp(
     const MomentsApp(),
