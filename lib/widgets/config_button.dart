@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moments/controllers/constants.dart';
 
 import '../resources/auth_methods.dart';
 import '../screens/login_screen.dart';
@@ -23,7 +24,7 @@ class ConfigButton extends StatelessWidget {
               children: [
                 InkWell(
                   onTap: () async {
-                    await AuthMethods().signOut();
+                    await authController.signOut();
                     Navigator.of(context).pushReplacement(
                       MaterialPageRoute(
                         builder: (context) => const LoginScreen(),

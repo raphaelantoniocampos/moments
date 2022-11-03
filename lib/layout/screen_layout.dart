@@ -13,29 +13,30 @@ import '../screens/camera_screen.dart';
 import '../utils/global_variables.dart';
 import '../utils/utils.dart';
 
-class MobileScreenLayout extends StatefulWidget {
-  const MobileScreenLayout({Key? key}) : super(key: key);
+class ScreenLayout extends StatefulWidget {
+  const ScreenLayout({Key? key}) : super(key: key);
 
   @override
-  State<MobileScreenLayout> createState() => _MobileScreenLayoutState();
+  State<ScreenLayout> createState() => _ScreenLayoutState();
 }
 
-class _MobileScreenLayoutState extends State<MobileScreenLayout> {
+class _ScreenLayoutState extends State<ScreenLayout> {
   final searchController = TextEditingController();
   Uint8List? _file;
   int _page = 1;
   late PageController pageController;
   bool _isLoading = false;
 
-  void createPost(String uid,
-      String username,
-      String profImage,) async {
+  void createPost(
+    String uid,
+    String username,
+  ) async {
     try {
       setState(() {
         _isLoading = true;
       });
       String res = await FirestoreMethods()
-          .uploadPost('', _file!, uid, username, profImage);
+          .uploadPost('', _file!, uid, username);
 
       if (res == 'Success') {
         showSnackBar('Posted', context);
@@ -63,14 +64,14 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
   @override
   void initState() {
     pageController = PageController(initialPage: 1);
-    addData();
+    // addData();
     super.initState();
   }
 
-  addData() async{
-    UserProvider userProvider = Provider.of(context, listen: false);
-    await userProvider.refreshUser();
-  }
+  // addData() async{
+  //   UserProvider userProvider = Provider.of(context, listen: false);
+  //   await userProvider.refreshUser();
+  // }
 
   @override
   void dispose() {
@@ -81,12 +82,8 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
 
   @override
   Widget build(BuildContext context) {
-    final model.User? user = Provider
-        .of<UserProvider>(context)
-        .getUser;
-    return user == null || _isLoading
-        ? const LoadingScreen()
-        : Scaffold(
+    final model.User? user = Provider.of<UserProvider>(context).getUser;
+    return Scaffold(
       body: PageView(
         controller: pageController,
         onPageChanged: onPageChanged,
@@ -101,7 +98,6 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
               ),
               label: '',
               backgroundColor: primaryColor),
-
           BottomNavigationBarItem(
               icon: Icon(
                 Icons.home,
@@ -128,11 +124,11 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          final gettingFile = await Navigator.push(context,
-              MaterialPageRoute(builder: (context) => CameraScreen()));
+          final gettingFile = await Navigator.push(
+              context, MaterialPageRoute(builder: (context) => CameraScreen()));
           _file = await gettingFile.readAsBytes();
 
-          createPost(user.uid, user.username, user.profilePic);
+          // createPost(user.uid, user.username, user.profilePic);
         },
         child: const Icon(
           Icons.add,
@@ -142,6 +138,3 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
     );
   }
 }
-
-
-

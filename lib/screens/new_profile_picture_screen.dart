@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:moments/screens/feed_screen.dart';
 import 'package:moments/screens/sign_up_screen.dart';
 import 'dart:io';
 
@@ -35,25 +36,25 @@ class _NewProfilePictureState extends State<NewProfilePicture> {
               color: primaryColor,
               height: 200,
             ),
-                const Center(
-                  child: Text(
-                    'Take your profile pic',
-                    style: TextStyle(fontSize: 20, color: secondaryColor),
-                  ),
-                ),
-                const SizedBox(
-                  height: 24,
-                ),
+            const Center(
+              child: Text(
+                'Take your profile pic',
+                style: TextStyle(fontSize: 20, color: secondaryColor),
+              ),
+            ),
+            const SizedBox(
+              height: 24,
+            ),
 
             // add photo widget
             Stack(
               children: [
                 const CircleAvatar(
-                        backgroundColor: Colors.white38,
-                        radius: 150,
-                        backgroundImage: NetworkImage(
-                            'https://www.pngall.com/wp-content/uploads/5/Profile-PNG-File.png'),
-                      ),
+                  backgroundColor: Colors.white38,
+                  radius: 150,
+                  backgroundImage: NetworkImage(
+                      'https://www.pngall.com/wp-content/uploads/5/Profile-PNG-File.png'),
+                ),
                 Positioned(
                     bottom: 0,
                     left: 200,
@@ -72,11 +73,11 @@ class _NewProfilePictureState extends State<NewProfilePicture> {
                           image = gettingImage;
                         });
                         Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SignUpScreen(
-                                  image: gettingImage,
-                                )));
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => FeedScreen(),
+                          ),
+                        );
                       },
                       icon: const Icon(Icons.add_a_photo),
                     )),

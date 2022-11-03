@@ -1,14 +1,41 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:get/get.dart';
+import 'package:moments/layout/screen_layout.dart';
 import 'dart:io';
 
 import 'package:moments/models/user.dart' as model;
+import 'package:moments/screens/feed_screen.dart';
+import 'package:moments/screens/login_screen.dart';
 import 'constants.dart';
 
 class AuthController extends GetxController {
   static AuthController instance = Get.find();
+  late Rx<User?> _user;
+
+  @override
+  void onReady() {
+    _user = Rx<User?>(firebaseAuth.currentUser);
+    _user.bindStream(
+      firebaseAuth.authStateChanges(),
+    );
+    ever(_user, _setInitialScreen);
+    super.onReady();
+  }
+
+  _setInitialScreen(User? user) {
+    if (user == null) {
+      Get.offAll(
+        () => const LoginScreen(),
+      );
+    } else {
+      Get.offAll(
+        () => const ScreenLayout(),
+      );
+    }
+  }
 
   //upload image to firebase storage
   Future<String> _uploadToStorage(File image) async {
@@ -52,4 +79,34 @@ class AuthController extends GetxController {
     }
     Get.snackbar('Creating account', res);
   }
+
+  void loginUser(String email, String password) async {
+    String res = '';
+    try {
+      if (email.isNotEmpty && password.isNotEmpty) {
+        await firebaseAuth.signInWithEmailAndPassword(
+            email: email, password: password);
+        res = 'Success';
+      } else {
+        res = 'Please enter all the fields';
+      }
+    } catch (err) {
+      res = err.toString();
+    }
+    Get.snackbar('Logging in', res);
+  }
+
+  Future<model.User> getUserDetails() async {
+    User currentUser = firebaseAuth.currentUser!;
+
+    DocumentSnapshot snap =
+    (await firestore.collection('users').doc(currentUser.uid).get());
+
+    return model.User.fromSnap(snap);
+  }
+
+  Future<void> signOut() async {
+    await firebaseAuth.signOut();
+  }
+
 }

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:moments/controllers/auth_controller.dart';
+import 'package:moments/controllers/constants.dart';
 import 'package:moments/resources/auth_methods.dart';
+import 'package:moments/screens/sign_up_screen.dart';
 import 'package:moments/utils/colors.dart';
 import 'package:moments/utils/utils.dart';
 import 'package:moments/widgets/text_field_input.dart';
 
-import '../layout/mobile_screen_layout.dart';
+import '../layout/screen_layout.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -31,18 +34,8 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {
       _isLoading = true;
     });
-    String res = await AuthMethods().loginUser(
-        email: _emailController.text, password: _passwordController.text);
-    if (res == 'Success') {
-      showSnackBar(res, context);
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => const MobileScreenLayout(),
-        ),
-      );
-    } else {
-      showSnackBar(res, context);
-    }
+    AuthController().loginUser(
+        _emailController.text, _passwordController.text);
     setState(() {
       _isLoading = false;
     });
@@ -132,8 +125,11 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Navigator.of(context)
-                          .pushNamed('/new_profile_picture_screen');
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const SignUpScreen(),
+                        ),
+                      );
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 8),

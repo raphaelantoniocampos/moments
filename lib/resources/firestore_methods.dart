@@ -17,7 +17,6 @@ class FirestoreMethods {
     Uint8List file,
     String uid,
     String username,
-    String profImage,
   ) async {
     String res = "some error ocurred";
     try {
@@ -33,7 +32,6 @@ class FirestoreMethods {
           postId: postId,
           datePublished: DateTime.now(),
           postUrl: photoUrl,
-          profImage: profImage,
           likes: []);
 
       _firestore.collection('posts').doc(postId).set(post.toJson());

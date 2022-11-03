@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:moments/controllers/auth_controller.dart';
 import 'package:moments/resources/auth_methods.dart';
-import 'package:moments/layout/mobile_screen_layout.dart';
+import 'package:moments/layout/screen_layout.dart';
 import 'package:moments/utils/colors.dart';
 import 'dart:io';
 
 import '../utils/utils.dart';
 
 class SignUpScreen extends StatefulWidget {
-  final File image;
-
-  const SignUpScreen({Key? key, required this.image}) : super(key: key);
+  const SignUpScreen({Key? key}) : super(key: key);
 
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
@@ -39,24 +38,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
       _isLoading = true;
     });
 
-    String res = await AuthMethods().signUpUser(
-        username: _usernameController.text,
-        email: _emailController.text,
-        password: _passwordController.text,
-        file: await widget.image.readAsBytes());
+    AuthController().registerUser(_usernameController.text,
+        _emailController.text, _passwordController.text);
 
     setState(() {
       _isLoading = false;
     });
-    if (res == 'Success') {
-      showSnackBar(res, context);
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => const MobileScreenLayout(),
-        ),
-      );
-    }
-    showSnackBar(res, context);
   }
 
   @override
