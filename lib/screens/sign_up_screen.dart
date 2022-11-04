@@ -29,7 +29,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   void signUpUser() async {
-    print(_isLoading);
+    setState(() {
+      _isLoading = true;
+    });
     AuthController().registerUser(_usernameController.text,
         _emailController.text, _passwordController.text);
     setState(() {

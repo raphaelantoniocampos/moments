@@ -44,17 +44,7 @@ class AuthController extends GetxController {
     }
   }
 
-  //upload image to firebase storage
-  Future<String> _uploadToStorage(File image) async {
-    Reference ref = firebaseStorage
-        .ref()
-        .child('profilePic')
-        .child(firebaseAuth.currentUser!.uid);
-    UploadTask uploadTask = ref.putFile(image);
-    TaskSnapshot snap = await uploadTask;
-    String downloadUrl = await snap.ref.getDownloadURL();
-    return downloadUrl;
-  }
+
 
   //registering the user
   void registerUser(String username, String email, String password) async {

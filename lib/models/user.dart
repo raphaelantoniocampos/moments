@@ -3,12 +3,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class User {
   final String email;
   final String uid;
-  final String profilePic;
+  String profilePic;
   final String username;
   final List connecting;
   final List connections;
 
-  const User(
+  User(
       {required this.profilePic,
       required this.uid,
       required this.username,

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:moments/layout/screen_layout.dart';
-import 'package:moments/screens/feed_screen.dart';
-import 'package:moments/screens/sign_up_screen.dart';
+import 'package:moments/controllers/profile_pic_controller.dart';
 import 'dart:io';
 
 import '../utils/colors.dart';
@@ -12,11 +11,15 @@ class NewProfilePictureScreen extends StatefulWidget {
   const NewProfilePictureScreen({Key? key}) : super(key: key);
 
   @override
-  State<NewProfilePictureScreen> createState() => _NewProfilePictureScreenState();
+  State<NewProfilePictureScreen> createState() =>
+      _NewProfilePictureScreenState();
 }
 
 class _NewProfilePictureScreenState extends State<NewProfilePictureScreen> {
-  File? image;
+
+  void changeProfilePic(image) async {
+    ProfilePicController().uploadProfilePic(image);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,16 +66,15 @@ class _NewProfilePictureScreenState extends State<NewProfilePictureScreen> {
                       color: primaryColor,
                       iconSize: 50,
                       onPressed: () async {
-                        final gettingImage = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => CameraScreen(
-                                      isRecordingAvailable: false,
-                                    )));
-                        print('print image: ${gettingImage.toString()}');
-                        setState(() {
-                          image = gettingImage;
-                        });
+                        final image = await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => CameraScreen(
+                              isRecordingAvailable: false,
+                            ),
+                          ),
+                        );
+                        changeProfilePic(image);
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
