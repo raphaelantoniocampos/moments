@@ -17,7 +17,7 @@ class User {
       required this.email});
 
   Map<String, dynamic> toJson() => {
-        "photoUrl": profilePic,
+        "profilePic": profilePic,
         "username": username,
         "email": email,
         "uid": uid,
@@ -30,7 +30,7 @@ class User {
 
     return User(
       username: snapshot['username'],
-      profilePic: snapshot['photoUrl'],
+      profilePic: snapshot['profilePic'],
       email: snapshot['email'],
       uid: snapshot['uid'],
       connecting: snapshot['connecting'],

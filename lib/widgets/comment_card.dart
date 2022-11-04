@@ -60,9 +60,9 @@ class _CommentCardState extends State<CommentCard> {
                               CircleAvatar(
                                 backgroundImage:
 
-                                    // NetworkImage(userSnap['photoUrl']),
+                                    // NetworkImage(userSnap['profilePic']),
 
-                                    NetworkImage(snap['photoUrl']),
+                                    NetworkImage(snap['profilePìc']),
                               ),
 
                               //Username

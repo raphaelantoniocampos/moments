@@ -7,7 +7,7 @@ import 'auth_controller.dart';
 //FIREBASE
 var firebaseAuth = FirebaseAuth.instance;
 var firebaseStorage = FirebaseStorage.instance;
-var firestore = FirebaseFirestore.instance;
+var firebaseFirestore = FirebaseFirestore.instance;
 
 //CONTROLLER
 var authController = AuthController.instance;

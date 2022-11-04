@@ -25,21 +25,22 @@ class AuthController extends GetxController {
     super.onReady();
   }
 
-  _setInitialScreen(User? user) {
+  _setInitialScreen(User? user) async {
     if (user == null) {
       Get.offAll(
         () => const LoginScreen(),
       );
-    } else if(
-    user.photoURL == initialProfilePic) {
-      Get.offAll(
-            () => const NewProfilePictureScreen(),
-      );
-    }
-    else {
-      Get.offAll(
-        () => const ScreenLayout(),
-      );
+    } else {
+      model.User modelUser = await getUserDetails();
+      if (modelUser.profilePic == initialProfilePic) {
+        Get.offAll(
+          () => const NewProfilePictureScreen(),
+        );
+      } else {
+        Get.offAll(
+          () => const ScreenLayout(),
+        );
+      }
     }
   }
 
@@ -65,18 +66,16 @@ class AuthController extends GetxController {
             email: email, password: password);
         // String downloadUrl = await _uploadToStorage(image);
         model.User user = model.User(
-            profilePic:
-                initialProfilePic,
+            profilePic: initialProfilePic,
             uid: cred.user!.uid,
             username: username,
             connecting: [],
             connections: [],
             email: email);
-        await firestore
+        await firebaseFirestore
             .collection('users')
             .doc(cred.user!.uid)
             .set(user.toJson());
-        firebaseAuth.currentUser?.updatePhotoURL(initialProfilePic);
         res = 'Success';
       } else {
         res = 'Please enter all the fields';
@@ -107,7 +106,7 @@ class AuthController extends GetxController {
     User currentUser = firebaseAuth.currentUser!;
 
     DocumentSnapshot snap =
-    (await firestore.collection('users').doc(currentUser.uid).get());
+        (await firebaseFirestore.collection('users').doc(currentUser.uid).get());
 
     return model.User.fromSnap(snap);
   }
@@ -115,5 +114,4 @@ class AuthController extends GetxController {
   Future<void> signOut() async {
     await firebaseAuth.signOut();
   }
-
 }

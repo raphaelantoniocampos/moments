@@ -84,7 +84,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         children: [
                           CircleAvatar(
                             backgroundColor: secondaryColor,
-                            backgroundImage: NetworkImage(userData['photoUrl']),
+                            backgroundImage: NetworkImage(userData['profilePic']),
                             radius: 40,
                           ),
                           Expanded(

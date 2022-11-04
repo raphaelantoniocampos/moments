@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:moments/layout/screen_layout.dart';
 import 'package:moments/screens/feed_screen.dart';
 import 'package:moments/screens/sign_up_screen.dart';
 import 'dart:io';
@@ -75,7 +76,7 @@ class _NewProfilePictureScreenState extends State<NewProfilePictureScreen> {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => FeedScreen(),
+                            builder: (context) => ScreenLayout(),
                           ),
                         );
                       },
