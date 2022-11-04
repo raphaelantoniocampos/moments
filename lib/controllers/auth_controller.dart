@@ -7,8 +7,8 @@ import 'package:moments/layout/screen_layout.dart';
 import 'dart:io';
 
 import 'package:moments/models/user.dart' as model;
-import 'package:moments/screens/feed_screen.dart';
 import 'package:moments/screens/login_screen.dart';
+import '../screens/new_profile_picture_screen.dart';
 import 'constants.dart';
 
 class AuthController extends GetxController {
@@ -30,7 +30,13 @@ class AuthController extends GetxController {
       Get.offAll(
         () => const LoginScreen(),
       );
-    } else {
+    } else if(
+    user.photoURL == initialProfilePic) {
+      Get.offAll(
+            () => const NewProfilePictureScreen(),
+      );
+    }
+    else {
       Get.offAll(
         () => const ScreenLayout(),
       );
@@ -60,7 +66,7 @@ class AuthController extends GetxController {
         // String downloadUrl = await _uploadToStorage(image);
         model.User user = model.User(
             profilePic:
-                'https://firebasestorage.googleapis.com/v0/b/moments-a47d4.appspot.com/o/model%2FinitialProfilePic.jpg?alt=media&token=05c1a014-b453-4ba7-a1fb-fd2e4ade68db',
+                initialProfilePic,
             uid: cred.user!.uid,
             username: username,
             connecting: [],
@@ -70,6 +76,7 @@ class AuthController extends GetxController {
             .collection('users')
             .doc(cred.user!.uid)
             .set(user.toJson());
+        firebaseAuth.currentUser?.updatePhotoURL(initialProfilePic);
         res = 'Success';
       } else {
         res = 'Please enter all the fields';

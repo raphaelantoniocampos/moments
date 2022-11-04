@@ -35,8 +35,8 @@ class _ScreenLayoutState extends State<ScreenLayout> {
       setState(() {
         _isLoading = true;
       });
-      String res = await FirestoreMethods()
-          .uploadPost('', _file!, uid, username);
+      String res =
+          await FirestoreMethods().uploadPost('', _file!, uid, username);
 
       if (res == 'Success') {
         showSnackBar('Posted', context);
@@ -89,38 +89,46 @@ class _ScreenLayoutState extends State<ScreenLayout> {
         onPageChanged: onPageChanged,
         children: homeScreenItems,
       ),
-      bottomNavigationBar: CupertinoTabBar(
-        items: [
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: backgroundColor,
+        type: BottomNavigationBarType.fixed,
+        selectedItemColor: primaryColor,
+        items: const [
           BottomNavigationBarItem(
-              icon: Icon(
-                Icons.search,
-                color: _page == 0 ? primaryColor : secondaryColor,
-              ),
-              label: '',
-              backgroundColor: primaryColor),
+            icon: Icon(
+              Icons.search,
+              size: 30,
+            ),
+            label: 'search',
+          ),
           BottomNavigationBarItem(
-              icon: Icon(
-                Icons.home,
-                color: _page == 1 ? primaryColor : secondaryColor,
-              ),
-              label: '',
-              backgroundColor: primaryColor),
+            icon: Icon(
+              Icons.home,
+              size: 30,
+            ),
+            label: 'home',
+          ),
           BottomNavigationBarItem(
-              icon: Icon(
-                Icons.notifications,
-                color: _page == 2 ? primaryColor : secondaryColor,
-              ),
-              label: '',
-              backgroundColor: primaryColor),
+            icon: Icon(
+              Icons.notifications,
+              size: 30,
+            ),
+            label: 'notifications',
+          ),
           BottomNavigationBarItem(
-              icon: Icon(
-                Icons.person,
-                color: _page == 3 ? primaryColor : secondaryColor,
-              ),
-              label: '',
-              backgroundColor: primaryColor),
+            icon: Icon(
+              Icons.person,
+              size: 30,
+            ),
+            label: 'profile',
+          ),
         ],
-        onTap: changePageTo,
+        onTap: (index) {
+          setState(() {
+            _page = index;
+          });
+        },
+        currentIndex: _page,
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {

@@ -7,14 +7,14 @@ import 'dart:io';
 import '../utils/colors.dart';
 import 'camera_screen.dart';
 
-class NewProfilePicture extends StatefulWidget {
-  const NewProfilePicture({Key? key}) : super(key: key);
+class NewProfilePictureScreen extends StatefulWidget {
+  const NewProfilePictureScreen({Key? key}) : super(key: key);
 
   @override
-  State<NewProfilePicture> createState() => _NewProfilePictureState();
+  State<NewProfilePictureScreen> createState() => _NewProfilePictureScreenState();
 }
 
-class _NewProfilePictureState extends State<NewProfilePicture> {
+class _NewProfilePictureScreenState extends State<NewProfilePictureScreen> {
   File? image;
 
   @override

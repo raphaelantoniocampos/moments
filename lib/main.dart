@@ -21,7 +21,11 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   cameras = await availableCameras();
 
-  await Firebase.initializeApp().then((value) => Get.put(AuthController()));
+  await Firebase.initializeApp().then(
+    (value) => Get.put(
+      AuthController(),
+    ),
+  );
 
   runApp(
     const MomentsApp(),
@@ -72,7 +76,6 @@ class MomentsApp extends StatelessWidget {
             } else if (snapshot.connectionState == ConnectionState.waiting) {
               return const LoadingScreen();
             }
-            print(authController.getUserDetails().toString());
             return const LoginScreen();
           },
         ),

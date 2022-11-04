@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:moments/controllers/auth_controller.dart';
-import 'package:moments/resources/auth_methods.dart';
-import 'package:moments/layout/screen_layout.dart';
 import 'package:moments/utils/colors.dart';
-import 'dart:io';
-
-import '../utils/utils.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -34,13 +29,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   void signUpUser() async {
-    setState(() {
-      _isLoading = true;
-    });
-
+    print(_isLoading);
     AuthController().registerUser(_usernameController.text,
         _emailController.text, _passwordController.text);
-
     setState(() {
       _isLoading = false;
     });
@@ -67,18 +58,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
               height: 200,
             ),
 
-            //text field input username
+            // text field input username
             Form(
               key: _formKey,
               child: Column(
                 children: [
                   TextFormField(
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Enter your username';
-                      }
-                      return null;
-                    },
                     decoration:
                         const InputDecoration(hintText: 'Enter your username'),
                     keyboardType: TextInputType.text,
@@ -90,19 +75,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                   //text field input email
                   TextFormField(
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Enter your email';
-                        } else {
-                          bool emailValid = RegExp(
-                                  r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                              .hasMatch(value);
-                          if (!emailValid) {
-                            return 'Email not valid';
-                          }
-                          return null;
-                        }
-                      },
                       decoration:
                           const InputDecoration(hintText: 'Enter your email'),
                       keyboardType: TextInputType.emailAddress,
@@ -113,15 +85,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
                   //text field input password
                   TextFormField(
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Enter your password';
-                      }
-                      if (value.length < 6) {
-                        return 'Password must have at least 6 characters';
-                      }
-                      return null;
-                    },
                     decoration:
                         const InputDecoration(hintText: 'Enter your password'),
                     keyboardType: TextInputType.text,
@@ -135,8 +98,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   //button signup
                   ElevatedButton(
                     onPressed: () async {
-                      if (_formKey.currentState!.validate() && !_isLoading) {
+                      if (!_isLoading) {
+                        setState(() {
+                          _isLoading = true;
+                        });
                         signUpUser();
+                        setState(() {
+                          _isLoading = false;
+                        });
                       }
                     },
                     child: Container(
