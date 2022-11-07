@@ -2,12 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:moments/resources/firestore_methods.dart';
-import 'package:moments/utils/colors.dart';
 import 'package:provider/provider.dart';
 
 import '../models/user.dart';
 import '../providers/user_provider.dart';
 import '../screens/loading_screen.dart';
+import '../utils/constants.dart';
 
 class CommentCard extends StatefulWidget {
   final snap;

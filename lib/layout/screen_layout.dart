@@ -1,15 +1,16 @@
 import 'dart:io';
 
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:moments/providers/user_provider.dart';
 import 'package:moments/screens/loading_screen.dart';
-import 'package:moments/utils/colors.dart';
 import 'package:provider/provider.dart';
 
+import '../controllers/upload_post_controller.dart';
 import '../models/user.dart' as model;
 import '../screens/camera_screen.dart';
-import '../utils/global_variables.dart';
-import '../utils/utils.dart';
+import '../utils/constants.dart';
 
 class ScreenLayout extends StatefulWidget {
   const ScreenLayout({Key? key}) : super(key: key);
@@ -20,31 +21,24 @@ class ScreenLayout extends StatefulWidget {
 
 class _ScreenLayoutState extends State<ScreenLayout> {
   final searchController = TextEditingController();
-  late final File file;
   late final String filePath;
   int _page = 1;
   late PageController pageController;
   bool _isLoading = false;
+  UploadPostController uploadPostController = Get.put(UploadPostController());
 
   void createPost(
     String uid,
+    File file,
   ) async {
-    try {
-      setState(() {
-        _isLoading = true;
-      });
-      String res = 'Success';
-      // String res =
-      //     await FirestoreMethods().uploadPost('', _file!, uid);
+    setState(() {
+      _isLoading = true;
+    });
 
-      if (res == 'Success') {
-        showSnackBar('Posted', context);
-      } else {
-        showSnackBar(res, context);
-      }
-    } catch (err) {
-      showSnackBar(err.toString(), context);
-    }
+    await uploadPostController.uploadPost(file);
+    // String res =
+    //     await FirestoreMethods().uploadPost('', file!, uid);
+
     setState(() {
       _isLoading = false;
     });
@@ -73,7 +67,7 @@ class _ScreenLayoutState extends State<ScreenLayout> {
     return user == null || _isLoading
         ? const LoadingScreen()
         : Scaffold(
-            body: homeScreenItems[_page],
+            body: pages[_page],
             bottomNavigationBar: BottomNavigationBar(
               backgroundColor: backgroundColor,
               type: BottomNavigationBarType.fixed,
@@ -117,15 +111,14 @@ class _ScreenLayoutState extends State<ScreenLayout> {
             ),
             floatingActionButton: FloatingActionButton(
               onPressed: () async {
-                final getFile = await Navigator.push(
+                final file = await Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => CameraScreen(),
                   ),
                 );
-                file = getFile;
 
-                // createPost(user.uid, user.username, user.profilePic);
+                createPost(user.uid, file);
               },
               child: const Icon(
                 Icons.add,

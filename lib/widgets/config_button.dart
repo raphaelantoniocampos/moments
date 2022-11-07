@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:moments/controllers/constants.dart';
+import 'package:moments/utils/constants.dart';
 
-import '../resources/auth_methods.dart';
 import '../screens/login_screen.dart';
-import '../utils/colors.dart';
 
 class ConfigButton extends StatelessWidget {
   const ConfigButton({Key? key}) : super(key: key);

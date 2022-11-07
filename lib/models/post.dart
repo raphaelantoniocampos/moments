@@ -8,9 +8,11 @@ class Post {
   final String postUrl;
   final likes;
   final bool isVideo;
+  final String thumbnail;
   final bool isPublic;
+  final int commentCount;
 
-  const Post({
+  Post({
     required this.description,
     required this.uid,
     required this.postId,
@@ -18,7 +20,9 @@ class Post {
     required this.postUrl,
     required this.likes,
     required this.isVideo,
+    required this.thumbnail,
     required this.isPublic,
+    required this.commentCount,
   });
 
   Map<String, dynamic> toJson() => {
@@ -29,7 +33,9 @@ class Post {
         "postUrl": postUrl,
         "likes": likes,
         "isVideo": isVideo,
+        "thumbnail": thumbnail,
         "isPublic": isPublic,
+        "commentCount": commentCount,
       };
 
   static Post fromSnap(DocumentSnapshot snap) {
@@ -43,7 +49,9 @@ class Post {
       postUrl: snapshot['postUrl'],
       likes: snapshot['likes'],
       isVideo: snapshot['isVideo'],
+      thumbnail: snapshot['thumbnail'],
       isPublic: snapshot['isPublic'],
+      commentCount: snapshot['commentCount'],
     );
   }
 }

@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 
-import 'constants.dart';
+import '../utils/constants.dart';
 import 'package:moments/models/user.dart' as model;
 
 class ProfilePicController extends GetxController{

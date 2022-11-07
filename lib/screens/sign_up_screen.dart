@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:moments/controllers/auth_controller.dart';
-import 'package:moments/utils/colors.dart';
+
+import '../utils/constants.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -32,7 +32,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     setState(() {
       _isLoading = true;
     });
-    AuthController().registerUser(_usernameController.text,
+    authController.registerUser(_usernameController.text,
         _emailController.text, _passwordController.text);
     setState(() {
       _isLoading = false;

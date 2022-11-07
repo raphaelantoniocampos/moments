@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:moments/screens/loading_screen.dart';
-import 'package:moments/utils/colors.dart';
+import '../utils/constants.dart';
 import 'package:moments/widgets/post_card.dart';
 
 import '../widgets/config_button.dart';

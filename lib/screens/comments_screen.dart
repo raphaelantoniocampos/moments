@@ -2,8 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:moments/resources/firestore_methods.dart';
 import 'package:moments/screens/loading_screen.dart';
-import 'package:moments/utils/colors.dart';
-import 'package:moments/utils/utils.dart';
+import '../utils/constants.dart';
 import 'package:provider/provider.dart';
 import '../models/user.dart';
 import '../providers/user_provider.dart';
@@ -91,7 +90,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                             user.uid,
                             widget.snap['postId'],
                             _commentController.text);
-                        showSnackBar(res, context);
+                        // showSnackBar(res, context);
                         setState(() {
                           _commentController.text = '';
                         });

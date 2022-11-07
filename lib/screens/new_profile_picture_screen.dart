@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:moments/layout/screen_layout.dart';
 import 'package:moments/controllers/profile_pic_controller.dart';
-import 'dart:io';
 
-import '../utils/colors.dart';
+import '../utils/constants.dart';
 import 'camera_screen.dart';
 
 class NewProfilePictureScreen extends StatefulWidget {

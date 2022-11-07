@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:moments/controllers/auth_controller.dart';
-import 'package:moments/controllers/constants.dart';
+import 'package:moments/utils/constants.dart';
 
 import '../models/user.dart';
 import '../resources/auth_methods.dart';

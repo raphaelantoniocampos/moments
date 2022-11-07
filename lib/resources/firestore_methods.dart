@@ -2,45 +2,42 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:moments/resources/storage_methods.dart';
-import 'package:moments/utils/utils.dart';
 import 'package:uuid/uuid.dart';
 
 import '../models/post.dart';
-import '../models/user.dart';
 
 class FirestoreMethods {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   // Upload post
-  Future<String> uploadPost(
-      String description,
-      Uint8List file,
-      String uid,
-      bool isVideo) async {
-    String res = "some error ocurred";
-    try {
-      String photoUrl =
-          await StorageMethods().uploadFileToStorage('posts', file);
-
-      String postId = const Uuid().v1();
-
-      Post post = Post(
-          description: description,
-          uid: uid,
-          postId: postId,
-          datePublished: DateTime.now(),
-          postUrl: photoUrl,
-          likes: [],
-          isVideo: isVideo,
-          isPublic: false);
-
-      _firestore.collection('posts').doc(postId).set(post.toJson());
-      res = 'Success';
-    } catch (err) {
-      res = err.toString();
-    }
-    return res;
-  }
+  // Future<String> uploadPost(
+  //     Uint8List file,
+  //     String uid,
+  //     bool isVideo) async {
+  //   String res = "some error ocurred";
+  //   try {
+  //     String photoUrl =
+  //         await StorageMethods().uploadFileToStorage('posts', file);
+  //
+  //     String postId = const Uuid().v1();
+  //
+  //     Post post = Post(
+  //         description: '',
+  //         uid: uid,
+  //         postId: postId,
+  //         datePublished: DateTime.now(),
+  //         postUrl: photoUrl,
+  //         likes: [],
+  //         isVideo: isVideo,
+  //         isPublic: false, thumbnail: '', commentCount: 0);
+  //
+  //     _firestore.collection('posts').doc(postId).set(post.toJson());
+  //     res = 'Success';
+  //   } catch (err) {
+  //     res = err.toString();
+  //   }
+  //   return res;
+  // }
 
   Future<void> likePost(String postId, String uid, List likes) async {
     try {

@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:moments/controllers/auth_controller.dart';
-import 'package:moments/controllers/constants.dart';
-import 'package:moments/resources/auth_methods.dart';
+import 'package:moments/utils/constants.dart';
 import 'package:moments/screens/sign_up_screen.dart';
-import 'package:moments/utils/colors.dart';
-import 'package:moments/utils/utils.dart';
 import 'package:moments/widgets/text_field_input.dart';
 
-import '../layout/screen_layout.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -34,7 +29,7 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {
       _isLoading = true;
     });
-    AuthController().loginUser(
+    authController.loginUser(
         _emailController.text, _passwordController.text);
     setState(() {
       _isLoading = false;

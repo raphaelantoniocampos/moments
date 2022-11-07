@@ -3,9 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:moments/resources/firestore_methods.dart';
 import 'package:moments/screens/loading_screen.dart';
-import 'package:moments/utils/colors.dart';
 import 'package:moments/utils/utils.dart';
 
+import '../utils/constants.dart';
 import '../widgets/follow_button.dart';
 import '../widgets/post_card.dart';
 
@@ -55,7 +55,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
       setState(() {});
     } catch (err) {
-      showSnackBar(err.toString(), context);
+      // showSnackBar(err.toString(), context);
     }
     setState(() {
       isLoading = false;

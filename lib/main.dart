@@ -3,16 +3,15 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:moments/controllers/constants.dart';
+import 'package:moments/utils/constants.dart';
 import 'package:moments/providers/user_provider.dart';
 import 'package:moments/screens/loading_screen.dart';
 import 'package:moments/screens/login_screen.dart';
-import 'package:moments/utils/global_variables.dart';
+import 'package:moments/utils/constants.dart';
 import 'package:get/get.dart';
 
 import 'controllers/auth_controller.dart';
 import 'layout/screen_layout.dart';
-import 'utils/colors.dart';
 import 'package:provider/provider.dart';
 
 List<CameraDescription> cameras = [];

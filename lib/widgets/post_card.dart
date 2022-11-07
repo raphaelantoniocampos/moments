@@ -5,15 +5,15 @@ import 'package:moments/screens/comments_screen.dart';
 import 'package:moments/screens/loading_screen.dart';
 import 'package:moments/widgets/like_animation.dart';
 import 'package:flutter/material.dart';
-import 'package:moments/utils/colors.dart';
 import 'package:provider/provider.dart';
 import '../models/user.dart';
 import '../providers/user_provider.dart';
 import '../screens/delete_post_screen.dart';
 import '../screens/profile_screen.dart';
+import '../utils/constants.dart';
 
 class PostCard extends StatefulWidget {
-  final snap;
+  final Map<String, dynamic >snap;
 
   const PostCard({Key? key, required this.snap}) : super(key: key);
 
@@ -86,7 +86,7 @@ class _PostCardState extends State<PostCard> {
                                 CircleAvatar(
                                   radius: 16,
                                   backgroundImage: NetworkImage(
-                                    widget.snap['profImage'],
+                                    widget.snap['profilePic'],
                                   ),
                                 ),
                                 Expanded(

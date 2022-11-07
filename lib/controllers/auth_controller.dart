@@ -9,7 +9,7 @@ import 'dart:io';
 import 'package:moments/models/user.dart' as model;
 import 'package:moments/screens/login_screen.dart';
 import '../screens/new_profile_picture_screen.dart';
-import 'constants.dart';
+import '../utils/constants.dart';
 
 class AuthController extends GetxController {
   static AuthController instance = Get.find();

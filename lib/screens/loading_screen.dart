@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:moments/utils/colors.dart';
+
+import '../utils/constants.dart';
 
 class LoadingScreen extends StatelessWidget {
   const LoadingScreen({Key? key}) : super(key: key);

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../resources/firestore_methods.dart';
-import '../utils/colors.dart';
+import '../utils/constants.dart';
 
 class DeletePostScreen extends StatefulWidget {
   final String postId;
