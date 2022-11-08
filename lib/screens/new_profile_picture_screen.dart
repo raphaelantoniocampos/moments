@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:moments/controllers/upload_post_controller.dart';
 import 'package:moments/layout/screen_layout.dart';
 import 'package:moments/controllers/profile_pic_controller.dart';
+import 'package:moments/screens/loading_screen.dart';
 
 import '../utils/constants.dart';
 import 'camera_screen.dart';
@@ -15,14 +17,25 @@ class NewProfilePictureScreen extends StatefulWidget {
 }
 
 class _NewProfilePictureScreenState extends State<NewProfilePictureScreen> {
+  bool isLoading = false;
 
-  void changeProfilePic(image) async {
-    ProfilePicController().uploadProfilePic(image);
+  Future<String> _uploadPost(image) async {
+    setState(() {
+      isLoading = true;
+    });
+    return await UploadPostController().uploadPost(image);
+  }
+  void _changeProfilePic(String downloadUrl) async {
+    ProfilePicController().changeProfilePic(downloadUrl);
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return isLoading ? const LoadingScreen() :
+      Scaffold(
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 32),
@@ -73,7 +86,9 @@ class _NewProfilePictureScreenState extends State<NewProfilePictureScreen> {
                             ),
                           ),
                         );
-                        changeProfilePic(image);
+                        String downloadUrl = await _uploadPost(image);
+                        _changeProfilePic(downloadUrl);
+
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(

@@ -5,7 +5,7 @@ class Post {
   final String uid;
   final String postId;
   final datePublished;
-  final String postUrl;
+  final String downloadUrl;
   final likes;
   final bool isVideo;
   final String thumbnail;
@@ -17,7 +17,7 @@ class Post {
     required this.uid,
     required this.postId,
     required this.datePublished,
-    required this.postUrl,
+    required this.downloadUrl,
     required this.likes,
     required this.isVideo,
     required this.thumbnail,
@@ -30,7 +30,7 @@ class Post {
         "uid": uid,
         "postId": postId,
         "datePublished": datePublished,
-        "postUrl": postUrl,
+        "downloadUrl": downloadUrl,
         "likes": likes,
         "isVideo": isVideo,
         "thumbnail": thumbnail,
@@ -46,7 +46,7 @@ class Post {
       uid: snapshot['uid'],
       postId: snapshot['postId'],
       datePublished: snapshot['datePublished'],
-      postUrl: snapshot['postUrl'],
+      downloadUrl: snapshot['downloadUrl'],
       likes: snapshot['likes'],
       isVideo: snapshot['isVideo'],
       thumbnail: snapshot['thumbnail'],

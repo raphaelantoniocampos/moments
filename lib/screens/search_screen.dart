@@ -117,7 +117,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     height: MediaQuery.of(context).size.height * 0.35,
                     width: double.infinity,
                     child: Image.network(
-                      (snapshot.data! as dynamic).docs[index]['postUrl'],
+                      (snapshot.data! as dynamic).docs[index]['downloadUrl'],
                     ),
                   ),
                   mainAxisSpacing: 0,

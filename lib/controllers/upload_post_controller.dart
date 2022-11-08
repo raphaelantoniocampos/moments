@@ -58,7 +58,7 @@ class UploadPostController extends GetxController {
     return thumbnail;
   }
 
-  uploadPost(File file) async {
+  Future<String> uploadPost(File file) async {
     String res = '';
     try {
       String path = file.path;
@@ -69,7 +69,7 @@ class UploadPostController extends GetxController {
 
       String id = const Uuid().v1();
       String uid = firebaseAuth.currentUser!.uid;
-      String postUrl = await _uploadFileToStorage('posts', path, id, isVideo);
+      String downloadUrl = await _uploadFileToStorage('posts', path, id, isVideo);
       String thumbnail = '';
       if (isVideo) {
         thumbnail = await _uploadThumbnailToStorage('thumbnails', id, path);
@@ -79,7 +79,7 @@ class UploadPostController extends GetxController {
           uid: uid,
           postId: id,
           datePublished: DateTime.now(),
-          postUrl: postUrl,
+          downloadUrl: downloadUrl,
           likes: [],
           isVideo: isVideo,
           thumbnail: thumbnail,
@@ -90,9 +90,11 @@ class UploadPostController extends GetxController {
             post.toJson(),
           );
       res = 'Success';
+      return downloadUrl;
     } catch (e) {
       res = e.toString();
     }
     Get.snackbar('Upload Post', res);
+    return initialProfilePic;
   }
 }
