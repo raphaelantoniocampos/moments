@@ -35,7 +35,7 @@ List<Widget> pages = [
   const Center(
     child: SearchScreen(),
   ),
-  const FeedScreen(),
+  FeedScreen(),
   const Center(
     child: Text('Notifications'),
   ),

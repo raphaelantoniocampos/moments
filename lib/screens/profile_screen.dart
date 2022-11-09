@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:moments/resources/firestore_methods.dart';
 import 'package:moments/screens/loading_screen.dart';
 import 'package:moments/utils/utils.dart';
+import 'package:get/get.dart';
 
+import '../controllers/post_controller.dart';
 import '../utils/constants.dart';
 import '../widgets/follow_button.dart';
 import '../widgets/post_card.dart';
@@ -19,6 +21,7 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  final PostController postController = Get.put(PostController());
   var userData = {};
   int postLen = 0;
   int friends = 0;
@@ -84,7 +87,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         children: [
                           CircleAvatar(
                             backgroundColor: secondaryColor,
-                            backgroundImage: NetworkImage(userData['profilePic']),
+                            backgroundImage:
+                                NetworkImage(userData['profilePic']),
                             radius: 40,
                           ),
                           Expanded(
@@ -110,8 +114,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                         ? FollowButton(
                                             text: 'Edit Profile',
                                             textColor: Colors.black,
-                                            backGroundColor:
-                                                backgroundColor,
+                                            backGroundColor: backgroundColor,
                                             borderColor: secondaryColor,
                                             function: () {},
                                           )
@@ -182,28 +185,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 SizedBox(
                   height: 600,
                   // width: double.infinity,
-                  child: StreamBuilder(
-                    stream: FirebaseFirestore.instance
-                        .collection('posts')
-                        .where('uid', isEqualTo: widget.uid)
-                        .orderBy('datePublished', descending: true)
-                        .snapshots(),
-                    builder: (context,
-                        AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
-                            snapshot) {
-                      if (!snapshot.hasData) {
-                        return const LoadingScreen();
-                      }
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const LoadingScreen();
-                      }
+                  child: Obx(
+                    () {
+                      // stream: FirebaseFirestore.instance
+                      //     .collection('posts')
+                      //     .where('uid', isEqualTo: widget.uid)
+                      //     .orderBy('datePublished', descending: true)
+                      //     .snapshots(),
+                      // builder: (context,
+                      //     AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+                      //         snapshot) {
+                      //   if (!snapshot.hasData) {
+                      //     return const LoadingScreen();
+                      //   }
+                      //   if (snapshot.connectionState == ConnectionState.waiting) {
+                      //     return const LoadingScreen();
+                      //   }
                       return ListView.builder(
                         scrollDirection: Axis.vertical,
                         shrinkWrap: true,
-                        itemCount: (snapshot.data! as dynamic).docs.length,
-                        itemBuilder: (context, index) => PostCard(
-                          snap: (snapshot.data! as dynamic).docs[index].data(),
-                        ),
+                        itemCount: postController.postList.length,
+                        itemBuilder: (context, index) {
+                          final data = postController.postList[index];
+                          return PostCard(
+                            post: data,
+                          );
+                        },
                       );
                     },
                   ),

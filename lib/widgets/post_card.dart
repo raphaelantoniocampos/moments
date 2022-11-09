@@ -2,10 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 import 'package:moments/resources/firestore_methods.dart';
 import 'package:moments/screens/comments_screen.dart';
+import 'package:moments/screens/display_post_screen.dart';
 import 'package:moments/screens/loading_screen.dart';
 import 'package:moments/widgets/like_animation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../controllers/profile_pic_controller.dart';
+import '../models/post.dart';
 import '../models/user.dart';
 import '../providers/user_provider.dart';
 import '../screens/delete_post_screen.dart';
@@ -13,9 +16,10 @@ import '../screens/profile_screen.dart';
 import '../utils/constants.dart';
 
 class PostCard extends StatefulWidget {
-  final Map<String, dynamic >snap;
+  // final Map<String, dynamic> snap;
+  final Post post;
 
-  const PostCard({Key? key, required this.snap}) : super(key: key);
+  const PostCard({Key? key, required this.post}) : super(key: key);
 
   @override
   State<PostCard> createState() => _PostCardState();
@@ -27,14 +31,23 @@ class _PostCardState extends State<PostCard> {
 
   @override
   void initState() {
+    // getComments();
     super.initState();
-    getComments();
   }
 
-  void getComments() async {
+  Future<User> _getUser() async {
+    DocumentSnapshot snap = (await firebaseFirestore
+        .collection('users')
+        .doc(widget.post.uid)
+        .get());
+
+    return User.fromSnap(snap);
+  }
+
+  void _getComments() async {
     QuerySnapshot snap = await FirebaseFirestore.instance
         .collection('posts')
-        .doc(widget.snap['postId'])
+        .doc(widget.post.postId)
         .collection('comments')
         .get();
 
@@ -49,7 +62,7 @@ class _PostCardState extends State<PostCard> {
         : StreamBuilder(
             initialData: FirebaseFirestore.instance
                 .collection('posts')
-                .doc(widget.snap['postId'])
+                .doc(widget.post.postId)
                 .collection('comments')
                 .get(),
             builder: (BuildContext context,
@@ -77,7 +90,7 @@ class _PostCardState extends State<PostCard> {
                             onTap: () => Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) =>
-                                    ProfileScreen(uid: widget.snap['uid']),
+                                    ProfileScreen(uid: widget.post.postId),
                               ),
                             ),
                             child: Row(
@@ -86,14 +99,14 @@ class _PostCardState extends State<PostCard> {
                                 CircleAvatar(
                                   radius: 16,
                                   backgroundImage: NetworkImage(
-                                    widget.snap['profilePic'],
+                                    user.profilePic,
                                   ),
                                 ),
                                 Expanded(
                                   child: Padding(
                                     padding: const EdgeInsets.only(left: 2),
                                     child: Text(
-                                      widget.snap['username'],
+                                      user.username,
                                       style: const TextStyle(
                                           fontWeight: FontWeight.bold),
                                     ),
@@ -123,7 +136,11 @@ class _PostCardState extends State<PostCard> {
                                                 ),
                                               ),
                                               InkWell(
-                                                onTap: () {},
+                                                onTap: () {
+                                                  ProfilePicController()
+                                                      .changeProfilePic(widget
+                                                          .post.downloadUrl);
+                                                },
                                                 child: Container(
                                                   padding: const EdgeInsets
                                                           .symmetric(
@@ -141,7 +158,7 @@ class _PostCardState extends State<PostCard> {
                                                           builder: (context) =>
                                                               DeletePostScreen(
                                                             postId: widget
-                                                                .snap['postId'],
+                                                                .post.postId,
                                                           ),
                                                         ),
                                                       )
@@ -181,7 +198,7 @@ class _PostCardState extends State<PostCard> {
                             width: double.infinity,
                             child: Center(
                               child: Text(
-                                widget.snap['description'],
+                                widget.post.description,
                                 style: const TextStyle(color: Colors.black),
                                 textAlign: TextAlign.center,
                               ),
@@ -193,9 +210,18 @@ class _PostCardState extends State<PostCard> {
 
                     //Post section
                     GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => DisplayPostScreen(
+                              post: widget.post,
+                            ),
+                          ),
+                        );
+                      },
                       onDoubleTap: () async {
-                        FirestoreMethods().likePost(widget.snap['postId'],
-                            user.uid, widget.snap['likes']);
+                        FirestoreMethods().likePost(
+                            widget.post.postId, user.uid, widget.post.likes);
                         setState(() {
                           isLikeAnimating = true;
                         });
@@ -205,7 +231,7 @@ class _PostCardState extends State<PostCard> {
                           height: MediaQuery.of(context).size.height * 0.35,
                           width: double.infinity,
                           child: Image.network(
-                            widget.snap['downloadUrl'],
+                            widget.post.downloadUrl,
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -238,19 +264,16 @@ class _PostCardState extends State<PostCard> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           LikeAnimation(
-                            isAnimating:
-                                widget.snap['likes'].contains(user.uid),
+                            isAnimating: widget.post.likes.contains(user.uid),
                             smallLike: true,
                             child: InkWell(
                               onTap: () async {
-                                FirestoreMethods().likePost(
-                                    widget.snap['postId'],
-                                    user.uid,
-                                    widget.snap['likes']);
+                                FirestoreMethods().likePost(widget.post.postId,
+                                    user.uid, widget.post.likes);
                               },
                               child: Row(
                                 children: [
-                                  widget.snap['likes'].contains(user.uid)
+                                  widget.post.likes.contains(user.uid)
                                       ? const Icon(
                                           Icons.favorite_border,
                                           color: Colors.pinkAccent,
@@ -265,12 +288,12 @@ class _PostCardState extends State<PostCard> {
                                     width: 5,
                                   ),
                                   Text(
-                                    '${widget.snap['likes'].length}',
+                                    '${widget.post.likes.length}',
                                     style: TextStyle(
-                                        color: widget.snap['likes']
-                                                .contains(user.uid)
-                                            ? Colors.pinkAccent
-                                            : secondaryColor),
+                                        color:
+                                            widget.post.likes.contains(user.uid)
+                                                ? Colors.pinkAccent
+                                                : secondaryColor),
                                   ),
                                 ],
                               ),
@@ -280,7 +303,7 @@ class _PostCardState extends State<PostCard> {
                           Text(
                             DateFormat.yMd()
                                 .add_Hm()
-                                .format(widget.snap['datePublished'].toDate()),
+                                .format(widget.post.datePublished.toDate()),
                             style: const TextStyle(
                                 fontSize: 10,
                                 color: Colors.black,
@@ -291,7 +314,7 @@ class _PostCardState extends State<PostCard> {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
                                   builder: (context) => CommentsScreen(
-                                    snap: widget.snap,
+                                    snap: widget.post.toJson(),
                                   ),
                                 ),
                               );

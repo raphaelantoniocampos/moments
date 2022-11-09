@@ -1,14 +1,19 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:moments/controllers/post_controller.dart';
 import 'package:moments/screens/loading_screen.dart';
+import '../models/post.dart';
 import '../utils/constants.dart';
 import 'package:moments/widgets/post_card.dart';
+import 'package:get/get.dart';
 
 import '../widgets/config_button.dart';
 
 class FeedScreen extends StatelessWidget {
-  const FeedScreen({Key? key}) : super(key: key);
+  FeedScreen({Key? key}) : super(key: key);
+
+  final PostController postController = Get.put(PostController());
 
   @override
   Widget build(BuildContext context) {
@@ -24,22 +29,28 @@ class FeedScreen extends StatelessWidget {
           ConfigButton(),
         ],
       ),
-      body: StreamBuilder(
-        stream: FirebaseFirestore.instance
-            .collection('posts')
-            .orderBy('datePublished', descending: true)
-            .snapshots(),
-        builder: (context,
-            AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const LoadingScreen();
-          }
+      body: Obx(
+        () {
+          // stream: FirebaseFirestore.instance
+          //     .collection('posts')
+          //     .orderBy('datePublished', descending: true)
+          //     .snapshots(),
+          // builder: (context,
+          //     AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
+          //   if (snapshot.connectionState == ConnectionState.waiting) {
+          //     return const LoadingScreen();
+          //   }
           return ListView.builder(
-            itemCount: snapshot.data!.docs.length,
-            itemBuilder: (context, index) =>
-                PostCard(
-                  snap: snapshot.data!.docs[index].data(),
-                ),
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            reverse: true,
+            itemCount: postController.postList.length,
+            itemBuilder: (context, index) {
+              final data = postController.postList[index];
+              return PostCard(
+                post: data,
+              );
+            },
           );
         },
       ),

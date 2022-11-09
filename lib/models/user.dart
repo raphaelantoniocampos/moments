@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../utils/constants.dart';
+
 class User {
   final String email;
   final String uid;
@@ -36,5 +38,10 @@ class User {
       connecting: snapshot['connecting'],
       connections: snapshot['connections'],
     );
+  }
+
+  static Future<User> fromUid(String uid) async {
+    var snap = await firebaseFirestore.collection('users').doc(uid).get();
+    return User.fromSnap(snap);
   }
 }
