@@ -230,10 +230,18 @@ class _PostCardState extends State<PostCard> {
                         SizedBox(
                           height: MediaQuery.of(context).size.height * 0.35,
                           width: double.infinity,
-                          child: Image.network(
-                            widget.post.downloadUrl,
-                            fit: BoxFit.cover,
-                          ),
+                          child: widget.post.isVideo
+                              ? Image.network(widget.post.thumbnail,
+                                  fit: BoxFit.cover)
+                              : Image.network(
+                                  widget.post.downloadUrl,
+                                  fit: BoxFit.cover,
+                                ),
+                        ),
+                        Icon(
+                          Icons.play_arrow,
+                          color: widget.post.isVideo ? Colors.white : Colors.transparent,
+                          size: 70,
                         ),
                         AnimatedOpacity(
                           duration: const Duration(milliseconds: 150),

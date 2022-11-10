@@ -1,5 +1,4 @@
 import 'package:camera/camera.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:moments/constants.dart';
@@ -62,7 +61,7 @@ class MomentsApp extends StatelessWidget {
               ColorScheme.fromSwatch().copyWith(secondary: primaryColor),
         ),
         home: StreamBuilder(
-          stream: FirebaseAuth.instance.idTokenChanges(),
+          stream: firebaseAuth.idTokenChanges(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.active) {
               if (snapshot.hasData) {
