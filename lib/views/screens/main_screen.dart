@@ -1,25 +1,24 @@
 import 'dart:io';
 
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:moments/providers/user_provider.dart';
-import 'package:moments/screens/loading_screen.dart';
 import 'package:provider/provider.dart';
 
-import '../controllers/upload_post_controller.dart';
-import '../models/user.dart' as model;
-import '../screens/camera_screen.dart';
-import '../utils/constants.dart';
+import '../../controllers/upload_post_controller.dart';
+import '../../models/user.dart' as model;
+import '../../constants.dart';
+import 'camera_screen.dart';
+import 'loading_screen.dart';
 
-class ScreenLayout extends StatefulWidget {
-  const ScreenLayout({Key? key}) : super(key: key);
+class MainScreen extends StatefulWidget {
+  const MainScreen({Key? key}) : super(key: key);
 
   @override
-  State<ScreenLayout> createState() => _ScreenLayoutState();
+  State<MainScreen> createState() => _MainScreenState();
 }
 
-class _ScreenLayoutState extends State<ScreenLayout> {
+class _MainScreenState extends State<MainScreen> {
   final searchController = TextEditingController();
   late final String filePath;
   int _page = 1;

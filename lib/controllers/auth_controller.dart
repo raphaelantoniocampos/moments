@@ -1,15 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:get/get.dart';
-import 'package:moments/layout/screen_layout.dart';
-import 'dart:io';
+import 'package:moments/views/screens/main_screen.dart';
 
 import 'package:moments/models/user.dart' as model;
-import 'package:moments/screens/login_screen.dart';
-import '../screens/new_profile_picture_screen.dart';
-import '../utils/constants.dart';
+import '../constants.dart';
+import '../views/screens/login_screen.dart';
+import '../views/screens/new_profile_picture_screen.dart';
 
 class AuthController extends GetxController {
   static AuthController instance = Get.find();
@@ -38,7 +35,7 @@ class AuthController extends GetxController {
         );
       } else {
         Get.offAll(
-          () => const ScreenLayout(),
+          () => const MainScreen(),
         );
       }
     }

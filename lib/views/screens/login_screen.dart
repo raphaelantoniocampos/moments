@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:moments/utils/constants.dart';
-import 'package:moments/screens/sign_up_screen.dart';
-import 'package:moments/widgets/text_field_input.dart';
+import 'package:moments/constants.dart';
+import 'package:moments/views/screens/sign_up_screen.dart';
+
+import '../widgets/text_field_input.dart';
 
 
 class LoginScreen extends StatefulWidget {

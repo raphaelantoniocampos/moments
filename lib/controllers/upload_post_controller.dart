@@ -7,7 +7,7 @@ import 'package:video_compress/video_compress.dart';
 import '../models/post.dart';
 import 'package:mime/mime.dart';
 
-import '../utils/constants.dart';
+import '../constants.dart';
 
 class UploadPostController extends GetxController {
   _compressVideo(String path) async {

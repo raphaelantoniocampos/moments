@@ -2,14 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:moments/resources/firestore_methods.dart';
-import 'package:moments/screens/loading_screen.dart';
-import 'package:moments/utils/utils.dart';
 import 'package:get/get.dart';
 
-import '../controllers/post_controller.dart';
-import '../utils/constants.dart';
+import '../../constants.dart';
+import '../../controllers/post_controller.dart';
 import '../widgets/follow_button.dart';
 import '../widgets/post_card.dart';
+import 'loading_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String uid;

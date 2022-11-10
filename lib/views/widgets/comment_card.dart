@@ -4,10 +4,10 @@ import 'package:intl/intl.dart';
 import 'package:moments/resources/firestore_methods.dart';
 import 'package:provider/provider.dart';
 
-import '../models/user.dart';
-import '../providers/user_provider.dart';
+import '../../constants.dart';
+import '../../models/user.dart';
+import '../../providers/user_provider.dart';
 import '../screens/loading_screen.dart';
-import '../utils/constants.dart';
 
 class CommentCard extends StatefulWidget {
   final snap;

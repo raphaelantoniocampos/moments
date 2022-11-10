@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../utils/constants.dart';
+import '../constants.dart';
 
 class User {
   final String email;

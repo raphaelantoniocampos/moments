@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:moments/utils/constants.dart';
+import 'package:moments/constants.dart';
 import 'package:video_player/video_player.dart';
 
-import '../models/post.dart';
+import '../../models/post.dart';
+
 
 class VideoPlayerItem extends StatefulWidget {
   final Post post;

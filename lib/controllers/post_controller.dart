@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
 import '../models/post.dart';
-import '../utils/constants.dart';
+import '../constants.dart';
 
 class PostController extends GetxController {
   final Rx<List<Post>> _postList = Rx<List<Post>>([]);

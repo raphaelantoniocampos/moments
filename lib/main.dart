@@ -1,17 +1,15 @@
 import 'package:camera/camera.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:moments/utils/constants.dart';
+import 'package:moments/constants.dart';
 import 'package:moments/providers/user_provider.dart';
-import 'package:moments/screens/loading_screen.dart';
-import 'package:moments/screens/login_screen.dart';
-import 'package:moments/utils/constants.dart';
 import 'package:get/get.dart';
+import 'package:moments/views/screens/loading_screen.dart';
+import 'package:moments/views/screens/login_screen.dart';
 
 import 'controllers/auth_controller.dart';
-import 'layout/screen_layout.dart';
+import 'views/screens/main_screen.dart';
 import 'package:provider/provider.dart';
 
 List<CameraDescription> cameras = [];
@@ -68,7 +66,7 @@ class MomentsApp extends StatelessWidget {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.active) {
               if (snapshot.hasData) {
-                return const ScreenLayout();
+                return const MainScreen();
               } else if (snapshot.hasError) {
                 return const LoginScreen();
               }

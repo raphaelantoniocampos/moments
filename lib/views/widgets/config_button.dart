@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:moments/utils/constants.dart';
+import 'package:moments/constants.dart';
 
 import '../screens/login_screen.dart';
 

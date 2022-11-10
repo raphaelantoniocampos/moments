@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../models/post.dart';
+import '../../models/post.dart';
 import '../widgets/video_player_item.dart';
 
 class DisplayPostScreen extends StatelessWidget {

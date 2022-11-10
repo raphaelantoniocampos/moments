@@ -3,8 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../resources/firestore_methods.dart';
-import '../utils/constants.dart';
+import '../../constants.dart';
+import '../../resources/firestore_methods.dart';
+
 
 class DeletePostScreen extends StatefulWidget {
   final String postId;

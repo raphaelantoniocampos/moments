@@ -2,11 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:moments/views/screens/feed_screen.dart';
+import 'package:moments/views/screens/profile_screen.dart';
+import 'package:moments/views/screens/search_screen.dart';
 
-import '../controllers/auth_controller.dart';
-import '../screens/feed_screen.dart';
-import '../screens/profile_screen.dart';
-import '../screens/search_screen.dart';
+import 'controllers/auth_controller.dart';
 
 //FIREBASE
 var firebaseAuth = FirebaseAuth.instance;

@@ -1,14 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:moments/controllers/post_controller.dart';
-import 'package:moments/screens/loading_screen.dart';
-import '../models/post.dart';
-import '../utils/constants.dart';
-import 'package:moments/widgets/post_card.dart';
 import 'package:get/get.dart';
 
+import '../../constants.dart';
 import '../widgets/config_button.dart';
+import '../widgets/post_card.dart';
 
 class FeedScreen extends StatelessWidget {
   FeedScreen({Key? key}) : super(key: key);

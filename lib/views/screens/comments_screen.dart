@@ -1,13 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:moments/resources/firestore_methods.dart';
-import 'package:moments/screens/loading_screen.dart';
-import '../utils/constants.dart';
 import 'package:provider/provider.dart';
-import '../models/user.dart';
-import '../providers/user_provider.dart';
 
+import '../../constants.dart';
+import '../../models/user.dart';
+import '../../providers/user_provider.dart';
 import '../widgets/comment_card.dart';
+import 'loading_screen.dart';
 
 class CommentsScreen extends StatefulWidget {
   final snap;
@@ -90,7 +90,6 @@ class _CommentsScreenState extends State<CommentsScreen> {
                             user.uid,
                             widget.snap['postId'],
                             _commentController.text);
-                        // showSnackBar(res, context);
                         setState(() {
                           _commentController.text = '';
                         });

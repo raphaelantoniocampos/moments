@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:moments/controllers/upload_post_controller.dart';
-import 'package:moments/layout/screen_layout.dart';
+import 'package:moments/views/screens/main_screen.dart';
 import 'package:moments/controllers/profile_pic_controller.dart';
-import 'package:moments/screens/loading_screen.dart';
 
-import '../utils/constants.dart';
+import '../../constants.dart';
 import 'camera_screen.dart';
+import 'loading_screen.dart';
 
 class NewProfilePictureScreen extends StatefulWidget {
   const NewProfilePictureScreen({Key? key}) : super(key: key);
@@ -92,7 +92,7 @@ class _NewProfilePictureScreenState extends State<NewProfilePictureScreen> {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ScreenLayout(),
+                            builder: (context) => MainScreen(),
                           ),
                         );
                       },

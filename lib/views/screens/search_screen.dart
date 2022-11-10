@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:moments/screens/profile_screen.dart';
+import 'package:moments/views/screens/profile_screen.dart';
 
-import '../utils/constants.dart';
+import '../../constants.dart';
 import '../widgets/config_button.dart';
 import 'loading_screen.dart';
 
