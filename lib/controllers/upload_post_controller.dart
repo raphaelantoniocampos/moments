@@ -58,7 +58,7 @@ class UploadPostController extends GetxController {
     return thumbnail;
   }
 
-  Future<String> uploadPost(File file) async {
+  Future<Post?> uploadPost(File file) async {
     String res = '';
     try {
       String path = file.path;
@@ -90,11 +90,11 @@ class UploadPostController extends GetxController {
             post.toJson(),
           );
       res = 'Success';
-      return downloadUrl;
+      return post;
     } catch (e) {
       res = e.toString();
     }
     Get.snackbar('Upload Post', res);
-    return initialProfilePic;
+    return null;
   }
 }

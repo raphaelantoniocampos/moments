@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:moments/resources/firestore_methods.dart';
 import 'package:flutter/material.dart';
+import 'package:moments/views/widgets/like_button.dart';
 import 'package:provider/provider.dart';
 import '../../constants.dart';
 import '../../controllers/post_controller.dart';
@@ -30,21 +30,19 @@ class PostCard extends StatefulWidget {
 class _PostCardState extends State<PostCard> {
   final PostController postController = Get.put(PostController());
   bool isLikeAnimating = false;
+  bool isLoading = false;
   int commentLen = 0;
 
   @override
   void initState() {
-    // getComments();
     super.initState();
   }
 
   Future<User> _getUser() async {
-    DocumentSnapshot snap = (await firebaseFirestore
-        .collection('users')
-        .doc(widget.post.uid)
-        .get());
-
-    return User.fromSnap(snap);
+    User user = await User.fromUid(widget.post.uid);
+    print('postUser ${user.username}');
+    return user;
+    // return User.fromSnap(snap);
   }
 
   void _getComments() async {
@@ -275,42 +273,43 @@ class _PostCardState extends State<PostCard> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          LikeAnimation(
-                            isAnimating: widget.post.likes.contains(user.uid),
-                            smallLike: true,
-                            child: InkWell(
-                              onTap: () => postController.likePost(widget.post.postId),
-                              child: Row(
-                                children: [
-                                  widget.post.likes.contains(user.uid)
-                                      ? const Icon(
-                                          Icons.favorite_border,
-                                          color: Colors.pinkAccent,
-                                          size: 30,
-                                        )
-                                      : const Icon(
-                                          Icons.favorite_border,
-                                          color: secondaryColor,
-                                          size: 30,
-                                        ),
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text(
-                                    '${widget.post.likes.length}',
-                                    style: TextStyle(
-                                        color:
-                                            widget.post.likes.contains(user.uid)
-                                                ? Colors.pinkAccent
-                                                : secondaryColor),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
+                          LikeButton(post: widget.post),
+                          // LikeAnimation(
+                          //   isAnimating: widget.post.likes.contains(user.uid),
+                          //   smallLike: true,
+                          //   child: InkWell(
+                          //     onTap: () => postController.likePost(widget.post.postId),
+                          //     child: Row(
+                          //       children: [
+                          //         widget.post.likes.contains(user.uid)
+                          //             ? const Icon(
+                          //                 Icons.favorite_border,
+                          //                 color: Colors.pinkAccent,
+                          //                 size: 30,
+                          //               )
+                          //             : const Icon(
+                          //                 Icons.favorite_border,
+                          //                 color: secondaryColor,
+                          //                 size: 30,
+                          //               ),
+                          //         const SizedBox(
+                          //           width: 5,
+                          //         ),
+                          //         Text(
+                          //           '${widget.post.likes.length}',
+                          //           style: TextStyle(
+                          //               color:
+                          //                   widget.post.likes.contains(user.uid)
+                          //                       ? Colors.pinkAccent
+                          //                       : secondaryColor),
+                          //         ),
+                          //       ],
+                          //     ),
+                          //   ),
+                          // ),
                           //Datetime
                           Text(
-                            DateFormat.yMd()
+                            DateFormat.yMMMMd()
                                 .add_Hm()
                                 .format(widget.post.datePublished.toDate()),
                             style: const TextStyle(

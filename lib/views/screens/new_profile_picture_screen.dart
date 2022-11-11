@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:moments/controllers/post_controller.dart';
 import 'package:moments/controllers/upload_post_controller.dart';
 import 'package:moments/views/screens/main_screen.dart';
 import 'package:moments/controllers/profile_pic_controller.dart';
+import 'package:get/get.dart';
 
 import '../../constants.dart';
+import '../../models/post.dart';
 import 'camera_screen.dart';
 import 'loading_screen.dart';
 
@@ -17,16 +20,23 @@ class NewProfilePictureScreen extends StatefulWidget {
 
 class _NewProfilePictureScreenState extends State<NewProfilePictureScreen> {
   bool isLoading = false;
+  final PostController postController = Get.put(PostController());
+  final ProfilePicController profilePicController = Get.put(ProfilePicController());
+  final UploadPostController uploadPostController = Get.put(UploadPostController());
 
-  Future<String> _uploadPost(image) async {
+  Future<Post?> _uploadPost(image) async {
     setState(() {
       isLoading = true;
     });
-    return await UploadPostController().uploadPost(image);
+    return await uploadPostController.uploadPost(image);
+  }
+
+  void _changeDescription(String postId, String description){
+    postController.changeDescription(postId, description);
   }
 
   void _changeProfilePic(String downloadUrl) async {
-    ProfilePicController().changeProfilePic(downloadUrl);
+    profilePicController.changeProfilePic(downloadUrl);
     setState(() {
       isLoading = false;
     });
@@ -83,8 +93,9 @@ class _NewProfilePictureScreenState extends State<NewProfilePictureScreen> {
                                       ),
                                     ),
                                   );
-                                  String downloadUrl = await _uploadPost(image);
-                                  _changeProfilePic(downloadUrl);
+                                  Post post = (await _uploadPost(image)) as Post;
+                                  _changeProfilePic(post.downloadUrl);
+                                  _changeDescription(post.postId, 'I created my moments account.');
 
                                   Navigator.pushReplacement(
                                     context,

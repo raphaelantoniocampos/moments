@@ -53,7 +53,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
               flex: 2,
               child: Container(),
             ),
-            const Text("moments"),
+            const Text(
+              "moments",
+              style: TextStyle(color: primaryColor, fontSize: 50),
+            ),
+            const SizedBox(
+              height: 24,
+            ),
 
             // text field input username
             Form(

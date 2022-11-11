@@ -4,7 +4,6 @@ import 'package:moments/views/screens/sign_up_screen.dart';
 
 import '../widgets/text_field_input.dart';
 
-
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
@@ -29,8 +28,7 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {
       _isLoading = true;
     });
-    authController.loginUser(
-        _emailController.text, _passwordController.text);
+    authController.loginUser(_emailController.text, _passwordController.text);
     setState(() {
       _isLoading = false;
     });
@@ -50,7 +48,13 @@ class _LoginScreenState extends State<LoginScreen> {
               flex: 2,
               child: Container(),
             ),
-            const Text("moments"),
+            const Text(
+              "moments",
+              style: TextStyle(color: primaryColor, fontSize: 50),
+            ),
+            const SizedBox(
+              height: 24,
+            ),
             //text field input email
             TextFieldInput(
                 hintText: 'Enter your email',

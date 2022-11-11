@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Post {
-  final String description;
+  String description;
   final String uid;
   final String postId;
   final datePublished;
