@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:moments/constants.dart';
 import 'package:moments/views/screens/sign_up_screen.dart';
 
@@ -51,12 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
               flex: 2,
               child: Container(),
             ),
-            //svg image
-            SvgPicture.asset(
-              'assets/moments_logo.svg',
-              color: primaryColor,
-              height: 200,
-            ),
+            const Text("moments"),
             //text field input email
             TextFieldInput(
                 hintText: 'Enter your email',

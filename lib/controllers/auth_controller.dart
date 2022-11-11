@@ -11,6 +11,7 @@ import '../views/screens/new_profile_picture_screen.dart';
 class AuthController extends GetxController {
   static AuthController instance = Get.find();
   late Rx<User?> _user;
+  User get user => _user.value!;
 
   @override
   void onReady() {

@@ -39,7 +39,6 @@ dependencies:
   cloud_firestore: ^4.0.4
   firebase_auth: ^4.1.1
   firebase_storage: ^11.0.4
-  flutter_svg: ^1.1.5
   camera: ^0.10.0+1
   image_picker:
   video_player:

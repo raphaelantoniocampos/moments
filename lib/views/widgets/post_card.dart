@@ -1,9 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:moments/resources/firestore_methods.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../constants.dart';
+import '../../controllers/post_controller.dart';
 import '../../controllers/profile_pic_controller.dart';
 import '../../models/post.dart';
 import '../../models/user.dart';
@@ -26,6 +28,7 @@ class PostCard extends StatefulWidget {
 }
 
 class _PostCardState extends State<PostCard> {
+  final PostController postController = Get.put(PostController());
   bool isLikeAnimating = false;
   int commentLen = 0;
 
@@ -220,8 +223,7 @@ class _PostCardState extends State<PostCard> {
                         );
                       },
                       onDoubleTap: () async {
-                        FirestoreMethods().likePost(
-                            widget.post.postId, user.uid, widget.post.likes);
+                        postController.likePost(widget.post.postId);
                         setState(() {
                           isLikeAnimating = true;
                         });
@@ -240,7 +242,9 @@ class _PostCardState extends State<PostCard> {
                         ),
                         Icon(
                           Icons.play_arrow,
-                          color: widget.post.isVideo ? Colors.white : Colors.transparent,
+                          color: widget.post.isVideo
+                              ? Colors.white
+                              : Colors.transparent,
                           size: 70,
                         ),
                         AnimatedOpacity(
@@ -275,10 +279,7 @@ class _PostCardState extends State<PostCard> {
                             isAnimating: widget.post.likes.contains(user.uid),
                             smallLike: true,
                             child: InkWell(
-                              onTap: () async {
-                                FirestoreMethods().likePost(widget.post.postId,
-                                    user.uid, widget.post.likes);
-                              },
+                              onTap: () => postController.likePost(widget.post.postId),
                               child: Row(
                                 children: [
                                   widget.post.likes.contains(user.uid)

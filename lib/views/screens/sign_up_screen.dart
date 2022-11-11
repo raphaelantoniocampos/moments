@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../constants.dart';
 
@@ -54,12 +53,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               flex: 2,
               child: Container(),
             ),
-            //svg image
-            SvgPicture.asset(
-              'assets/moments_logo.svg',
-              color: primaryColor,
-              height: 200,
-            ),
+            const Text("moments"),
 
             // text field input username
             Form(

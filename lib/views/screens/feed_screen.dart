@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:moments/controllers/post_controller.dart';
 import 'package:get/get.dart';
 
-import '../../constants.dart';
 import '../widgets/config_button.dart';
 import '../widgets/post_card.dart';
 
@@ -17,11 +15,8 @@ class FeedScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: SvgPicture.asset(
-          'assets/moments_logo.svg',
-          color: primaryColor,
-          height: 50,
-        ),
+        title:
+        const Text("moments"),
         actions: const [
           ConfigButton(),
         ],
