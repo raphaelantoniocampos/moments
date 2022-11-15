@@ -11,6 +11,7 @@ import '../views/screens/new_profile_picture_screen.dart';
 class AuthController extends GetxController {
   static AuthController instance = Get.find();
   late Rx<User?> _user;
+
   User get user => _user.value!;
 
   @override
@@ -42,8 +43,6 @@ class AuthController extends GetxController {
     }
   }
 
-
-
   //registering the user
   void registerUser(String username, String email, String password) async {
     String res;
@@ -57,6 +56,8 @@ class AuthController extends GetxController {
             profilePic: initialProfilePic,
             uid: cred.user!.uid,
             username: username,
+            public: [],
+            hiding: [],
             connecting: [],
             connections: [],
             email: email);
@@ -93,8 +94,10 @@ class AuthController extends GetxController {
   Future<model.User> getUserDetails() async {
     User currentUser = firebaseAuth.currentUser!;
 
-    DocumentSnapshot snap =
-        (await firebaseFirestore.collection('users').doc(currentUser.uid).get());
+    DocumentSnapshot snap = (await firebaseFirestore
+        .collection('users')
+        .doc(currentUser.uid)
+        .get());
 
     return model.User.fromSnap(snap);
   }

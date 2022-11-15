@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:moments/controllers/auth_controller.dart';
 import 'package:moments/constants.dart';
 
 import '../models/user.dart';
-import '../resources/auth_methods.dart';
 
 class UserProvider with ChangeNotifier{
   User? _user;

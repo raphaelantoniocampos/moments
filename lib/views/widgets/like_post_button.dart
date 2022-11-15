@@ -8,16 +8,16 @@ import '../../models/user.dart';
 import '../../providers/user_provider.dart';
 import 'like_animation.dart';
 
-class LikeButton extends StatefulWidget {
+class LikePostButton extends StatefulWidget {
   final Post post;
 
-  const LikeButton({Key? key, required this.post}) : super(key: key);
+  const LikePostButton({Key? key, required this.post}) : super(key: key);
 
   @override
-  State<LikeButton> createState() => _LikeButtonState();
+  State<LikePostButton> createState() => _LikePostButtonState();
 }
 
-class _LikeButtonState extends State<LikeButton> {
+class _LikePostButtonState extends State<LikePostButton> {
   final PostController postController = Get.put(PostController());
 
   @override
@@ -41,15 +41,9 @@ class _LikeButtonState extends State<LikeButton> {
         },
         child: Row(
           children: [
-            widget.post.likes.contains(user?.uid)
-                ? const Icon(
+                 Icon(
                     Icons.favorite_border,
-                    color: Colors.pinkAccent,
-                    size: 30,
-                  )
-                : const Icon(
-                    Icons.favorite_border,
-                    color: secondaryColor,
+                    color: widget.post.likes.contains(user?.uid) ? Colors.pinkAccent : secondaryColor,
                     size: 30,
                   ),
             const SizedBox(

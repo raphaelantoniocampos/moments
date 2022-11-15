@@ -35,7 +35,6 @@ class FeedScreen extends StatelessWidget {
           return ListView.builder(
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
-            reverse: true,
             itemCount: postController.postList.length,
             itemBuilder: (context, index) {
               final data = postController.postList[index];

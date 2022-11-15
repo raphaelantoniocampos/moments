@@ -7,6 +7,8 @@ class User {
   final String uid;
   String profilePic;
   final String username;
+  List public;
+  List hiding;
   final List connecting;
   final List connections;
 
@@ -14,6 +16,8 @@ class User {
       {required this.profilePic,
       required this.uid,
       required this.username,
+      required this.public,
+      required this.hiding,
       required this.connecting,
       required this.connections,
       required this.email});
@@ -21,6 +25,8 @@ class User {
   Map<String, dynamic> toJson() => {
         "profilePic": profilePic,
         "username": username,
+        "public": public,
+        "hiding": hiding,
         "email": email,
         "uid": uid,
         "connecting": connecting,
@@ -32,6 +38,8 @@ class User {
 
     return User(
       username: snapshot['username'],
+      public: snapshot['public'],
+      hiding: snapshot['hiding'],
       profilePic: snapshot['profilePic'],
       email: snapshot['email'],
       uid: snapshot['uid'],

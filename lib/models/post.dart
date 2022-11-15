@@ -9,7 +9,7 @@ class Post {
   final likes;
   final bool isVideo;
   final String thumbnail;
-  final bool isPublic;
+  bool isPublic;
   final int commentCount;
 
   Post({

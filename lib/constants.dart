@@ -32,9 +32,7 @@ const blackTransparent = Color.fromRGBO(18, 18, 18, 0.2);
 
 //HOME SCREEN ITENS
 List<Widget> pages = [
-  const Center(
-    child: SearchScreen(),
-  ),
+  SearchScreen(),
   FeedScreen(),
   const Center(
     child: Text('Notifications'),
@@ -43,6 +41,10 @@ List<Widget> pages = [
     uid: firebaseAuth.currentUser!.uid,
   ),
 ];
+
+//PUBLIC AND HIDE POSTS
+int publicLimit = 1;
+int hideLimit = 5;
 
 
 

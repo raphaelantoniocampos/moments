@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
-import 'package:moments/views/widgets/like_button.dart';
+import 'package:moments/views/widgets/like_post_button.dart';
 import 'package:provider/provider.dart';
 import '../../constants.dart';
 import '../../controllers/post_controller.dart';
@@ -10,12 +10,13 @@ import '../../controllers/profile_pic_controller.dart';
 import '../../models/post.dart';
 import '../../models/user.dart';
 import '../../providers/user_provider.dart';
-import '../screens/comments_screen.dart';
+import '../screens/comment_screen.dart';
 import '../screens/delete_post_screen.dart';
 import '../screens/display_post_screen.dart';
 import '../screens/loading_screen.dart';
 import '../screens/profile_screen.dart';
 import 'like_animation.dart';
+import 'loading_post.dart';
 
 class PostCard extends StatefulWidget {
   // final Map<String, dynamic> snap;
@@ -31,48 +32,25 @@ class _PostCardState extends State<PostCard> {
   final PostController postController = Get.put(PostController());
   bool isLikeAnimating = false;
   bool isLoading = false;
-  int commentLen = 0;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  Future<User> _getUser() async {
-    User user = await User.fromUid(widget.post.uid);
-    print('postUser ${user.username}');
-    return user;
-    // return User.fromSnap(snap);
-  }
-
-  void _getComments() async {
-    QuerySnapshot snap = await FirebaseFirestore.instance
-        .collection('posts')
-        .doc(widget.post.postId)
-        .collection('comments')
-        .get();
-
-    commentLen = snap.docs.length;
-  }
 
   @override
   Widget build(BuildContext context) {
     final User? user = Provider.of<UserProvider>(context).getUser;
+    isLikeAnimating = false;
     return user == null
         ? const LoadingScreen()
-        : StreamBuilder(
-            initialData: FirebaseFirestore.instance
-                .collection('posts')
-                .doc(widget.post.postId)
-                .collection('comments')
+        : FutureBuilder(
+            future: firebaseFirestore
+                .collection('users')
+                .where('uid', isEqualTo: widget.post.uid)
                 .get(),
-            builder: (BuildContext context,
-                AsyncSnapshot<Future<QuerySnapshot<Map<String, dynamic>>>>
-                    snapshot) {
+            builder: (context,
+                AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const LoadingScreen();
+                return const LoadingPost();
               }
-              if (snapshot.connectionState == ConnectionState.done) {}
+              var docs = snapshot.data!.docs;
+              var user = docs[0].data();
               return Container(
                 decoration: const BoxDecoration(
                   color: backgroundColor,
@@ -91,7 +69,7 @@ class _PostCardState extends State<PostCard> {
                             onTap: () => Navigator.of(context).push(
                               MaterialPageRoute(
                                 builder: (context) =>
-                                    ProfileScreen(uid: widget.post.postId),
+                                    ProfileScreen(uid: widget.post.uid),
                               ),
                             ),
                             child: Row(
@@ -100,14 +78,14 @@ class _PostCardState extends State<PostCard> {
                                 CircleAvatar(
                                   radius: 16,
                                   backgroundImage: NetworkImage(
-                                    user.profilePic,
+                                    user['profilePic'],
                                   ),
                                 ),
                                 Expanded(
                                   child: Padding(
                                     padding: const EdgeInsets.only(left: 2),
                                     child: Text(
-                                      user.username,
+                                      user['username'],
                                       style: const TextStyle(
                                           fontWeight: FontWeight.bold),
                                     ),
@@ -139,8 +117,9 @@ class _PostCardState extends State<PostCard> {
                                               InkWell(
                                                 onTap: () {
                                                   ProfilePicController()
-                                                      .changeProfilePic(widget
-                                                          .post.downloadUrl);
+                                                      .changeProfilePic(
+                                                          widget.post);
+                                                  Navigator.of(context).pop();
                                                 },
                                                 child: Container(
                                                   padding: const EdgeInsets
@@ -149,6 +128,21 @@ class _PostCardState extends State<PostCard> {
                                                       horizontal: 16),
                                                   child: const Text(
                                                       'Use as profile picture'),
+                                                ),
+                                              ),
+                                              InkWell(
+                                                onTap: () {
+                                                  postController.makePublic(
+                                                      widget.post.postId);
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: Container(
+                                                  padding: const EdgeInsets
+                                                          .symmetric(
+                                                      vertical: 12,
+                                                      horizontal: 16),
+                                                  child: const Text(
+                                                      'Make/unmake public'),
                                                 ),
                                               ),
                                               InkWell(
@@ -227,7 +221,21 @@ class _PostCardState extends State<PostCard> {
                         });
                       },
                       child: Stack(alignment: Alignment.center, children: [
-                        SizedBox(
+                        Container(
+                          decoration: widget.post.isPublic
+                              ? const BoxDecoration(
+                                  border: Border(
+                                    top: BorderSide(
+                                        width: 2, color: Colors.greenAccent),
+                                    left: BorderSide(
+                                        width: 2, color: Colors.greenAccent),
+                                    right: BorderSide(
+                                        width: 2, color: Colors.greenAccent),
+                                    bottom: BorderSide(
+                                        width: 2, color: Colors.greenAccent),
+                                  ),
+                                )
+                              : null,
                           height: MediaQuery.of(context).size.height * 0.35,
                           width: double.infinity,
                           child: widget.post.isVideo
@@ -273,7 +281,7 @@ class _PostCardState extends State<PostCard> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          LikeButton(post: widget.post),
+                          LikePostButton(post: widget.post),
                           // LikeAnimation(
                           //   isAnimating: widget.post.likes.contains(user.uid),
                           //   smallLike: true,
@@ -321,8 +329,8 @@ class _PostCardState extends State<PostCard> {
                             onTap: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (context) => CommentsScreen(
-                                    snap: widget.post.toJson(),
+                                  builder: (context) => CommentScreen(
+                                    postId: widget.post.postId,
                                   ),
                                 ),
                               );
@@ -338,7 +346,7 @@ class _PostCardState extends State<PostCard> {
                                   width: 5,
                                 ),
                                 Text(
-                                  '$commentLen',
+                                  widget.post.commentCount.toString(),
                                   style: const TextStyle(color: secondaryColor),
                                 ),
                               ],

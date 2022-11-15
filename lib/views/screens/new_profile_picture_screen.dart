@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:moments/controllers/post_controller.dart';
-import 'package:moments/controllers/upload_post_controller.dart';
 import 'package:moments/views/screens/main_screen.dart';
 import 'package:moments/controllers/profile_pic_controller.dart';
 import 'package:get/get.dart';
@@ -22,21 +21,20 @@ class _NewProfilePictureScreenState extends State<NewProfilePictureScreen> {
   bool isLoading = false;
   final PostController postController = Get.put(PostController());
   final ProfilePicController profilePicController = Get.put(ProfilePicController());
-  final UploadPostController uploadPostController = Get.put(UploadPostController());
 
   Future<Post?> _uploadPost(image) async {
     setState(() {
       isLoading = true;
     });
-    return await uploadPostController.uploadPost(image);
+    return await postController.uploadPost(image);
   }
 
   void _changeDescription(String postId, String description){
     postController.changeDescription(postId, description);
   }
 
-  void _changeProfilePic(String downloadUrl) async {
-    profilePicController.changeProfilePic(downloadUrl);
+  void _changeProfilePic(Post post) async {
+    profilePicController.changeProfilePic(post);
     setState(() {
       isLoading = false;
     });
@@ -94,7 +92,7 @@ class _NewProfilePictureScreenState extends State<NewProfilePictureScreen> {
                                     ),
                                   );
                                   Post post = (await _uploadPost(image)) as Post;
-                                  _changeProfilePic(post.downloadUrl);
+                                  _changeProfilePic(post);
                                   _changeDescription(post.postId, 'I created my moments account.');
 
                                   Navigator.pushReplacement(

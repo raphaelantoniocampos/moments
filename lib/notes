@@ -1,25 +1,14 @@
 to do:
 
 - feed screen:
-    - profile picture selection
-    - click to view image and video
-    - number of comments bugged
-        -use future builder instead of stream builder
     - delete only your posts
 
 - dark theme
-
-- search screen:
-    - public posts on SearchScreen
 
 - change friends to connections
     - connecting vs connected
 
 - storage adjusts:
-    - use MVC infrastructure
-    - format posts and users collection firestore
-        - post storing profImage during post
-    - post and store videos
     - usernames unique value
     - one public posts per person
     - exhibition name and username
@@ -28,4 +17,4 @@ to do:
     -rotate photo
     -gesture zoom
 
-- optimize comment screen
+- adjust comment screen
