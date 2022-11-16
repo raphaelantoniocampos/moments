@@ -12,29 +12,13 @@ import '../constants.dart';
 
 class PostController extends GetxController {
   final Rx<List<Post>> _postList = Rx<List<Post>>([]);
-  final Rx<List<Post>> _publicPostList = Rx<List<Post>>([]);
   List<Post> get postList => _postList.value;
-  List<Post> get publicPostList => _publicPostList.value;
 
   @override
   void onInit() {
     _postList.bindStream(
       firebaseFirestore
           .collection('posts')
-          .orderBy('datePublished', descending: true)
-          .snapshots()
-          .map((QuerySnapshot query) {
-        List<Post> retValue = [];
-        for (var element in query.docs) {
-          retValue.add(Post.fromSnap(element));
-        }
-        return retValue;
-      }),
-    );
-    _publicPostList.bindStream(
-      firebaseFirestore
-          .collection('posts')
-          .where('isPublic', isEqualTo: true)
           .orderBy('datePublished', descending: true)
           .snapshots()
           .map((QuerySnapshot query) {

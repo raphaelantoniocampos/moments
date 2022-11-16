@@ -17,7 +17,7 @@ class FeedScreen extends StatelessWidget {
         centerTitle: true,
         title:
         const Text("moments"),
-        actions: const [
+        actions: [
           ConfigButton(),
         ],
       ),

@@ -45,7 +45,7 @@ class _DisplayPostScreenState extends State<DisplayPostScreen> {
                         : Center(
                             child: Image.network(
                               widget.post.downloadUrl,
-                              fit: BoxFit.fill,
+                              fit: BoxFit.cover,
                             ),
                           ),
                     Column(

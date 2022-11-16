@@ -29,7 +29,9 @@ class PostCard extends StatefulWidget {
 }
 
 class _PostCardState extends State<PostCard> {
-  final PostController postController = Get.put(PostController());
+  final PostController postController = Get.put(
+    PostController(),
+  );
   bool isLikeAnimating = false;
   bool isLoading = false;
 
@@ -51,7 +53,8 @@ class _PostCardState extends State<PostCard> {
               }
               var docs = snapshot.data!.docs;
               var user = docs[0].data();
-              return Container(
+              return
+                Container(
                 decoration: const BoxDecoration(
                   color: backgroundColor,
                 ),

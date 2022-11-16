@@ -4,7 +4,8 @@ import 'package:moments/constants.dart';
 import '../screens/login_screen.dart';
 
 class ConfigButton extends StatelessWidget {
-  const ConfigButton({Key? key}) : super(key: key);
+  final Color color;
+  ConfigButton({Key? key, this.color = primaryColor}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +41,7 @@ class ConfigButton extends StatelessWidget {
           ),
         );
       },
-      icon: const Icon(Icons.settings),
+      icon: Icon(Icons.settings, color: color,),
     );
   }
 }

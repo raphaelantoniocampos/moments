@@ -54,6 +54,7 @@ class AuthController extends GetxController {
         // String downloadUrl = await _uploadToStorage(image);
         model.User user = model.User(
             profilePic: initialProfilePic,
+            coverPic: initialCoverPic,
             uid: cred.user!.uid,
             username: username,
             public: [],

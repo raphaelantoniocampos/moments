@@ -16,8 +16,6 @@ import 'loading_screen.dart';
 class SearchScreen extends StatelessWidget {
   SearchScreen({Key? key}) : super(key: key);
   final SearchController searchController = Get.put(SearchController());
-  final PostController postController = Get.put(PostController());
-  RxBool showUsers = false.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +30,9 @@ class SearchScreen extends StatelessWidget {
           title: TextFormField(
             onChanged: (text) {
               if (text.isEmpty) {
-                showUsers.value = false;
+                searchController.showUsers.value = false;
               } else {
-                showUsers.value = true;
+                searchController.showUsers.value = true;
               }
               searchController.searchUser(text);
             },
@@ -48,11 +46,11 @@ class SearchScreen extends StatelessWidget {
               hintStyle: TextStyle(color: secondaryColor),
             ),
           ),
-          actions: const [
+          actions: [
             ConfigButton(),
           ],
         ),
-        body: showUsers.value == true
+        body: searchController.showUsers.value == true
             ? ListView.builder(
             itemCount: searchController.searchedUsers.length,
             itemBuilder: (context, index) {
@@ -111,9 +109,9 @@ class SearchScreen extends StatelessWidget {
         //         })
             : MasonryGridView.count(
           crossAxisCount: 3,
-          itemCount: postController.publicPostList.length,
+          itemCount: searchController.publicPostList.length,
           itemBuilder: (context, index) {
-            Post post = postController.publicPostList[index];
+            Post post = searchController.publicPostList[index];
             return SizedBox(
               height: MediaQuery.of(context).size.height * 0.35,
               width: double.infinity,

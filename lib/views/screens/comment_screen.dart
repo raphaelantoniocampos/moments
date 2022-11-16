@@ -1,18 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:moments/resources/firestore_methods.dart';
-import 'package:moments/views/widgets/like_post_button.dart';
-import 'package:provider/provider.dart';
 import 'package:get/get.dart';
 import 'package:timeago/timeago.dart' as tago;
 
 import 'package:moments/controllers/comment_controller.dart';
 import '../../constants.dart';
-import 'package:moments/models/user.dart';
-import '../../models/post.dart';
-import '../../models/user.dart';
-import '../../providers/user_provider.dart';
-import '../widgets/comment_card.dart';
 import 'loading_screen.dart';
 
 class CommentScreen extends StatefulWidget {
@@ -93,78 +85,168 @@ class _CommentScreenState extends State<CommentScreen> {
                                         ConnectionState.done) {
                                       var docs = snapshot.data!.docs;
                                       var user = docs[0].data();
-                                      return ListTile(
-                                        leading: CircleAvatar(
-                                          backgroundColor: primaryColor,
-                                          backgroundImage:
-                                              NetworkImage(user['profilePic']),
-                                        ),
-                                        title: Row(
+                                      return Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 12, vertical: 8),
+                                        child: Column(
                                           children: [
-                                            Text(
-                                              "${user['username']} ",
-                                              style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: primaryColor,
-                                                  fontWeight: FontWeight.w700),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    //Profile pic
+                                                    CircleAvatar(
+                                                      backgroundImage:
+
+                                                          // NetworkImage(userSnap['profilePic']),
+
+                                                          NetworkImage(user[
+                                                              'profilePic']),
+                                                    ),
+
+                                                    //Username
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 8),
+                                                      child: Text(
+                                                        user['username'],
+                                                        style: const TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+
+                                                //Datetime
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          right: 8.0),
+                                                  child: Text(tago.format(
+                                                      comment.datePublished
+                                                          .toDate())),
+                                                ),
+                                              ],
                                             ),
-                                            Text(
-                                              comment.text,
-                                              style: TextStyle(
-                                                  fontSize: 12,
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.w500),
+                                            Row(
+                                              children: [
+                                                Container(
+                                                  width: 330,
+                                                  height: 40,
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: Text(comment.text),
+                                                ),
+                                                Expanded(
+                                                  child: GestureDetector(
+                                                    onTap: () {
+                                                      commentController
+                                                          .likeComment(
+                                                              comment.id);
+                                                    },
+                                                    child: Row(
+                                                      children: [
+                                                        Icon(
+                                                          Icons.favorite_border,
+                                                          size: 20,
+                                                          color: comment.likes
+                                                                  .contains(
+                                                                      authController
+                                                                          .user
+                                                                          .uid)
+                                                              ? Colors
+                                                                  .pinkAccent
+                                                              : secondaryColor,
+                                                        ),
+                                                        Text(
+                                                            ' ${comment.likes.length}'),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           ],
-                                        ),
-                                        subtitle: Row(
-                                          children: [
-                                            Text(
-                                              tago.format(comment.datePublished
-                                                  .toDate()),
-                                              style: TextStyle(
-                                                  fontSize: 10,
-                                                  color: secondaryColor),
-                                            ),
-                                            SizedBox(
-                                              width: 5,
-                                            ),
-                                            Text(
-                                              "${comment.likes.length} likes",
-                                              style: TextStyle(
-                                                fontSize: 10,
-                                                color: secondaryColor,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        trailing: InkWell(
-                                          onTap: () {
-                                            commentController
-                                                .likeComment(comment.id);
-                                            if (comment.likes.contains(
-                                                authController.user.uid)) {
-                                              setState(() {
-                                                comment.likes.remove(
-                                                    authController.user.uid);
-                                              });
-                                            } else {
-                                              setState(() {
-                                                comment.likes.add(
-                                                    authController.user.uid);
-                                              });
-                                            }
-                                          },
-                                          child: Icon(
-                                            Icons.favorite_border,
-                                            color: comment.likes.contains(
-                                                    authController.user.uid)
-                                                ? Colors.pinkAccent
-                                                : secondaryColor,
-                                            size: 25,
-                                          ),
                                         ),
                                       );
+                                      //   ListTile(
+                                      //   leading: CircleAvatar(
+                                      //     backgroundColor: primaryColor,
+                                      //     backgroundImage:
+                                      //         NetworkImage(user['profilePic']),
+                                      //   ),
+                                      //   title: Row(
+                                      //     children: [
+                                      //       Text(
+                                      //         "${user['username']} ",
+                                      //         style: TextStyle(
+                                      //             fontSize: 12,
+                                      //             color: primaryColor,
+                                      //             fontWeight: FontWeight.w700),
+                                      //       ),
+                                      //       Text(
+                                      //         comment.text,
+                                      //         style: TextStyle(
+                                      //             fontSize: 12,
+                                      //             color: Colors.black,
+                                      //             fontWeight: FontWeight.w500),
+                                      //       ),
+                                      //     ],
+                                      //   ),
+                                      //   subtitle: Row(
+                                      //     children: [
+                                      //       Text(
+                                      //         tago.format(comment.datePublished
+                                      //             .toDate()),
+                                      //         style: TextStyle(
+                                      //             fontSize: 10,
+                                      //             color: secondaryColor),
+                                      //       ),
+                                      //       SizedBox(
+                                      //         width: 5,
+                                      //       ),
+                                      //       Text(
+                                      //         "${comment.likes.length} likes",
+                                      //         style: TextStyle(
+                                      //           fontSize: 10,
+                                      //           color: secondaryColor,
+                                      //         ),
+                                      //       ),
+                                      //     ],
+                                      //   ),
+                                      //   trailing: InkWell(
+                                      //     onTap: () {
+                                      //       commentController
+                                      //           .likeComment(comment.id);
+                                      //       if (comment.likes.contains(
+                                      //           authController.user.uid)) {
+                                      //         setState(() {
+                                      //           comment.likes.remove(
+                                      //               authController.user.uid);
+                                      //         });
+                                      //       } else {
+                                      //         setState(() {
+                                      //           comment.likes.add(
+                                      //               authController.user.uid);
+                                      //         });
+                                      //       }
+                                      //     },
+                                      //     child: Icon(
+                                      //       Icons.favorite_border,
+                                      //       color: comment.likes.contains(
+                                      //               authController.user.uid)
+                                      //           ? Colors.pinkAccent
+                                      //           : secondaryColor,
+                                      //       size: 25,
+                                      //     ),
+                                      //   ),
+                                      // );
                                     }
                                     return const ListTile();
                                   });

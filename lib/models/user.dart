@@ -6,6 +6,7 @@ class User {
   final String email;
   final String uid;
   String profilePic;
+  String coverPic;
   final String username;
   List public;
   List hiding;
@@ -14,6 +15,7 @@ class User {
 
   User(
       {required this.profilePic,
+      required this.coverPic,
       required this.uid,
       required this.username,
       required this.public,
@@ -24,6 +26,7 @@ class User {
 
   Map<String, dynamic> toJson() => {
         "profilePic": profilePic,
+        "coverPic": coverPic,
         "username": username,
         "public": public,
         "hiding": hiding,
@@ -34,13 +37,14 @@ class User {
       };
 
   static User fromSnap(DocumentSnapshot snap) {
-    var snapshot = snap.data() as Map<String, dynamic>;
+    var snapshot = snap.data()! as Map<String, dynamic>;
 
     return User(
       username: snapshot['username'],
       public: snapshot['public'],
       hiding: snapshot['hiding'],
       profilePic: snapshot['profilePic'],
+      coverPic: snapshot['coverPic'],
       email: snapshot['email'],
       uid: snapshot['uid'],
       connecting: snapshot['connecting'],
