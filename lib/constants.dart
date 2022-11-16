@@ -18,7 +18,7 @@ var authController = AuthController.instance;
 
 //INITIAL IMAGES
 const initialProfilePic = 'https://firebasestorage.googleapis.com/v0/b/moments-a47d4.appspot.com/o/model%2FinitialProfilePic.jpg?alt=media&token=05c1a014-b453-4ba7-a1fb-fd2e4ade68db';
-const initialCoverPic = 'https://www.sciline.org/wp-content/uploads/2021/02/cropped-Torrential-Rain-Flooding-and-Climate-Change.jpg';
+const initialCoverPic = 'https://www.macmillandictionary.com/us/external/slideshow/full/Grey_full.png';
 
 //THEME SETTINGS AND COLORS
 const appBarElevation = 0.0;

@@ -4,23 +4,23 @@ import 'package:moments/constants.dart';
 
 import '../models/user.dart';
 
-class ProfileController extends GetxController{
-late Rx<User> _user;
-User get user => _user.value;
+class ProfileController extends GetxController {
+  final Rx<User> _user = Rx<User>(User(profilePic: '', coverPic: '', uid: '', username: '', public: [], hiding: [], connecting: [], connections: [], email: ''));
 
- Rx<String> _uid = "".obs;
-updateUserId(String uid) {
-  _uid.value = uid;
-  getUserData();
-}
+  User get user => _user.value;
 
-getUserData() async{
-  DocumentSnapshot userDoc = await firebaseFirestore.collection('users').doc(_uid.value).get();
-  final data = userDoc.data()! as dynamic;
-  _user.value = User.fromSnap(data);
+  Rx<String> _uid = "".obs;
 
-  update();
-}
+  updateUserId(String uid) {
+    _uid.value = uid;
+    getUserData();
+  }
 
-
+  getUserData() async {
+    DocumentSnapshot userDoc =
+        await firebaseFirestore.collection('users').doc(_uid.value).get();
+    // final data = userDoc.data()!;
+    _user.value = User.fromSnap(userDoc);
+    update();
+  }
 }

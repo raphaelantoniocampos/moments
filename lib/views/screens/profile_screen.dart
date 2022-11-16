@@ -15,7 +15,7 @@ import 'loading_screen.dart';
 class ProfileScreen extends StatefulWidget {
   final String uid;
 
-  ProfileScreen({Key? key, required this.uid}) : super(key: key);
+  const ProfileScreen({Key? key, required this.uid}) : super(key: key);
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
@@ -53,7 +53,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   width: double.infinity,
                   height: 200,
                   child: Image.network(
-                    initialCoverPic,
+                    'https://www.sciline.org/wp-content/uploads/2021/02/cropped-Torrential-Rain-Flooding-and-Climate-Change.jpg',
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -86,7 +86,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                             ),
                             Text(
-                              'username',
+                              controller.user.username,
                               style: const TextStyle(
                                   fontSize: 13,
                                   // fontWeight: FontWeight.bold,
