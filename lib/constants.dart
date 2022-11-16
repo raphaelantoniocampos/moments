@@ -34,8 +34,8 @@ const blackTransparent = Color.fromRGBO(18, 18, 18, 0.2);
 List<Widget> pages = [
   SearchScreen(),
   FeedScreen(),
-  const Center(
-    child: Text('Notifications'),
+  Center(
+    child: Text('Messages'),
   ),
   ProfileScreen(
     uid: firebaseAuth.currentUser!.uid,

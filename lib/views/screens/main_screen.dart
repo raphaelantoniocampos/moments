@@ -88,10 +88,10 @@ class _MainScreenState extends State<MainScreen> {
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(
-                    Icons.notifications,
+                    Icons.message,
                     size: 30,
                   ),
-                  label: 'notifications',
+                  label: 'messages',
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(
