@@ -178,6 +178,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     height: 25,
                   ),
                   ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       scrollDirection: Axis.vertical,
                       itemCount: controller.postList.length,

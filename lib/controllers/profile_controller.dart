@@ -74,7 +74,7 @@ class ProfileController extends GetxController {
 
     _postList.bindStream(
       firebaseFirestore
-          .collection('posts')
+          .collection('posts').where('uid', isEqualTo: _uid.value)
           .orderBy('datePublished', descending: true)
           .snapshots()
           .map((QuerySnapshot query) {
@@ -85,6 +85,7 @@ class ProfileController extends GetxController {
         return retValue;
       }),
     );
+
 
     update();
   }
