@@ -60,21 +60,7 @@ class MomentsApp extends StatelessWidget {
           colorScheme:
               ColorScheme.fromSwatch().copyWith(secondary: primaryColor),
         ),
-        home: StreamBuilder(
-          stream: firebaseAuth.idTokenChanges(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.active) {
-              if (snapshot.hasData) {
-                return const MainScreen();
-              } else if (snapshot.hasError) {
-                return const LoginScreen();
-              }
-            } else if (snapshot.connectionState == ConnectionState.waiting) {
-              return const LoadingScreen();
-            }
-            return const LoginScreen();
-          },
-        ),
+        home: const LoadingScreen(),
       ),
     );
   }

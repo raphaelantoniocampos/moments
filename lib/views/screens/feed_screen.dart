@@ -23,15 +23,6 @@ class FeedScreen extends StatelessWidget {
       ),
       body: Obx(
         () {
-          // stream: FirebaseFirestore.instance
-          //     .collection('posts')
-          //     .orderBy('datePublished', descending: true)
-          //     .snapshots(),
-          // builder: (context,
-          //     AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-          //   if (snapshot.connectionState == ConnectionState.waiting) {
-          //     return const LoadingScreen();
-          //   }
           return ListView.builder(
             scrollDirection: Axis.vertical,
             shrinkWrap: true,

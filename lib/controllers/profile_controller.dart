@@ -7,8 +7,12 @@ import '../models/post.dart';
 
 class ProfileController extends GetxController {
   final Rx<Map<String, dynamic>> _user = Rx<Map<String, dynamic>>({});
+  final Rx<List<Post>> _postList = Rx<List<Post>>([]);
+
 
   Map<String, dynamic> get user => _user.value;
+  List<Post> get postList => _postList.value;
+
 
   Rx<String> _uid = "".obs;
 
@@ -16,6 +20,7 @@ class ProfileController extends GetxController {
     _uid.value = uid;
     getUserData();
   }
+
 
   getUserData() async {
     DocumentSnapshot userDoc =
@@ -54,18 +59,6 @@ class ProfileController extends GetxController {
       }
     });
 
-    //
-    // firebaseFirestore
-    //     .collection('users')
-    //     .doc(authController.user.uid)
-    //     .get()
-    //     .then((value) {
-    //   if ((value.data()! as dynamic).contains(_uid.value)) {
-    //     isConnecting = true;
-    //   } else {
-    //     isConnecting = false;
-    //   }
-    // });
 
     _user.value = {
       'connections': connections.length,
@@ -78,6 +71,21 @@ class ProfileController extends GetxController {
       'username': username,
       'coverPic': coverPic,
     };
+
+    _postList.bindStream(
+      firebaseFirestore
+          .collection('posts')
+          .orderBy('datePublished', descending: true)
+          .snapshots()
+          .map((QuerySnapshot query) {
+        List<Post> retValue = [];
+        for (var element in query.docs) {
+          retValue.add(Post.fromSnap(element));
+        }
+        return retValue;
+      }),
+    );
+
     update();
   }
 
@@ -101,7 +109,8 @@ class ProfileController extends GetxController {
     }
     //IF USER IS CONNECTING and USER HAS LESS THAN LIMIT CONNECTIONS => ADD CONNECTION, REMOVE CONNECTING
     else if ((doc.data()! as dynamic)['connecting']
-        .contains(authController.user.uid) && !(_user.value['reachedLimit'])) {
+            .contains(authController.user.uid) &&
+        !(_user.value['reachedLimit'])) {
       await firebaseFirestore.collection('users').doc(_uid.value).update({
         'connections': FieldValue.arrayUnion([authController.user.uid])
       });
@@ -162,6 +171,28 @@ class ProfileController extends GetxController {
         imageUrl = post.downloadUrl;
       }
       user.profilePic = imageUrl;
+      Map<String, Object?> data = user.toJson();
+      collection.doc(firebaseAuth.currentUser!.uid).update(data);
+      res = 'Success';
+    } catch (e) {
+      res = e.toString();
+      Get.snackbar("Change Profile Pic", res);
+    }
+    update();
+  }
+
+  Future<void> changeCoverPic(Post post) async {
+    String res = '';
+    try {
+      var collection = firebaseFirestore.collection('users');
+      model.User user = await authController.getUserDetails();
+      String imageUrl;
+      if (post.isVideo) {
+        imageUrl = post.thumbnail;
+      } else {
+        imageUrl = post.downloadUrl;
+      }
+      user.coverPic = imageUrl;
       Map<String, Object?> data = user.toJson();
       collection.doc(firebaseAuth.currentUser!.uid).update(data);
       res = 'Success';

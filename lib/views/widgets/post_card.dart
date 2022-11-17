@@ -137,6 +137,22 @@ class _PostCardState extends State<PostCard> {
                                               ),
                                               InkWell(
                                                 onTap: () {
+                                                  profileController
+                                                      .changeCoverPic(
+                                                      widget.post);
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: Container(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      vertical: 12,
+                                                      horizontal: 16),
+                                                  child: const Text(
+                                                      'Use as cover picture'),
+                                                ),
+                                              ),
+                                              InkWell(
+                                                onTap: () {
                                                   postController.makePublic(
                                                       widget.post.postId);
                                                   Navigator.of(context).pop();
@@ -220,10 +236,10 @@ class _PostCardState extends State<PostCard> {
                         );
                       },
                       onDoubleTap: () async {
-                        postController.likePost(widget.post.postId);
-                        setState(() {
-                          isLikeAnimating = true;
-                        });
+                        // postController.likePost(widget.post.postId);
+                        // setState(() {
+                        //   isLikeAnimating = true;
+                        // });
                       },
                       child: Stack(alignment: Alignment.center, children: [
                         Container(

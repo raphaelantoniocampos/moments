@@ -15,10 +15,6 @@ import '../views/screens/new_profile_picture_screen.dart';
 import 'comment_controller.dart';
 
 class AuthController extends GetxController {
-  final ProfileController profileController = Get.put(ProfileController());
-  final CommentController commentController = Get.put(CommentController());
-  final PostController postController = Get.put(PostController());
-  final SearchController searchController = Get.put(SearchController());
   static AuthController instance = Get.find();
   late Rx<User?> _user;
 
@@ -115,11 +111,7 @@ class AuthController extends GetxController {
 
   Future<void> signOut() async {
     await firebaseAuth.signOut();
-    Get.delete<CommentController>();
-    Get.delete<PostController>();
-    Get.delete<ProfileController>();
-    Get.delete<SearchController>();
-
+    Get.deleteAll();
   }
 
 }

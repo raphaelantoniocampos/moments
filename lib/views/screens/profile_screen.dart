@@ -1,17 +1,11 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:moments/controllers/profile_controller.dart';
-import 'package:moments/resources/firestore_methods.dart';
 import 'package:get/get.dart';
 import 'package:moments/views/widgets/config_button.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants.dart';
-import '../../controllers/post_controller.dart';
 import '../../providers/user_provider.dart';
-import '../widgets/default_button.dart';
-import '../widgets/follow_button.dart';
 import '../widgets/post_card.dart';
 import 'loading_screen.dart';
 import '../../models/user.dart' as model;
@@ -26,13 +20,13 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  final PostController postController = Get.put(PostController());
+  // final PostController postController = Get.put(PostController());
   final ProfileController profileController = Get.put(ProfileController());
 
   @override
   void initState() {
-    profileController.updateUserId(widget.uid);
     super.initState();
+    profileController.updateUserId(widget.uid);
   }
 
   @override
@@ -45,502 +39,159 @@ class _ProfileScreenState extends State<ProfileScreen> {
             return const LoadingScreen();
           }
           return Scaffold(
-            // appBar: AppBar(
-            //   title: Text(
-            //     'username',
-            //     style: const TextStyle(fontWeight: FontWeight.bold,
-            //         color: primaryColor),
-            //   ),
-            //   centerTitle: true,
-            //   actions: [IconButton(onPressed: () {}, icon: Icon(Icons.more_horiz))],
-            // ),
-            body: Stack(
-              children: [
-                SizedBox(
-                  width: double.infinity,
-                  height: 200,
-                  child: Image.network(
-                    controller.user['coverPic'],
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                SingleChildScrollView(
-                  child: Column(
+            body: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Stack(
                     children: [
-                      AppBar(
-                        backgroundColor: Colors.transparent,
-                        actions: [
-                          ConfigButton(
-                            color: Colors.black,
-                          ),
-                        ],
+                      SizedBox(
+                        width: double.infinity,
+                        height: 200,
+                        child: Image.network(
+                          controller.user['coverPic'],
+                          fit: BoxFit.cover,
+                        ),
                       ),
-                      const SizedBox(
-                        height: 130,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      Column(
                         children: [
-                          Row(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 12.0),
-                                child: CircleAvatar(
-                                  radius: 30,
-                                  backgroundColor: secondaryColor,
-                                  backgroundImage: NetworkImage(
-                                      controller.user['profilePic']),
-                                ),
-                              ),
-                              Text(
-                                controller.user['username'],
-                                style: const TextStyle(
-                                    fontSize: 13,
-                                    // fontWeight: FontWeight.bold,
-                                    color: primaryColor),
+                          AppBar(
+                            backgroundColor: Colors.transparent,
+                            actions: [
+                              ConfigButton(
+                                color: Colors.black,
                               ),
                             ],
                           ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 12.0),
+                            child: CircleAvatar(
+                              radius: 30,
+                              backgroundColor: secondaryColor,
+                              backgroundImage:
+                                  NetworkImage(controller.user['profilePic']),
+                            ),
+                          ),
                           Text(
-                            '${controller.user['connections']} connections',
+                            controller.user['username'],
                             style: const TextStyle(
                                 fontSize: 13,
                                 // fontWeight: FontWeight.bold,
                                 color: primaryColor),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 12),
-                            child: widget.uid == authController.user.uid
+                        ],
+                      ),
+                      Text(
+                        '${controller.user['connections']} connections',
+                        style: const TextStyle(
+                            fontSize: 13,
+                            // fontWeight: FontWeight.bold,
+                            color: primaryColor),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 12),
+                        child: widget.uid == authController.user.uid
+                            ? TextButton(
+                                onPressed: () {},
+                                child: const Text(
+                                  'edit',
+                                  style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.bold,
+                                      color: primaryColor),
+                                ),
+                              )
+                            : controller.user['isConnected']
                                 ? TextButton(
-                                    onPressed: () {},
+                                    onPressed: () =>
+                                        profileController.connect(),
                                     child: const Text(
-                                      'edit',
+                                      'connected',
                                       style: TextStyle(
                                           fontSize: 13,
                                           fontWeight: FontWeight.bold,
                                           color: primaryColor),
                                     ),
                                   )
-                                : controller.user['isConnected']
+                                : controller.user['iAmConnecting']
                                     ? TextButton(
                                         onPressed: () =>
                                             profileController.connect(),
                                         child: const Text(
-                                          'connected',
+                                          'connecting',
                                           style: TextStyle(
                                               fontSize: 13,
                                               fontWeight: FontWeight.bold,
                                               color: primaryColor),
                                         ),
                                       )
-                                    : controller.user['iAmConnecting']
+                                    : controller.user['connections'] >=
+                                            limitConnections
                                         ? TextButton(
-                                            onPressed: () =>
-                                                profileController.connect(),
+                                            onPressed: () {},
                                             child: const Text(
-                                              'connecting',
+                                              'user limited',
                                               style: TextStyle(
                                                   fontSize: 13,
                                                   fontWeight: FontWeight.bold,
-                                                  color: primaryColor),
+                                                  color: Colors.redAccent),
                                             ),
                                           )
-                                        : controller.user['connections'] >= limitConnections
+                                        : myUser.connections.length <
+                                                limitConnections
                                             ? TextButton(
+                                                onPressed: () =>
+                                                    profileController.connect(),
+                                                child: const Text(
+                                                  'connect',
+                                                  style: TextStyle(
+                                                      fontSize: 13,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: primaryColor),
+                                                ),
+                                              )
+                                            : TextButton(
                                                 onPressed: () {},
                                                 child: const Text(
-                                                  'user limited',
+                                                  'max connections',
                                                   style: TextStyle(
                                                       fontSize: 13,
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       color: Colors.redAccent),
                                                 ),
-                                              )
-                                            : myUser.connections.length <
-                                                    limitConnections
-                                                ? TextButton(
-                                                    onPressed: () =>
-                                                        profileController
-                                                            .connect(),
-                                                    child: const Text(
-                                                      'connect',
-                                                      style: TextStyle(
-                                                          fontSize: 13,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color: primaryColor),
-                                                    ),
-                                                  )
-                                                : TextButton(
-                                                    onPressed: () {},
-                                                    child: const Text(
-                                                      'max connections',
-                                                      style: TextStyle(
-                                                          fontSize: 13,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color:
-                                                              Colors.redAccent),
-                                                    ),
-                                                  ),
-                            // : TextButton(
-                            //     onPressed: () {},
-                            //     style: ButtonStyle(),
-                            //     child: Text(
-                            //       widget.uid == authController.user.uid
-                            //           ? 'edit'
-                            //           : controller.user['isConnected']
-                            //               ? 'remove connection'
-                            //               : 'connect',
-                            //       style: const TextStyle(
-                            //         fontSize: 13,
-                            //         fontWeight: FontWeight.bold,
-                            //         color: primaryColor,
-                            //       ),
-                            //     ),
-                            //   ),
-                          ),
-                        ],
+                                              ),
                       ),
-
-                      // post list
                     ],
                   ),
-                ),
-              ],
+                  const SizedBox(
+                    height: 25,
+                  ),
+                  ListView.builder(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.vertical,
+                      itemCount: controller.postList.length,
+                      itemBuilder: (context, index) {
+                        return PostCard(post: controller.postList[index]);
+                      }),
+                ],
+              ),
             ),
-            // ListView(
-            //   children: [
-            //     Padding(
-            //       padding: const EdgeInsets.all(16.0),
-            //       child: Column(
-            //         children: [
-            //           Row(
-            //             children: [
-            //               CircleAvatar(
-            //                 backgroundColor: secondaryColor,
-            //                 backgroundImage: NetworkImage(initialProfilePic),
-            //                 radius: 40,
-            //               ),
-            //               Expanded(
-            //                 flex: 1,
-            //                 child: Column(
-            //                   children: [
-            //                     Row(
-            //                       mainAxisSize: MainAxisSize.max,
-            //                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            //                       children: [
-            //                         buildStatColumn(1, 'posts'),
-            //                         buildStatColumn(1, 'friends'),
-            //                         // buildStatColumn(30, 'followers'),
-            //                       ],
-            //                     ),
-            //                     Row(
-            //                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            //                       children: [
-            //                         authController.user.uid == 'are you'
-            //                             ? FollowButton(
-            //                                 text: 'Edit Profile',
-            //                                 textColor: Colors.black,
-            //                                 backGroundColor: backgroundColor,
-            //                                 borderColor: secondaryColor,
-            //                                 function: () {},
-            //                               )
-            //                             : authController.user.uid == 'is friend'
-            //                                 ? FollowButton(
-            //                                     text: 'Remove friend',
-            //                                     textColor: Colors.black,
-            //                                     backGroundColor: backgroundColor,
-            //                                     borderColor: secondaryColor,
-            //                                     function: () {},
-            //                                   )
-            //                                 : FollowButton(
-            //                                     text: 'Add friend',
-            //                                     textColor: Colors.white,
-            //                                     backGroundColor: primaryColor,
-            //                                     borderColor: secondaryColor,
-            //                                     function: () {},
-            //                                   ),
-            //                       ],
-            //                     ),
-            //                   ],
-            //                 ),
-            //               ),
-            //             ],
-            //           ),
-            //           Container(
-            //             alignment: Alignment.centerLeft,
-            //             padding: const EdgeInsets.only(top: 1),
-            //             child: Text(
-            //               'username',
-            //               style: const TextStyle(
-            //                 fontWeight: FontWeight.bold,
-            //               ),
-            //             ),
-            //           ),
-            //           // Container(
-            //           //   alignment: Alignment.centerLeft,
-            //           //   padding: const EdgeInsets.only(top: 1),
-            //           //   child: Text(
-            //           //     'description',
-            //           //   ),
-            //           // ),
-            //         ],
-            //       ),
-            //     ),
-            //     const Divider(),
-            //     SizedBox(
-            //       height: 600,
-            //       // width: double.infinity,
-            //       child: Obx(
-            //         () {
-            //           // stream: FirebaseFirestore.instance
-            //           //     .collection('posts')
-            //           //     .where('uid', isEqualTo: widget.uid)
-            //           //     .orderBy('datePublished', descending: true)
-            //           //     .snapshots(),
-            //           // builder: (context,
-            //           //     AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
-            //           //         snapshot) {
-            //           //   if (!snapshot.hasData) {
-            //           //     return const LoadingScreen();
-            //           //   }
-            //           //   if (snapshot.connectionState == ConnectionState.waiting) {
-            //           //     return const LoadingScreen();
-            //           //   }
-            //           return ListView.builder(
-            //             scrollDirection: Axis.vertical,
-            //             shrinkWrap: true,
-            //             itemCount: postController.postList.length,
-            //             itemBuilder: (context, index) {
-            //               final data = postController.postList[index];
-            //               return PostCard(
-            //                 post: data,
-            //               );
-            //             },
-            //           );
-            //         },
-            //       ),
-            //     ),
-            //   ],
-            // ),
           );
         });
   }
 }
 
-// class ProfileScreen extends StatefulWidget {
-//   final String uid;
-//
-//   const ProfileScreen({Key? key, required this.uid}) : super(key: key);
-//
-//   @override
-//   State<ProfileScreen> createState() => _ProfileScreenState();
-// }
-//
-// class _ProfileScreenState extends State<ProfileScreen> {
-//   final PostController postController = Get.put(PostController());
-//   var userData = {};
-//   int postLen = 0;
-//   int friends = 0;
-//   bool isFriend = false;
-//   bool isLoading = false;
-//
-//   @override
-//   void initState() {
-//     getData();
-//     super.initState();
-//   }
-//
-//   getData() async {
-//     setState(() {
-//       isLoading = true;
-//     });
-//     try {
-//       var userSnap = await FirebaseFirestore.instance
-//           .collection('users')
-//           .doc(widget.uid)
-//           .get();
-//
-//       var postSnap = await FirebaseFirestore.instance
-//           .collection('posts')
-//           .where('uid', isEqualTo: widget.uid)
-//           .get();
-//
-//       userData = userSnap.data()!;
-//       friends = userData['friends'].length;
-//       postLen = postSnap.docs.length;
-//       isFriend = userSnap
-//           .data()!['friends']
-//           .contains(FirebaseAuth.instance.currentUser!.uid);
-//
-//       setState(() {});
-//     } catch (err) {
-//       // showSnackBar(err.toString(), context);
-//     }
-//     setState(() {
-//       isLoading = false;
-//     });
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return isLoading
-//         ? const LoadingScreen()
-//         :
-//     Scaffold(
-//             appBar: AppBar(
-//               title: Text(
-//                 userData['username'],
-//                 style: const TextStyle(color: primaryColor),
-//               ),
-//               centerTitle: false,
-//             ),
-//             body: ListView(
-//               children: [
-//                 Padding(
-//                   padding: const EdgeInsets.all(16.0),
-//                   child: Column(
-//                     children: [
-//                       Row(
-//                         children: [
-//                           CircleAvatar(
-//                             backgroundColor: secondaryColor,
-//                             backgroundImage:
-//                                 NetworkImage(userData['profilePic']),
-//                             radius: 40,
-//                           ),
-//                           Expanded(
-//                             flex: 1,
-//                             child: Column(
-//                               children: [
-//                                 Row(
-//                                   mainAxisSize: MainAxisSize.max,
-//                                   mainAxisAlignment:
-//                                       MainAxisAlignment.spaceEvenly,
-//                                   children: [
-//                                     buildStatColumn(postLen, 'posts'),
-//                                     buildStatColumn(friends, 'friends'),
-//                                     // buildStatColumn(30, 'followers'),
-//                                   ],
-//                                 ),
-//                                 Row(
-//                                   mainAxisAlignment:
-//                                       MainAxisAlignment.spaceEvenly,
-//                                   children: [
-//                                     FirebaseAuth.instance.currentUser!.uid ==
-//                                             widget.uid
-//                                         ? FollowButton(
-//                                             text: 'Edit Profile',
-//                                             textColor: Colors.black,
-//                                             backGroundColor: backgroundColor,
-//                                             borderColor: secondaryColor,
-//                                             function: () {},
-//                                           )
-//                                         : isFriend
-//                                             ? FollowButton(
-//                                                 text: 'Remove friend',
-//                                                 textColor: Colors.black,
-//                                                 backGroundColor:
-//                                                     backgroundColor,
-//                                                 borderColor: secondaryColor,
-//                                                 function: () async {
-//                                                   await FirestoreMethods()
-//                                                       .addFriend(
-//                                                           FirebaseAuth.instance
-//                                                               .currentUser!.uid,
-//                                                           widget.uid);
-//                                                   setState(() {
-//                                                     isFriend = false;
-//                                                     friends--;
-//                                                   });
-//                                                 },
-//                                               )
-//                                             : FollowButton(
-//                                                 text: 'Add friend',
-//                                                 textColor: Colors.white,
-//                                                 backGroundColor: primaryColor,
-//                                                 borderColor: secondaryColor,
-//                                                 function: () async {
-//                                                   await FirestoreMethods()
-//                                                       .addFriend(
-//                                                           FirebaseAuth.instance
-//                                                               .currentUser!.uid,
-//                                                           widget.uid);
-//                                                   setState(() {
-//                                                     isFriend = true;
-//                                                     friends++;
-//                                                   });
-//                                                 },
-//                                               ),
-//                                   ],
-//                                 ),
-//                               ],
-//                             ),
-//                           ),
-//                         ],
-//                       ),
-//                       Container(
-//                         alignment: Alignment.centerLeft,
-//                         padding: const EdgeInsets.only(top: 1),
-//                         child: Text(
-//                           userData['username'],
-//                           style: const TextStyle(
-//                             fontWeight: FontWeight.bold,
-//                           ),
-//                         ),
-//                       ),
-//                       // Container(
-//                       //   alignment: Alignment.centerLeft,
-//                       //   padding: const EdgeInsets.only(top: 1),
-//                       //   child: Text(
-//                       //     'description',
-//                       //   ),
-//                       // ),
-//                     ],
-//                   ),
-//                 ),
-//                 const Divider(),
-//                 SizedBox(
-//                   height: 600,
-//                   // width: double.infinity,
-//                   child: Obx(
-//                     () {
-//                       // stream: FirebaseFirestore.instance
-//                       //     .collection('posts')
-//                       //     .where('uid', isEqualTo: widget.uid)
-//                       //     .orderBy('datePublished', descending: true)
-//                       //     .snapshots(),
-//                       // builder: (context,
-//                       //     AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
-//                       //         snapshot) {
-//                       //   if (!snapshot.hasData) {
-//                       //     return const LoadingScreen();
-//                       //   }
-//                       //   if (snapshot.connectionState == ConnectionState.waiting) {
-//                       //     return const LoadingScreen();
-//                       //   }
-//                       return ListView.builder(
-//                         scrollDirection: Axis.vertical,
-//                         shrinkWrap: true,
-//                         itemCount: postController.postList.length,
-//                         itemBuilder: (context, index) {
-//                           final data = postController.postList[index];
-//                           return PostCard(
-//                             post: data,
-//                           );
-//                         },
-//                       );
-//                     },
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           );
-//   }
-//
 Column buildStatColumn(int num, String label) {
   return Column(
     mainAxisSize: MainAxisSize.min,

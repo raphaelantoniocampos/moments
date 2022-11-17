@@ -19,8 +19,6 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  final searchController = TextEditingController();
-  // late final String filePath;
   int _page = 1;
   late PageController pageController;
   bool _isLoading = false;
@@ -29,7 +27,6 @@ class _MainScreenState extends State<MainScreen> {
   );
 
   void createPost(
-    String uid,
     File file,
   ) async {
     setState(() {
@@ -55,75 +52,71 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
-    searchController.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final model.User? user = Provider.of<UserProvider>(context).getUser;
-    return user == null || _isLoading
-        ? const LoadingScreen()
-        : Scaffold(
-            body: pages[_page],
-            bottomNavigationBar: BottomNavigationBar(
-              backgroundColor: backgroundColor,
-              type: BottomNavigationBarType.fixed,
-              selectedItemColor: primaryColor,
-              items: const [
-                BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.search,
-                    size: 30,
-                  ),
-                  label: 'search',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.home,
-                    size: 30,
-                  ),
-                  label: 'home',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.message,
-                    size: 30,
-                  ),
-                  label: 'messages',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(
-                    Icons.person,
-                    size: 30,
-                  ),
-                  label: 'profile',
-                ),
-              ],
-              onTap: (index) {
-                setState(() {
-                  _page = index;
-                });
-              },
-              currentIndex: _page,
-            ),
-            floatingActionButton: FloatingActionButton(
-              onPressed: () async {
-                final file = await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => CameraScreen(),
-                  ),
-                );
-
-                createPost(user.uid, file);
-              },
-              child: const Icon(
-                Icons.add,
+    if (user == null || _isLoading) {
+      return const LoadingScreen();
+    } else {
+      return Scaffold(
+        body: pages[_page],
+        bottomNavigationBar: BottomNavigationBar(
+          backgroundColor: backgroundColor,
+          type: BottomNavigationBarType.fixed,
+          selectedItemColor: primaryColor,
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.search,
                 size: 30,
               ),
+              label: 'search',
             ),
-          );
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.home,
+                size: 30,
+              ),
+              label: 'home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.message,
+                size: 30,
+              ),
+              label: 'messages',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(
+                Icons.person,
+                size: 30,
+              ),
+              label: 'profile',
+            ),
+          ],
+          onTap: (index) {
+            setState(() {
+              _page = index;
+            });
+          },
+          currentIndex: _page,
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () async {
+            final file = await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CameraScreen(),
+              ),
+            );
+
+            createPost(file);
+          },
+          child: const Icon(
+            Icons.add,
+            size: 30,
+          ),
+        ),
+      );
+    }
   }
 }
