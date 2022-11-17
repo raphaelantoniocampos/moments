@@ -6,7 +6,7 @@ import 'package:moments/views/widgets/like_post_button.dart';
 import 'package:provider/provider.dart';
 import '../../constants.dart';
 import '../../controllers/post_controller.dart';
-import '../../controllers/profile_pic_controller.dart';
+import '../../controllers/profile_controller.dart';
 import '../../models/post.dart';
 import '../../models/user.dart';
 import '../../providers/user_provider.dart';
@@ -32,6 +32,8 @@ class _PostCardState extends State<PostCard> {
   final PostController postController = Get.put(
     PostController(),
   );
+  final ProfileController profileController = Get.put(ProfileController());
+
   bool isLikeAnimating = false;
   bool isLoading = false;
 
@@ -119,7 +121,7 @@ class _PostCardState extends State<PostCard> {
                                               ),
                                               InkWell(
                                                 onTap: () {
-                                                  ProfilePicController()
+                                                  profileController
                                                       .changeProfilePic(
                                                           widget.post);
                                                   Navigator.of(context).pop();

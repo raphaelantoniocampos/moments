@@ -1,14 +1,24 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:moments/controllers/post_controller.dart';
+import 'package:moments/controllers/profile_controller.dart';
+import 'package:moments/controllers/search_controller.dart';
 import 'package:moments/views/screens/main_screen.dart';
+import 'package:path_provider/path_provider.dart';
+
 
 import 'package:moments/models/user.dart' as model;
 import '../constants.dart';
 import '../views/screens/login_screen.dart';
 import '../views/screens/new_profile_picture_screen.dart';
+import 'comment_controller.dart';
 
 class AuthController extends GetxController {
+  final ProfileController profileController = Get.put(ProfileController());
+  final CommentController commentController = Get.put(CommentController());
+  final PostController postController = Get.put(PostController());
+  final SearchController searchController = Get.put(SearchController());
   static AuthController instance = Get.find();
   late Rx<User?> _user;
 
@@ -105,5 +115,11 @@ class AuthController extends GetxController {
 
   Future<void> signOut() async {
     await firebaseAuth.signOut();
+    Get.delete<CommentController>();
+    Get.delete<PostController>();
+    Get.delete<ProfileController>();
+    Get.delete<SearchController>();
+
   }
+
 }

@@ -20,7 +20,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   final searchController = TextEditingController();
-  late final String filePath;
+  // late final String filePath;
   int _page = 1;
   late PageController pageController;
   bool _isLoading = false;

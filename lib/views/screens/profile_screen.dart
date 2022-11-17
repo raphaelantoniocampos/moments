@@ -5,12 +5,16 @@ import 'package:moments/controllers/profile_controller.dart';
 import 'package:moments/resources/firestore_methods.dart';
 import 'package:get/get.dart';
 import 'package:moments/views/widgets/config_button.dart';
+import 'package:provider/provider.dart';
 
 import '../../constants.dart';
 import '../../controllers/post_controller.dart';
+import '../../providers/user_provider.dart';
+import '../widgets/default_button.dart';
 import '../widgets/follow_button.dart';
 import '../widgets/post_card.dart';
 import 'loading_screen.dart';
+import '../../models/user.dart' as model;
 
 class ProfileScreen extends StatefulWidget {
   final String uid;
@@ -22,7 +26,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-
   final PostController postController = Get.put(PostController());
   final ProfileController profileController = Get.put(ProfileController());
 
@@ -37,6 +40,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return GetBuilder<ProfileController>(
         init: ProfileController(),
         builder: (controller) {
+          final model.User? myUser = Provider.of<UserProvider>(context).getUser;
+          if (controller.user.isEmpty || myUser == null) {
+            return const LoadingScreen();
+          }
           return Scaffold(
             // appBar: AppBar(
             //   title: Text(
@@ -49,76 +56,158 @@ class _ProfileScreenState extends State<ProfileScreen> {
             // ),
             body: Stack(
               children: [
-                Container(
+                SizedBox(
                   width: double.infinity,
                   height: 200,
                   child: Image.network(
-                    'https://www.sciline.org/wp-content/uploads/2021/02/cropped-Torrential-Rain-Flooding-and-Climate-Change.jpg',
+                    controller.user['coverPic'],
                     fit: BoxFit.cover,
                   ),
                 ),
-                Column(
-                  children: [
-                    AppBar(
-                      backgroundColor: Colors.transparent,
-                      actions: [
-                        ConfigButton(
-                          color: Colors.black,
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 130,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          children: [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 12.0),
-                              child: CircleAvatar(
-                                radius: 30,
-                                backgroundColor: secondaryColor,
-                                backgroundImage:
-                                    NetworkImage(initialProfilePic),
-                              ),
-                            ),
-                            Text(
-                              controller.user.username,
-                              style: const TextStyle(
-                                  fontSize: 13,
-                                  // fontWeight: FontWeight.bold,
-                                  color: primaryColor),
-                            ),
-                          ],
-                        ),
-                        Text(
-                          '150 connections',
-                          style: const TextStyle(
-                              fontSize: 13,
-                              // fontWeight: FontWeight.bold,
-                              color: primaryColor),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 12),
-                          child: TextButton(
-                            onPressed: () {},
-                            child: Text(
-                              'connect',
-                              style: const TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.bold,
-                                  color: primaryColor),
-                            ),
+                SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      AppBar(
+                        backgroundColor: Colors.transparent,
+                        actions: [
+                          ConfigButton(
+                            color: Colors.black,
                           ),
-                        )
-                      ],
-                    ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 130,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 12.0),
+                                child: CircleAvatar(
+                                  radius: 30,
+                                  backgroundColor: secondaryColor,
+                                  backgroundImage: NetworkImage(
+                                      controller.user['profilePic']),
+                                ),
+                              ),
+                              Text(
+                                controller.user['username'],
+                                style: const TextStyle(
+                                    fontSize: 13,
+                                    // fontWeight: FontWeight.bold,
+                                    color: primaryColor),
+                              ),
+                            ],
+                          ),
+                          Text(
+                            '${controller.user['connections']} connections',
+                            style: const TextStyle(
+                                fontSize: 13,
+                                // fontWeight: FontWeight.bold,
+                                color: primaryColor),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 12),
+                            child: widget.uid == authController.user.uid
+                                ? TextButton(
+                                    onPressed: () {},
+                                    child: const Text(
+                                      'edit',
+                                      style: TextStyle(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.bold,
+                                          color: primaryColor),
+                                    ),
+                                  )
+                                : controller.user['isConnected']
+                                    ? TextButton(
+                                        onPressed: () =>
+                                            profileController.connect(),
+                                        child: const Text(
+                                          'connected',
+                                          style: TextStyle(
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.bold,
+                                              color: primaryColor),
+                                        ),
+                                      )
+                                    : controller.user['iAmConnecting']
+                                        ? TextButton(
+                                            onPressed: () =>
+                                                profileController.connect(),
+                                            child: const Text(
+                                              'connecting',
+                                              style: TextStyle(
+                                                  fontSize: 13,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: primaryColor),
+                                            ),
+                                          )
+                                        : controller.user['connections'] >= limitConnections
+                                            ? TextButton(
+                                                onPressed: () {},
+                                                child: const Text(
+                                                  'user limited',
+                                                  style: TextStyle(
+                                                      fontSize: 13,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Colors.redAccent),
+                                                ),
+                                              )
+                                            : myUser.connections.length <
+                                                    limitConnections
+                                                ? TextButton(
+                                                    onPressed: () =>
+                                                        profileController
+                                                            .connect(),
+                                                    child: const Text(
+                                                      'connect',
+                                                      style: TextStyle(
+                                                          fontSize: 13,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color: primaryColor),
+                                                    ),
+                                                  )
+                                                : TextButton(
+                                                    onPressed: () {},
+                                                    child: const Text(
+                                                      'max connections',
+                                                      style: TextStyle(
+                                                          fontSize: 13,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color:
+                                                              Colors.redAccent),
+                                                    ),
+                                                  ),
+                            // : TextButton(
+                            //     onPressed: () {},
+                            //     style: ButtonStyle(),
+                            //     child: Text(
+                            //       widget.uid == authController.user.uid
+                            //           ? 'edit'
+                            //           : controller.user['isConnected']
+                            //               ? 'remove connection'
+                            //               : 'connect',
+                            //       style: const TextStyle(
+                            //         fontSize: 13,
+                            //         fontWeight: FontWeight.bold,
+                            //         color: primaryColor,
+                            //       ),
+                            //     ),
+                            //   ),
+                          ),
+                        ],
+                      ),
 
-                    // post list
-                  ],
+                      // post list
+                    ],
+                  ),
                 ),
               ],
             ),

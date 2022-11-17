@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:moments/controllers/post_controller.dart';
 import 'package:moments/views/screens/main_screen.dart';
-import 'package:moments/controllers/profile_pic_controller.dart';
 import 'package:get/get.dart';
 
 import '../../constants.dart';
+import '../../controllers/profile_controller.dart';
 import '../../models/post.dart';
 import 'camera_screen.dart';
 import 'loading_screen.dart';
@@ -20,7 +20,7 @@ class NewProfilePictureScreen extends StatefulWidget {
 class _NewProfilePictureScreenState extends State<NewProfilePictureScreen> {
   bool isLoading = false;
   final PostController postController = Get.put(PostController());
-  final ProfilePicController profilePicController = Get.put(ProfilePicController());
+  final ProfileController profileController = Get.put(ProfileController());
 
   Future<Post?> _uploadPost(image) async {
     setState(() {
@@ -34,7 +34,7 @@ class _NewProfilePictureScreenState extends State<NewProfilePictureScreen> {
   }
 
   void _changeProfilePic(Post post) async {
-    profilePicController.changeProfilePic(post);
+    profileController.changeProfilePic(post);
     setState(() {
       isLoading = false;
     });

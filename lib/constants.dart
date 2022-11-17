@@ -12,13 +12,12 @@ import 'controllers/auth_controller.dart';
 var firebaseAuth = FirebaseAuth.instance;
 var firebaseStorage = FirebaseStorage.instance;
 var firebaseFirestore = FirebaseFirestore.instance;
-
-//CONTROLLER
 var authController = AuthController.instance;
+
 
 //INITIAL IMAGES
 const initialProfilePic = 'https://firebasestorage.googleapis.com/v0/b/moments-a47d4.appspot.com/o/model%2FinitialProfilePic.jpg?alt=media&token=05c1a014-b453-4ba7-a1fb-fd2e4ade68db';
-const initialCoverPic = 'https://www.macmillandictionary.com/us/external/slideshow/full/Grey_full.png';
+const initialCoverPic = 'https://firebasestorage.googleapis.com/v0/b/moments-a47d4.appspot.com/o/model%2FinitialCoverPic.jpg?alt=media&token=b0506430-ed74-49ce-91f5-00f94442ec82';
 
 //THEME SETTINGS AND COLORS
 const appBarElevation = 0.0;
@@ -38,7 +37,7 @@ const blackTransparent = Color.fromRGBO(18, 18, 18, 0.2);
 List<Widget> pages = [
   SearchScreen(),
   FeedScreen(),
-  Center(
+  const Center(
     child: Text('Messages'),
   ),
   ProfileScreen(
@@ -47,8 +46,9 @@ List<Widget> pages = [
 ];
 
 //PUBLIC AND HIDE POSTS
-int publicLimit = 1;
-int hideLimit = 5;
+const int publicLimit = 1;
+const int hideLimit = 5;
+const int limitConnections = 150;
 
 
 
