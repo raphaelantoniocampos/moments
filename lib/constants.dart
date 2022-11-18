@@ -43,7 +43,7 @@ List<Widget> pages = [
     child: Text('Messages'),
   ),
   ProfileScreen(
-    uid: myUid,
+    uid: firebaseAuth.currentUser!.uid,
   ),
 ];
 

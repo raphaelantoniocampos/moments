@@ -24,7 +24,6 @@ Future<void> main() async {
     ),
   );
 
-  myUid = firebaseAuth.currentUser!.uid;
   runApp(
     const MomentsApp(),
   );

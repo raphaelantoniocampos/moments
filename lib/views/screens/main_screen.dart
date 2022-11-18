@@ -96,6 +96,7 @@ class _MainScreenState extends State<MainScreen> {
           onTap: (index) {
             setState(() {
               _page = index;
+              postController.updateData();
             });
           },
           currentIndex: _page,

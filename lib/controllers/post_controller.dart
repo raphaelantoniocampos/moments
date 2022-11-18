@@ -12,13 +12,22 @@ import '../constants.dart';
 
 class PostController extends GetxController {
   final Rx<List<Post>> _postList = Rx<List<Post>>([]);
+
   List<Post> get postList => _postList.value;
 
   @override
   void onInit() {
+    updateData();
+    super.onInit();
+  }
+
+  updateData() async {
+    List connections = [''];
+    connections = await getUserConnections();
     _postList.bindStream(
       firebaseFirestore
           .collection('posts')
+          .where('uid', whereIn: connections)
           .orderBy('datePublished', descending: true)
           .snapshots()
           .map((QuerySnapshot query) {
@@ -29,7 +38,16 @@ class PostController extends GetxController {
         return retValue;
       }),
     );
-    super.onInit();
+  }
+
+  getUserConnections() async {
+    DocumentSnapshot userDoc = await firebaseFirestore
+        .collection('users')
+        .doc(firebaseAuth.currentUser!.uid)
+        .get();
+    final userData = userDoc.data()! as dynamic;
+    List connections = userData['connections'];
+    return connections;
   }
 
   likePost(String postId) async {

@@ -6,7 +6,6 @@ import 'package:intl/intl.dart';
 import 'package:moments/controllers/post_controller.dart';
 
 import '../../constants.dart';
-import '../../resources/firestore_methods.dart';
 
 
 class DeletePostScreen extends StatefulWidget {
