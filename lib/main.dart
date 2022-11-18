@@ -12,6 +12,7 @@ import 'views/screens/main_screen.dart';
 import 'package:provider/provider.dart';
 
 List<CameraDescription> cameras = [];
+String myUid = '';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,6 +24,7 @@ Future<void> main() async {
     ),
   );
 
+  myUid = firebaseAuth.currentUser!.uid;
   runApp(
     const MomentsApp(),
   );

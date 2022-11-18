@@ -7,6 +7,8 @@ import 'package:moments/views/screens/profile_screen.dart';
 import 'package:moments/views/screens/search_screen.dart';
 
 import 'controllers/auth_controller.dart';
+import 'main.dart';
+
 
 //FIREBASE
 var firebaseAuth = FirebaseAuth.instance;
@@ -41,7 +43,7 @@ List<Widget> pages = [
     child: Text('Messages'),
   ),
   ProfileScreen(
-    uid: firebaseAuth.currentUser!.uid,
+    uid: myUid,
   ),
 ];
 

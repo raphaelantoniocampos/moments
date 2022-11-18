@@ -9,18 +9,31 @@ class ProfileController extends GetxController {
   final Rx<Map<String, dynamic>> _user = Rx<Map<String, dynamic>>({});
   final Rx<List<Post>> _postList = Rx<List<Post>>([]);
 
-
   Map<String, dynamic> get user => _user.value;
-  List<Post> get postList => _postList.value;
 
+  List<Post> get postList => _postList.value;
 
   Rx<String> _uid = "".obs;
 
   updateUserId(String uid) {
     _uid.value = uid;
+    _postList.bindStream(
+      firebaseFirestore
+          .collection('posts')
+          .where('uid', isEqualTo: _uid.value)
+          .orderBy('datePublished', descending: true)
+          .snapshots()
+          .map((QuerySnapshot query) {
+        List<Post> retValue = [];
+        for (var element in query.docs) {
+          retValue.add(Post.fromSnap(element));
+        }
+        return retValue;
+      }),
+    );
     getUserData();
+    // update();
   }
-
 
   getUserData() async {
     DocumentSnapshot userDoc =
@@ -59,7 +72,6 @@ class ProfileController extends GetxController {
       }
     });
 
-
     _user.value = {
       'connections': connections.length,
       'connecting': connecting.length,
@@ -71,22 +83,6 @@ class ProfileController extends GetxController {
       'username': username,
       'coverPic': coverPic,
     };
-
-    _postList.bindStream(
-      firebaseFirestore
-          .collection('posts').where('uid', isEqualTo: _uid.value)
-          .orderBy('datePublished', descending: true)
-          .snapshots()
-          .map((QuerySnapshot query) {
-        List<Post> retValue = [];
-        for (var element in query.docs) {
-          retValue.add(Post.fromSnap(element));
-        }
-        return retValue;
-      }),
-    );
-
-
     update();
   }
 

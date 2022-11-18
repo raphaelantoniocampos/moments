@@ -48,6 +48,17 @@ class PostController extends GetxController {
     }
   }
 
+  Future<void> deletePost(String postId) async {
+    String res = '';
+    try {
+      await firebaseFirestore.collection('posts').doc(postId).delete();
+      res = 'Post deleted';
+    } catch (err) {
+      res = err.toString();
+    }
+    Get.snackbar("Delete", res);
+  }
+
   Future<void> changeDescription(String postId, String description) async {
     try {
       var snap = await firebaseFirestore.collection('posts').doc(postId).get();

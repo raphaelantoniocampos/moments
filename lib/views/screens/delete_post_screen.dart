@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:moments/controllers/post_controller.dart';
 
 import '../../constants.dart';
 import '../../resources/firestore_methods.dart';
@@ -17,6 +19,7 @@ class DeletePostScreen extends StatefulWidget {
 }
 
 class _DeletePostScreenState extends State<DeletePostScreen> {
+  PostController postController = Get.put(PostController());
   double maxTime = 5;
   double currentTime = 0;
 
@@ -57,7 +60,7 @@ class _DeletePostScreenState extends State<DeletePostScreen> {
                           style:
                               ElevatedButton.styleFrom(primary: primaryColor),
                           onPressed: () async {
-                            await FirestoreMethods().deletePost(widget.postId);
+                            await postController.deletePost(widget.postId);
                             Navigator.of(context)
                               ..pop()
                               ..pop();

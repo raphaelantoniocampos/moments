@@ -65,13 +65,13 @@ class CommentController extends GetxController {
     }
   }
 
-  likeComment(String id) async {
+  likeComment(String commentId) async {
     var uid = authController.user.uid;
     DocumentSnapshot doc = await firebaseFirestore
         .collection('posts')
         .doc(_postId)
         .collection('comments')
-        .doc(id)
+        .doc(commentId)
         .get();
 
     if ((doc.data()! as dynamic)['likes'].contains(uid)) {
@@ -79,7 +79,7 @@ class CommentController extends GetxController {
           .collection('posts')
           .doc(_postId)
           .collection('comments')
-          .doc(id)
+          .doc(commentId)
           .update({
         'likes': FieldValue.arrayRemove([uid])
       });
@@ -88,7 +88,7 @@ class CommentController extends GetxController {
           .collection('posts')
           .doc(_postId)
           .collection('comments')
-          .doc(id)
+          .doc(commentId)
           .update({
         'likes': FieldValue.arrayUnion([uid])
       });

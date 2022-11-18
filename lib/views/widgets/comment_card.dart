@@ -1,15 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:moments/resources/firestore_methods.dart';
-import 'package:provider/provider.dart';
+import 'package:moments/controllers/comment_controller.dart';
+import 'package:get/get.dart';
+import 'package:moments/main.dart';
 
-import 'package:moments/models/user.dart';
-import 'package:moments/models/comment.dart';
 import '../../constants.dart';
-import '../../models/user.dart';
-import '../../providers/user_provider.dart';
-import '../screens/loading_screen.dart';
 
 
 class CommentCard extends StatefulWidget {
@@ -22,6 +18,9 @@ class CommentCard extends StatefulWidget {
 }
 
 class _CommentCardState extends State<CommentCard> {
+  CommentController commentController = Get.put(CommentController());
+
+
   Future<DocumentSnapshot> getUser() async {
     DocumentSnapshot snap = await FirebaseFirestore.instance
         .collection('users')
@@ -33,10 +32,11 @@ class _CommentCardState extends State<CommentCard> {
 
   @override
   Widget build(BuildContext context) {
-    final User? user = Provider.of<UserProvider>(context).getUser;
-    return user == null
-        ? const LoadingScreen()
-        : FutureBuilder<DocumentSnapshot>(
+    // final User? user = Provider.of<UserProvider>(context).getUser;
+    // return user == null
+    //     ? const LoadingScreen()
+    //     :
+    return FutureBuilder<DocumentSnapshot>(
             future: getUser(),
             builder: (BuildContext context,
                 AsyncSnapshot<DocumentSnapshot> snapshot) {
@@ -101,11 +101,8 @@ class _CommentCardState extends State<CommentCard> {
                           Expanded(
                             child: GestureDetector(
                               onTap: () {
-                                FirestoreMethods().likeComment(
-                                    widget.snap['postId'],
-                                    user.uid,
-                                    widget.snap['commentId'],
-                                    widget.snap['likes']);
+                                commentController.likeComment(
+                                    widget.snap['commentId']);
                               },
                               child: Row(
                                 children: [
@@ -113,7 +110,7 @@ class _CommentCardState extends State<CommentCard> {
                                     Icons.favorite_border,
                                     size: 20,
                                     color: widget.snap['likes']
-                                            .contains(user.uid)
+                                            .contains(myUid)
                                         ? Colors.pinkAccent
                                         : secondaryColor,
                                   ),
