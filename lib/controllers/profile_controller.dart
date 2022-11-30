@@ -15,27 +15,15 @@ class ProfileController extends GetxController {
 
   Rx<String> _uid = "".obs;
 
-  updateUserId(String uid) {
+  updateUserId(String uid) async {
     _uid.value = uid;
-    _postList.bindStream(
-      firebaseFirestore
-          .collection('posts')
-          .where('uid', isEqualTo: _uid.value)
-          .orderBy('datePublished', descending: true)
-          .snapshots()
-          .map((QuerySnapshot query) {
-        List<Post> retValue = [];
-        for (var element in query.docs) {
-          retValue.add(Post.fromSnap(element));
-        }
-        return retValue;
-      }),
-    );
-    getUserData();
-    // update();
+
+    await getUserData();
+    await getPostsData();
   }
 
   getUserData() async {
+    _user.value = {};
     DocumentSnapshot userDoc =
         await firebaseFirestore.collection('users').doc(_uid.value).get();
     final userData = userDoc.data()! as dynamic;
@@ -83,6 +71,28 @@ class ProfileController extends GetxController {
       'username': username,
       'coverPic': coverPic,
     };
+    update();
+  }
+
+  getPostsData() async {
+    _postList.value = [];
+    var canView = [true];
+
+    if (_user.value['isConnected'] || _uid.value == authController.user.uid) {
+      canView.add(false);
+    }
+
+    var postsDoc = await firebaseFirestore
+        .collection('posts')
+        .where('uid', isEqualTo: _uid.value)
+        .where('isPublic', whereIn: canView)
+        .orderBy('datePublished', descending: true)
+        .get();
+
+    for (var element in postsDoc.docs) {
+      _postList.value.add(Post.fromSnap(element));
+    }
+
     update();
   }
 
