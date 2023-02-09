@@ -15,14 +15,24 @@ class FeedScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title:
-        const Text("moments"),
+        title: const Text("moments"),
         actions: [
           ConfigButton(),
         ],
       ),
       body: Obx(
         () {
+          if (postController.postList.isEmpty) {
+            return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Text(
+                        'No posts here yet'),
+                    Text('Try adding some friends or using the Search Tab'),
+                  ],
+                ),);
+          }
           return ListView.builder(
             scrollDirection: Axis.vertical,
             shrinkWrap: true,

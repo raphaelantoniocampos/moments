@@ -22,12 +22,12 @@ class PostController extends GetxController {
   }
 
   updateData() async {
-    List connections = [''];
-    connections = await getUserConnections();
+    List friends = [''];
+    friends = await getUserFriends();
     _postList.bindStream(
       firebaseFirestore
           .collection('posts')
-          .where('uid', whereIn: connections)
+          .where('uid', whereIn: friends)
           .orderBy('datePublished', descending: true)
           .snapshots()
           .map((QuerySnapshot query) {
@@ -40,14 +40,14 @@ class PostController extends GetxController {
     );
   }
 
-  getUserConnections() async {
+  getUserFriends() async {
     DocumentSnapshot userDoc = await firebaseFirestore
         .collection('users')
         .doc(firebaseAuth.currentUser!.uid)
         .get();
     final userData = userDoc.data()! as dynamic;
-    List connections = userData['connections'];
-    return connections;
+    List friends = userData['friends'];
+    return friends;
   }
 
   likePost(String postId) async {
