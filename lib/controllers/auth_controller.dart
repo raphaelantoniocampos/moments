@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:moments/controllers/post_controller.dart';
-import 'package:moments/controllers/profile_controller.dart';
+import 'package:moments/controllers/user_controller.dart';
 import 'package:moments/controllers/search_controller.dart';
 import 'package:moments/views/screens/main_screen.dart';
 import 'package:path_provider/path_provider.dart';
@@ -65,8 +65,8 @@ class AuthController extends GetxController {
             username: username,
             public: [],
             hiding: [],
-            connecting: [],
-            connections: [],
+            asked: [],
+            friends: [],
             email: email);
         await firebaseFirestore
             .collection('users')

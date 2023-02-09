@@ -6,7 +6,7 @@ import 'package:moments/views/widgets/like_post_button.dart';
 import 'package:provider/provider.dart';
 import '../../constants.dart';
 import '../../controllers/post_controller.dart';
-import '../../controllers/profile_controller.dart';
+import '../../controllers/user_controller.dart';
 import '../../models/post.dart';
 import '../../models/user.dart';
 import '../../providers/user_provider.dart';

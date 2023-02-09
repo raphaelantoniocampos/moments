@@ -10,8 +10,8 @@ class User {
   final String username;
   List public;
   List hiding;
-  final List connecting;
-  final List connections;
+  final List asked;
+  final List friends;
 
   User(
       {required this.profilePic,
@@ -20,8 +20,8 @@ class User {
       required this.username,
       required this.public,
       required this.hiding,
-      required this.connecting,
-      required this.connections,
+      required this.asked,
+      required this.friends,
       required this.email});
 
   Map<String, dynamic> toJson() => {
@@ -32,8 +32,8 @@ class User {
         "hiding": hiding,
         "email": email,
         "uid": uid,
-        "connecting": connecting,
-        "connections": connections,
+        "asked": asked,
+        "friends": friends,
       };
 
   static User fromSnap(DocumentSnapshot snap) {
@@ -47,8 +47,8 @@ class User {
       coverPic: snapshot['coverPic'],
       email: snapshot['email'],
       uid: snapshot['uid'],
-      connecting: snapshot['connecting'],
-      connections: snapshot['connections'],
+      asked: snapshot['asked'],
+      friends: snapshot['friends'],
     );
   }
 

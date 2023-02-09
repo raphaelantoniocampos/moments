@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:moments/controllers/profile_controller.dart';
+import 'package:moments/controllers/user_controller.dart';
 import 'package:get/get.dart';
 import 'package:moments/views/widgets/config_button.dart';
 import 'package:provider/provider.dart';
@@ -91,7 +91,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ],
                       ),
                       Text(
-                        '${controller.user['connections']} connections',
+                        '${controller.user['friends']} friends',
                         style: const TextStyle(
                             fontSize: 13,
                             // fontWeight: FontWeight.bold,
@@ -110,32 +110,32 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       color: primaryColor),
                                 ),
                               )
-                            : controller.user['isConnected']
+                            : controller.user['isFriend']
                                 ? TextButton(
                                     onPressed: () =>
-                                        profileController.connect(),
+                                        profileController.addFriend(),
                                     child: const Text(
-                                      'connected',
+                                      'remove friend',
                                       style: TextStyle(
                                           fontSize: 13,
                                           fontWeight: FontWeight.bold,
-                                          color: primaryColor),
+                                          color: Colors.redAccent),
                                     ),
                                   )
-                                : controller.user['iAmConnecting']
+                                : controller.user['wasAsked']
                                     ? TextButton(
                                         onPressed: () =>
-                                            profileController.connect(),
+                                            profileController.addFriend(),
                                         child: const Text(
-                                          'connecting',
+                                          'asked',
                                           style: TextStyle(
                                               fontSize: 13,
                                               fontWeight: FontWeight.bold,
                                               color: primaryColor),
                                         ),
                                       )
-                                    : controller.user['connections'] >=
-                                            limitConnections
+                                    : controller.user['friends'] >=
+                                            limitFriends
                                         ? TextButton(
                                             onPressed: () {},
                                             child: const Text(
@@ -146,13 +146,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   color: Colors.redAccent),
                                             ),
                                           )
-                                        : myUser.connections.length <
-                                                limitConnections
+                                        : myUser.friends.length <
+                                                limitFriends
                                             ? TextButton(
                                                 onPressed: () =>
-                                                    profileController.connect(),
+                                                    profileController.addFriend(),
                                                 child: const Text(
-                                                  'connect',
+                                                  'add friend',
                                                   style: TextStyle(
                                                       fontSize: 13,
                                                       fontWeight:

@@ -50,4 +50,4 @@ List<Widget> pages = [
 //PUBLIC AND HIDE POSTS
 const int publicLimit = 1;
 const int hideLimit = 5;
-const int limitConnections = 150;
+const int limitFriends = 150;

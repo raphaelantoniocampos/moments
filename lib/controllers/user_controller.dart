@@ -30,22 +30,22 @@ class ProfileController extends GetxController {
     String username = userData['username'];
     String profilePic = userData['profilePic'];
     String coverPic = userData['coverPic'];
-    List connections = userData['connections'];
-    List connecting = userData['connecting'];
-    bool isConnected = false;
-    bool isConnecting = false;
-    bool iAmConnecting = false;
-    bool reachedLimit = connections.length >= limitConnections;
+    List friends = userData['friends'];
+    List asked = userData['asked'];
+    bool isFriend = false;
+    bool askedCurrentUser = false;
+    bool wasAsked = false;
+    bool reachedLimit = friends.length >= limitFriends;
 
-    if (connections.contains(authController.user.uid)) {
-      isConnected = true;
+    if (friends.contains(authController.user.uid)) {
+      isFriend = true;
     } else {
-      isConnected = false;
+      isFriend = false;
     }
-    if (connecting.contains(authController.user.uid)) {
-      isConnecting = true;
+    if (asked.contains(authController.user.uid)) {
+      askedCurrentUser  = true;
     } else {
-      isConnecting = false;
+      askedCurrentUser  = false;
     }
 
     await firebaseFirestore
@@ -53,19 +53,19 @@ class ProfileController extends GetxController {
         .doc(authController.user.uid)
         .get()
         .then((value) {
-      if ((value.data()! as dynamic)['connecting'].contains(_uid.value)) {
-        iAmConnecting = true;
+      if ((value.data()! as dynamic)['asked'].contains(_uid.value)) {
+        wasAsked = true;
       } else {
-        iAmConnecting = false;
+        wasAsked = false;
       }
     });
 
     _user.value = {
-      'connections': connections.length,
-      'connecting': connecting.length,
-      'isConnected': isConnected,
-      'isConnecting': isConnecting,
-      'iAmConnecting': iAmConnecting,
+      'friends': friends.length,
+      'asked': asked.length,
+      'isFriend': isFriend,
+      'askedCurrentUser ': askedCurrentUser ,
+      'wasAsked': wasAsked,
       'reachedLimit': reachedLimit,
       'profilePic': profilePic,
       'username': username,
@@ -78,7 +78,7 @@ class ProfileController extends GetxController {
     _postList.value = [];
     var canView = [true];
 
-    if (_user.value['isConnected'] || _uid.value == authController.user.uid) {
+    if (_user.value['isFriend'] || _uid.value == authController.user.uid) {
       canView.add(false);
     }
 
@@ -96,72 +96,72 @@ class ProfileController extends GetxController {
     update();
   }
 
-  connect() async {
+  addFriend() async {
     var doc = await firebaseFirestore.collection('users').doc(_uid.value).get();
 
-    // IF IS CONNECTED => REMOVE CONNECTION
-    if ((doc.data()! as dynamic)['connections']
+    // IF IS FRIEND => REMOVE FRIEND
+    if ((doc.data()! as dynamic)['friends']
         .contains(authController.user.uid)) {
       await firebaseFirestore.collection('users').doc(_uid.value).update({
-        'connections': FieldValue.arrayRemove([authController.user.uid])
+        'friends': FieldValue.arrayRemove([authController.user.uid])
       });
       await firebaseFirestore
           .collection('users')
           .doc(authController.user.uid)
           .update({
-        'connections': FieldValue.arrayRemove([_uid.value])
+        'friends': FieldValue.arrayRemove([_uid.value])
       });
-      _user.value.update('connections', (value) => value - 1);
-      _user.value.update('isConnected', (value) => false);
+      _user.value.update('friends', (value) => value - 1);
+      _user.value.update('isFriend', (value) => false);
     }
-    //IF USER IS CONNECTING and USER HAS LESS THAN LIMIT CONNECTIONS => ADD CONNECTION, REMOVE CONNECTING
-    else if ((doc.data()! as dynamic)['connecting']
+    //IF USER IS ASKING and USER HAS LESS THAN LIMIT FRIENDS => ADD FRIEND, REMOVE ASKED
+    else if ((doc.data()! as dynamic)['asked']
             .contains(authController.user.uid) &&
         !(_user.value['reachedLimit'])) {
       await firebaseFirestore.collection('users').doc(_uid.value).update({
-        'connections': FieldValue.arrayUnion([authController.user.uid])
+        'friends': FieldValue.arrayUnion([authController.user.uid])
       });
       await firebaseFirestore
           .collection('users')
           .doc(authController.user.uid)
           .update({
-        'connections': FieldValue.arrayUnion([_uid.value])
+        'friends': FieldValue.arrayUnion([_uid.value])
       });
       await firebaseFirestore
           .collection('users')
           .doc(authController.user.uid)
           .update({
-        'connecting': FieldValue.arrayRemove([_uid.value])
+        'asked': FieldValue.arrayRemove([_uid.value])
       });
       await firebaseFirestore.collection('users').doc(_uid.value).update({
-        'connecting': FieldValue.arrayRemove([authController.user.uid])
+        'asked': FieldValue.arrayRemove([authController.user.uid])
       });
 
-      _user.value.update('connections', (value) => value + 1);
-      _user.value.update('connecting', (value) => value - 1);
-      _user.value.update('isConnected', (value) => true);
-      _user.value.update('isConnecting', (value) => false);
-      _user.value.update('iAmConnecting', (value) => false);
+      _user.value.update('friends', (value) => value + 1);
+      _user.value.update('asked', (value) => value - 1);
+      _user.value.update('isFriend', (value) => true);
+      _user.value.update('askedCurrentUser', (value) => false);
+      _user.value.update('wasAsked', (value) => false);
     }
-    //IF I AM CONNECTING => REMOVE CONNECTING
-    else if (_user.value['iAmConnecting']) {
+    //IF USER WAS ASKED => REMOVE ASKED
+    else if (_user.value['wasAsked']) {
       await firebaseFirestore
           .collection('users')
           .doc(authController.user.uid)
           .update({
-        'connecting': FieldValue.arrayRemove([_uid.value])
+        'asked': FieldValue.arrayRemove([_uid.value])
       });
-      _user.value.update('iAmConnecting', (value) => false);
+      _user.value.update('wasAsked', (value) => false);
     }
-    //IF IS NOT CONNECTING => ADD CONNECTING
+    //IF IS NOT ASKED => ADD ASKED
     else {
       await firebaseFirestore
           .collection('users')
           .doc(authController.user.uid)
           .update({
-        'connecting': FieldValue.arrayUnion([_uid.value])
+        'asked': FieldValue.arrayUnion([_uid.value])
       });
-      _user.value.update('iAmConnecting', (value) => true);
+      _user.value.update('wasAsked', (value) => true);
     }
     update();
   }

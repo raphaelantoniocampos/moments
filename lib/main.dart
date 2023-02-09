@@ -12,7 +12,7 @@ import 'views/screens/main_screen.dart';
 import 'package:provider/provider.dart';
 
 List<CameraDescription> cameras = [];
-String myUid = '';
+// String myUid = '';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -4,7 +4,7 @@ import 'package:moments/views/screens/main_screen.dart';
 import 'package:get/get.dart';
 
 import '../../constants.dart';
-import '../../controllers/profile_controller.dart';
+import '../../controllers/user_controller.dart';
 import '../../models/post.dart';
 import 'camera_screen.dart';
 import 'loading_screen.dart';
