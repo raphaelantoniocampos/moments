@@ -6,6 +6,7 @@ import '../../controllers/post_controller.dart';
 import '../../models/post.dart';
 import '../../models/user.dart';
 import '../../providers/user_provider.dart';
+import '../screens/user_list_screen.dart';
 import 'like_animation.dart';
 
 class LikePostButton extends StatefulWidget {
@@ -39,13 +40,21 @@ class _LikePostButtonState extends State<LikePostButton> {
             });
           }
         },
+        onLongPress: () {
+          Get.to(
+            () =>
+                UserListScreen(title: 'Post likes', uidList: widget.post.likes),
+          );
+        },
         child: Row(
           children: [
-                 Icon(
-                    Icons.favorite_border,
-                    color: widget.post.likes.contains(user?.uid) ? Colors.pinkAccent : secondaryColor,
-                    size: 30,
-                  ),
+            Icon(
+              Icons.favorite_border,
+              color: widget.post.likes.contains(user?.uid)
+                  ? Colors.pinkAccent
+                  : secondaryColor,
+              size: 30,
+            ),
             const SizedBox(
               width: 5,
             ),

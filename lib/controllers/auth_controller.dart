@@ -1,53 +1,62 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:moments/controllers/post_controller.dart';
-import 'package:moments/controllers/user_controller.dart';
-import 'package:moments/controllers/search_controller.dart';
 import 'package:moments/views/screens/main_screen.dart';
-import 'package:path_provider/path_provider.dart';
-
 
 import 'package:moments/models/user.dart' as model;
 import '../constants.dart';
 import '../views/screens/login_screen.dart';
 import '../views/screens/new_profile_picture_screen.dart';
-import 'comment_controller.dart';
 
 class AuthController extends GetxController {
-  static AuthController instance = Get.find();
+  static AuthController instance = Get.put(AuthController());
   late Rx<User?> _user;
 
   User get user => _user.value!;
 
   @override
   void onReady() {
+    super.onReady();
+    bindUser();
+  }
+
+  void bindUser() {
     _user = Rx<User?>(firebaseAuth.currentUser);
     _user.bindStream(
       firebaseAuth.authStateChanges(),
     );
-    ever(_user, _setInitialScreen);
-    super.onReady();
-  }
-
-  _setInitialScreen(User? user) async {
-    if (user == null) {
-      Get.offAll(
-        () => const LoginScreen(),
-      );
-    } else {
-      model.User modelUser = await getUserDetails();
-      if (modelUser.profilePic == initialProfilePic) {
+    ever(_user, (User? user) async {
+      if (user == null) {
         Get.offAll(
-          () => const NewProfilePictureScreen(),
+              () => const LoginScreen(),
         );
       } else {
-        Get.offAll(
-          () => const MainScreen(),
-        );
+        model.User modelUser = await getUserDetails();
+        if (modelUser.profilePic == initialProfilePic) {
+          Get.offAll(
+                () => const NewProfilePictureScreen(),
+          );
+        } else {
+          Get.offAll(
+                () => const MainScreen(),
+          );
+        }
       }
-    }
+    });
   }
+
+  Future<model.User> getUserDetails() async {
+    User currentUser = firebaseAuth.currentUser!;
+
+    DocumentSnapshot snap = (await firebaseFirestore
+        .collection('users')
+        .doc(currentUser.uid)
+        .get());
+
+    return model.User.fromSnap(snap);
+  }
+
 
   //registering the user
   void registerUser(String username, String email, String password) async {
@@ -89,6 +98,7 @@ class AuthController extends GetxController {
         await firebaseAuth.signInWithEmailAndPassword(
             email: email, password: password);
         res = 'Success';
+        bindUser();
       } else {
         res = 'Please enter all the fields';
       }
@@ -98,20 +108,8 @@ class AuthController extends GetxController {
     Get.snackbar('Logging in', res);
   }
 
-  Future<model.User> getUserDetails() async {
-    User currentUser = firebaseAuth.currentUser!;
-
-    DocumentSnapshot snap = (await firebaseFirestore
-        .collection('users')
-        .doc(currentUser.uid)
-        .get());
-
-    return model.User.fromSnap(snap);
-  }
-
   Future<void> signOut() async {
     await firebaseAuth.signOut();
     Get.deleteAll();
   }
-
 }

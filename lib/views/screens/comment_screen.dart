@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:moments/views/screens/profile_screen.dart';
+import 'package:moments/views/screens/user_list_screen.dart';
 import 'package:timeago/timeago.dart' as tago;
 
 import 'package:moments/controllers/comment_controller.dart';
@@ -95,32 +97,40 @@ class _CommentScreenState extends State<CommentScreen> {
                                                   MainAxisAlignment
                                                       .spaceBetween,
                                               children: [
-                                                Row(
-                                                  children: [
-                                                    //Profile pic
-                                                    CircleAvatar(
-                                                      backgroundImage:
-
-                                                          // NetworkImage(userSnap['profilePic']),
-
-                                                          NetworkImage(user[
-                                                              'profilePic']),
+                                                InkWell(
+                                                  onTap: () =>
+                                                      Navigator.of(context)
+                                                          .pushReplacement(
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          ProfileScreen(
+                                                              uid: user['uid']),
                                                     ),
-
-                                                    //Username
-                                                    Padding(
-                                                      padding:
-                                                          const EdgeInsets.only(
-                                                              left: 8),
-                                                      child: Text(
-                                                        user['username'],
-                                                        style: const TextStyle(
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
+                                                  ),
+                                                  child: Row(
+                                                    children: [
+                                                      //Profile pic
+                                                      CircleAvatar(
+                                                        backgroundImage:
+                                                            NetworkImage(user[
+                                                                'profilePic']),
                                                       ),
-                                                    ),
-                                                  ],
+
+                                                      //Username
+                                                      Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(left: 8),
+                                                        child: Text(
+                                                          user['username'],
+                                                          style: const TextStyle(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
 
                                                 //Datetime
@@ -150,6 +160,17 @@ class _CommentScreenState extends State<CommentScreen> {
                                                           .likeComment(
                                                               comment.id);
                                                     },
+                                                    onLongPress: () {
+                                                      commentController.updateCommentLikes(comment);
+                                                      Get.to(
+                                                        () => UserListScreen(
+                                                            title:
+                                                                'Comment likes',
+                                                            uidList:
+                                                                commentController
+                                                                    .commentUidList),
+                                                      );
+                                                    },
                                                     child: Row(
                                                       children: [
                                                         Icon(
@@ -175,78 +196,6 @@ class _CommentScreenState extends State<CommentScreen> {
                                           ],
                                         ),
                                       );
-                                      //   ListTile(
-                                      //   leading: CircleAvatar(
-                                      //     backgroundColor: primaryColor,
-                                      //     backgroundImage:
-                                      //         NetworkImage(user['profilePic']),
-                                      //   ),
-                                      //   title: Row(
-                                      //     children: [
-                                      //       Text(
-                                      //         "${user['username']} ",
-                                      //         style: TextStyle(
-                                      //             fontSize: 12,
-                                      //             color: primaryColor,
-                                      //             fontWeight: FontWeight.w700),
-                                      //       ),
-                                      //       Text(
-                                      //         comment.text,
-                                      //         style: TextStyle(
-                                      //             fontSize: 12,
-                                      //             color: Colors.black,
-                                      //             fontWeight: FontWeight.w500),
-                                      //       ),
-                                      //     ],
-                                      //   ),
-                                      //   subtitle: Row(
-                                      //     children: [
-                                      //       Text(
-                                      //         tago.format(comment.datePublished
-                                      //             .toDate()),
-                                      //         style: TextStyle(
-                                      //             fontSize: 10,
-                                      //             color: secondaryColor),
-                                      //       ),
-                                      //       SizedBox(
-                                      //         width: 5,
-                                      //       ),
-                                      //       Text(
-                                      //         "${comment.likes.length} likes",
-                                      //         style: TextStyle(
-                                      //           fontSize: 10,
-                                      //           color: secondaryColor,
-                                      //         ),
-                                      //       ),
-                                      //     ],
-                                      //   ),
-                                      //   trailing: InkWell(
-                                      //     onTap: () {
-                                      //       commentController
-                                      //           .likeComment(comment.id);
-                                      //       if (comment.likes.contains(
-                                      //           authController.user.uid)) {
-                                      //         setState(() {
-                                      //           comment.likes.remove(
-                                      //               authController.user.uid);
-                                      //         });
-                                      //       } else {
-                                      //         setState(() {
-                                      //           comment.likes.add(
-                                      //               authController.user.uid);
-                                      //         });
-                                      //       }
-                                      //     },
-                                      //     child: Icon(
-                                      //       Icons.favorite_border,
-                                      //       color: comment.likes.contains(
-                                      //               authController.user.uid)
-                                      //           ? Colors.pinkAccent
-                                      //           : secondaryColor,
-                                      //       size: 25,
-                                      //     ),
-                                      //   ),
-                                      // );
                                     }
                                     return const ListTile();
                                   });
@@ -257,8 +206,9 @@ class _CommentScreenState extends State<CommentScreen> {
                     ListTile(
                       title: TextFormField(
                         controller: _commentController,
-                        style: TextStyle(fontSize: 16, color: Colors.black),
-                        decoration: InputDecoration(
+                        style:
+                            const TextStyle(fontSize: 16, color: Colors.black),
+                        decoration: const InputDecoration(
                           labelText: "Comment",
                           labelStyle: TextStyle(
                               fontSize: 20,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:moments/controllers/user_controller.dart';
 import 'package:get/get.dart';
+import 'package:moments/views/screens/user_list_screen.dart';
 import 'package:moments/views/widgets/config_button.dart';
 import 'package:provider/provider.dart';
 
@@ -20,22 +21,21 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  // final PostController postController = Get.put(PostController());
-  final ProfileController profileController = Get.put(ProfileController());
+  final UserController userController = Get.put(UserController());
 
   @override
   void initState() {
     super.initState();
-    profileController.updateUserId(widget.uid);
+    userController.updateUserId(widget.uid);
   }
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<ProfileController>(
-        init: ProfileController(),
+    return GetBuilder<UserController>(
+        init: UserController(),
         builder: (controller) {
-          final model.User? myUser = Provider.of<UserProvider>(context).getUser;
-          if (controller.user.isEmpty || myUser == null) {
+          final model.User? currentUser = Provider.of<UserProvider>(context).getUser;
+          if (controller.user.isEmpty || currentUser == null) {
             return const LoadingScreen();
           }
           return Scaffold(
@@ -90,12 +90,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         ],
                       ),
-                      Text(
-                        '${controller.user['friends']} friends',
-                        style: const TextStyle(
-                            fontSize: 13,
-                            // fontWeight: FontWeight.bold,
-                            color: primaryColor),
+                      InkWell(
+                        child: Text(
+                          '${controller.user['friends'].length} friends',
+                          style: const TextStyle(
+                              fontSize: 13,
+                              // fontWeight: FontWeight.bold,
+                              color: primaryColor),
+                        ),
+                        onTap: () {
+                          Get.to(() => UserListScreen(title: 'Friends',
+                              uidList: controller.user['friends']));
+                        },
                       ),
                       Padding(
                         padding: const EdgeInsets.only(right: 12),
@@ -112,8 +118,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               )
                             : controller.user['isFriend']
                                 ? TextButton(
-                                    onPressed: () =>
-                                        profileController.addFriend(),
+                                    onPressed: () => userController.addFriend(),
                                     child: const Text(
                                       'remove friend',
                                       style: TextStyle(
@@ -125,7 +130,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 : controller.user['wasAsked']
                                     ? TextButton(
                                         onPressed: () =>
-                                            profileController.addFriend(),
+                                            userController.addFriend(),
                                         child: const Text(
                                           'asked',
                                           style: TextStyle(
@@ -134,8 +139,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                               color: primaryColor),
                                         ),
                                       )
-                                    : controller.user['friends'] >=
-                                            limitFriends
+                                    : controller.user['friends'].length >= limitFriends
                                         ? TextButton(
                                             onPressed: () {},
                                             child: const Text(
@@ -146,11 +150,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                   color: Colors.redAccent),
                                             ),
                                           )
-                                        : myUser.friends.length <
-                                                limitFriends
+                                        : currentUser.friends.length < limitFriends
                                             ? TextButton(
                                                 onPressed: () =>
-                                                    profileController.addFriend(),
+                                                    userController.addFriend(),
                                                 child: const Text(
                                                   'add friend',
                                                   style: TextStyle(
@@ -178,7 +181,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     height: 25,
                   ),
                   ListView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
+                      physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
                       scrollDirection: Axis.vertical,
                       itemCount: controller.postList.length,

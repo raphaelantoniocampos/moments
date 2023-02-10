@@ -7,8 +7,13 @@ import '../constants.dart';
 
 class CommentController extends GetxController {
   final Rx<List<Comment>> _comments = Rx<List<Comment>>([]);
+  List<dynamic> _commentUidList = [];
 
   List<Comment> get comments => _comments.value;
+  List get commentUidList => _commentUidList;
+  set setCommentUidList(List<dynamic> value) {
+    _commentUidList = value;
+  }
 
   String _postId = "";
 
@@ -31,6 +36,15 @@ class CommentController extends GetxController {
       }
       return commentList;
     }));
+  }
+
+  updateCommentLikes(Comment comment){
+    if(comment.likes.isNotEmpty){
+      commentUidList = [];
+    }
+    for (var uid in comment.likes){
+      commentUidList.add(uid);
+    }
   }
 
   postComment(String commentText) async {

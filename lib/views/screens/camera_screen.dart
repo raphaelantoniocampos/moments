@@ -10,10 +10,10 @@ import '../../constants.dart';
 import '../../main.dart';
 
 class CameraScreen extends StatefulWidget {
-  bool startWithRearCamera;
-  bool isRecordingAvailable;
+  final bool startWithRearCamera;
+  final bool isRecordingAvailable;
 
-  CameraScreen(
+  const CameraScreen(
       {Key? key,
       this.startWithRearCamera = false,
       this.isRecordingAvailable = true})
@@ -91,7 +91,22 @@ class _CameraScreenState extends State<CameraScreen>
 
     //Initialize controller
     try {
-      await cameraController.initialize();
+      await cameraController.initialize().then((_) {
+        //Get zoom levels
+        cameraController.getMaxZoomLevel().then((value) => _maxZoom = value);
+        cameraController.getMinZoomLevel().then((value) => _minZoom = value);
+
+        //Get exposure levels
+        // cameraController
+        //     .getMaxExposureOffset()
+        //     .then((value) => _maxExposureOffset = value);
+        // cameraController
+        //     .getMinExposureOffset()
+        //     .then((value) => _minExposureOffset = value);
+
+        // _currentFlashMode = controller!.value.flashMode;
+        _currentFlashMode = FlashMode.off;
+      });
     } on CameraException catch (err) {
       debugPrint('Error initializing camera: $err');
     }
@@ -101,21 +116,6 @@ class _CameraScreenState extends State<CameraScreen>
         _isCameraInitialized = controller!.value.isInitialized;
       });
     }
-
-    //Get zoom levels
-    cameraController.getMaxZoomLevel().then((value) => _maxZoom = value);
-    cameraController.getMinZoomLevel().then((value) => _minZoom = value);
-
-    //Get exposure levels
-    // cameraController
-    //     .getMaxExposureOffset()
-    //     .then((value) => _maxExposureOffset = value);
-    // cameraController
-    //     .getMinExposureOffset()
-    //     .then((value) => _minExposureOffset = value);
-
-    // _currentFlashMode = controller!.value.flashMode;
-    _currentFlashMode = FlashMode.off;
   }
 
   Future<void> startVideoRecording() async {
@@ -204,10 +204,11 @@ class _CameraScreenState extends State<CameraScreen>
 
   @override
   void initState() {
+    super.initState();
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     _isRearCameraSelected = widget.startWithRearCamera;
     getPermissionStatus();
-    super.initState();
+
   }
 
   @override

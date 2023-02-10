@@ -5,7 +5,7 @@ import 'package:moments/constants.dart';
 import 'package:moments/models/user.dart' as model;
 import '../models/post.dart';
 
-class ProfileController extends GetxController {
+class UserController extends GetxController {
   final Rx<Map<String, dynamic>> _user = Rx<Map<String, dynamic>>({});
   final Rx<List<Post>> _postList = Rx<List<Post>>([]);
 
@@ -61,10 +61,10 @@ class ProfileController extends GetxController {
     });
 
     _user.value = {
-      'friends': friends.length,
+      'friends': friends,
       'asked': asked.length,
       'isFriend': isFriend,
-      'askedCurrentUser ': askedCurrentUser ,
+      'askedCurrentUser': askedCurrentUser ,
       'wasAsked': wasAsked,
       'reachedLimit': reachedLimit,
       'profilePic': profilePic,
@@ -72,6 +72,8 @@ class ProfileController extends GetxController {
       'coverPic': coverPic,
     };
     update();
+
+    print('username: ${_user.value['username']}');
   }
 
   getPostsData() async {

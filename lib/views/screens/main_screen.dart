@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:moments/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
+import '../../controllers/auth_controller.dart';
 import '../../controllers/post_controller.dart';
 import '../../models/user.dart' as model;
 import '../../constants.dart';
@@ -22,9 +23,7 @@ class _MainScreenState extends State<MainScreen> {
   int _page = 1;
   late PageController pageController;
   bool _isLoading = false;
-  PostController postController = Get.put(
-    PostController(),
-  );
+  PostController postController = Get.put(PostController());
 
   void createPost(
     File file,
@@ -42,8 +41,9 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   void initState() {
-    addData();
     super.initState();
+    // AuthController authController = Get.put(AuthController());
+    addData();
   }
 
   addData() async {

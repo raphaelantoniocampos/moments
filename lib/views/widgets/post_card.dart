@@ -32,7 +32,7 @@ class _PostCardState extends State<PostCard> {
   final PostController postController = Get.put(
     PostController(),
   );
-  final ProfileController profileController = Get.put(ProfileController());
+  final UserController profileController = Get.put(UserController());
 
   bool isLikeAnimating = false;
   bool isLoading = false;
