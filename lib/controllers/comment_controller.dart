@@ -40,7 +40,7 @@ class CommentController extends GetxController {
 
   updateCommentLikes(Comment comment){
     if(comment.likes.isNotEmpty){
-      commentUidList = [];
+      setCommentUidList = [];
     }
     for (var uid in comment.likes){
       commentUidList.add(uid);

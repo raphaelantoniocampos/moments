@@ -52,6 +52,7 @@ dependencies:
   video_compress: ^3.1.1
   mime: ^1.0.2
   timeago: ^3.3.0
+  chewie: ^1.4.0
 
 dev_dependencies:
   flutter_test:

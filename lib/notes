@@ -3,16 +3,17 @@ to do:
 - feed screen:
     - interact only with your posts
 
-- dark theme
+- change post card design
 
-- display post
+- change feed screen behavior (make like tiktok)
+
+- add chat
+
+- video widget
     - interact with video (pause, resume)
 
 - search screen
     - make like tiktok
-
-- change friends to connections
-    - connecting vs connected
 
 - storage adjusts:
     - usernames unique value
@@ -23,4 +24,6 @@ to do:
     -rotate photo
     -gesture zoom
 
-- adjust comment screen
+- dark theme
+
+

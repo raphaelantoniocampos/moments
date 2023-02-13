@@ -113,7 +113,7 @@ class UserController extends GetxController {
           .update({
         'friends': FieldValue.arrayRemove([_uid.value])
       });
-      _user.value.update('friends', (value) => value - 1);
+      // _user.value.update('friends', (value) => value - 1);
       _user.value.update('isFriend', (value) => false);
     }
     //IF USER IS ASKING and USER HAS LESS THAN LIMIT FRIENDS => ADD FRIEND, REMOVE ASKED
@@ -139,8 +139,8 @@ class UserController extends GetxController {
         'asked': FieldValue.arrayRemove([authController.user.uid])
       });
 
-      _user.value.update('friends', (value) => value + 1);
-      _user.value.update('asked', (value) => value - 1);
+      // _user.value.update('friends', (value) => value + 1);
+      // _user.value.update('asked', (value) => value - 1);
       _user.value.update('isFriend', (value) => true);
       _user.value.update('askedCurrentUser', (value) => false);
       _user.value.update('wasAsked', (value) => false);

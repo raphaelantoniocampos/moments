@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:moments/views/widgets/image_widget.dart';
 import 'package:moments/views/widgets/like_post_button.dart';
 import 'package:provider/provider.dart';
 import '../../constants.dart';
@@ -55,8 +56,7 @@ class _PostCardState extends State<PostCard> {
               }
               var docs = snapshot.data!.docs;
               var user = docs[0].data();
-              return
-                Container(
+              return Container(
                 decoration: const BoxDecoration(
                   color: backgroundColor,
                 ),
@@ -80,11 +80,20 @@ class _PostCardState extends State<PostCard> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                CircleAvatar(
-                                  radius: 16,
-                                  backgroundImage: NetworkImage(
-                                    user['profilePic'],
+                                InkWell(
+                                  child: CircleAvatar(
+                                    radius: 16,
+                                    backgroundImage: NetworkImage(
+                                      user['profilePic'],
+                                    ),
                                   ),
+                                  onTap: () {
+                                    Get.to(
+                                      () => ImageWidget(
+                                        url: user['profilePic'],
+                                      ),
+                                    );
+                                  },
                                 ),
                                 Expanded(
                                   child: Padding(
@@ -139,12 +148,12 @@ class _PostCardState extends State<PostCard> {
                                                 onTap: () {
                                                   profileController
                                                       .changeCoverPic(
-                                                      widget.post);
+                                                          widget.post);
                                                   Navigator.of(context).pop();
                                                 },
                                                 child: Container(
                                                   padding: const EdgeInsets
-                                                      .symmetric(
+                                                          .symmetric(
                                                       vertical: 12,
                                                       horizontal: 16),
                                                   child: const Text(

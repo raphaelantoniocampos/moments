@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:moments/views/screens/profile_screen.dart';
+import 'package:moments/views/widgets/image_widget.dart';
 import 'package:moments/views/widgets/like_post_button.dart';
 
 import '../../constants.dart';
 import '../../models/post.dart';
-import '../widgets/video_player_item.dart';
+import '../widgets/video_widget.dart';
 import 'loading_screen.dart';
 
 class DisplayPostScreen extends StatefulWidget {
@@ -41,13 +42,8 @@ class _DisplayPostScreenState extends State<DisplayPostScreen> {
                 body: Stack(
                   children: [
                     widget.post.isVideo
-                        ? VideoPlayerItem(post: widget.post)
-                        : Center(
-                            child: Image.network(
-                              widget.post.downloadUrl,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
+                        ? VideoWidget(post: widget.post)
+                        : ImageWidget(url: widget.post.downloadUrl),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
@@ -77,8 +73,7 @@ class _DisplayPostScreenState extends State<DisplayPostScreen> {
                                     child: Text(
                                       user['username'],
                                       style: const TextStyle(
-                                              color: backgroundColor
-                                      ),
+                                          color: backgroundColor),
                                     ),
                                   ),
                                 ],

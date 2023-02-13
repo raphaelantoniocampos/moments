@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 
 import '../../constants.dart';
 import '../../providers/user_provider.dart';
+import '../widgets/image_widget.dart';
 import '../widgets/post_card.dart';
 import 'loading_screen.dart';
 import '../../models/user.dart' as model;
@@ -74,11 +75,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           Padding(
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 12.0),
-                            child: CircleAvatar(
-                              radius: 30,
-                              backgroundColor: secondaryColor,
-                              backgroundImage:
-                                  NetworkImage(controller.user['profilePic']),
+                            child: InkWell(
+                              onTap: (){
+                                Get.to(
+                                      () => ImageWidget(
+                                    url: controller.user['profilePic'],
+                                  ),
+                                );
+                              },
+                              child: CircleAvatar(
+                                radius: 30,
+                                backgroundColor: secondaryColor,
+                                backgroundImage:
+                                    NetworkImage(controller.user['profilePic']),
+                              ),
                             ),
                           ),
                           Text(
