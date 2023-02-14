@@ -266,7 +266,7 @@ class _PostCardState extends State<PostCard> {
                                   ),
                                 )
                               : null,
-                          height: MediaQuery.of(context).size.height * 0.35,
+                          height: MediaQuery.of(context).size.height * 0.60,
                           width: double.infinity,
                           child: widget.post.isVideo
                               ? Image.network(widget.post.thumbnail,

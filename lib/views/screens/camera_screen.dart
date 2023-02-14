@@ -38,6 +38,7 @@ class _CameraScreenState extends State<CameraScreen>
   bool _isCameraInitialized = false;
   double _minZoom = 1.0;
   double _maxZoom = 1.0;
+
   // double _minExposureOffset = 0.0;
   // double _maxExposureOffset = 0.0;
   bool _isRearCameraSelected = true;
@@ -208,7 +209,6 @@ class _CameraScreenState extends State<CameraScreen>
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: []);
     _isRearCameraSelected = widget.startWithRearCamera;
     getPermissionStatus();
-
   }
 
   @override
@@ -246,6 +246,7 @@ class _CameraScreenState extends State<CameraScreen>
                   AspectRatio(
                     aspectRatio: 1 / controller!.value.aspectRatio,
                     child: Stack(
+                      alignment: AlignmentDirectional.center,
                       children: [
                         CameraPreview(
                           controller!,
@@ -388,8 +389,8 @@ class _CameraScreenState extends State<CameraScreen>
                                       ),
                                       const Text(
                                         'Tap for photo, hold for video',
-                                        style: TextStyle(
-                                            color: backgroundColor),
+                                        style:
+                                            TextStyle(color: backgroundColor),
                                       )
                                     ],
                                   ),

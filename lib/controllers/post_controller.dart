@@ -144,10 +144,7 @@ class PostController extends GetxController {
     String res = '';
     try {
       String path = file.path;
-      bool isVideo = false;
-      if (lookupMimeType(path) == 'video/mp4') {
-        isVideo = true;
-      }
+      bool isVideo = lookupMimeType(path) == 'video/mp4';
 
       String id = const Uuid().v1();
       String uid = firebaseAuth.currentUser!.uid;
