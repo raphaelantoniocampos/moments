@@ -87,26 +87,17 @@ class _NewProfilePictureScreenState extends State<NewProfilePictureScreen> {
                                 color: primaryColor,
                                 iconSize: 50,
                                 onPressed: () async {
-                                  final image = await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => CameraScreen(
-                                        isRecordingAvailable: false,
-                                      ),
-                                    ),
-                                  );
+                                  final image =
+                                      await Get.to(() => const CameraScreen(
+                                            isRecordingAvailable: false,
+                                          ));
                                   Post post =
                                       (await _uploadPost(image)) as Post;
                                   _changeProfilePic(post);
                                   _changeDescription(post.postId,
                                       'I created my moments account.');
 
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => MainScreen(),
-                                    ),
-                                  );
+                                  Get.offAll(() => const MainScreen());
                                 },
                                 icon: const Icon(Icons.add_a_photo),
                               )),

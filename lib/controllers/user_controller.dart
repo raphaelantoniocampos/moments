@@ -43,9 +43,9 @@ class UserController extends GetxController {
       isFriend = false;
     }
     if (asked.contains(authController.user.uid)) {
-      askedCurrentUser  = true;
+      askedCurrentUser = true;
     } else {
-      askedCurrentUser  = false;
+      askedCurrentUser = false;
     }
 
     await firebaseFirestore
@@ -64,7 +64,7 @@ class UserController extends GetxController {
       'friends': friends,
       'asked': asked.length,
       'isFriend': isFriend,
-      'askedCurrentUser': askedCurrentUser ,
+      'askedCurrentUser': askedCurrentUser,
       'wasAsked': wasAsked,
       'reachedLimit': reachedLimit,
       'profilePic': profilePic,
@@ -72,8 +72,6 @@ class UserController extends GetxController {
       'coverPic': coverPic,
     };
     update();
-
-    print('username: ${_user.value['username']}');
   }
 
   getPostsData() async {
@@ -102,8 +100,7 @@ class UserController extends GetxController {
     var doc = await firebaseFirestore.collection('users').doc(_uid.value).get();
 
     // IF IS FRIEND => REMOVE FRIEND
-    if ((doc.data()! as dynamic)['friends']
-        .contains(authController.user.uid)) {
+    if ((doc.data()! as dynamic)['friends'].contains(authController.user.uid)) {
       await firebaseFirestore.collection('users').doc(_uid.value).update({
         'friends': FieldValue.arrayRemove([authController.user.uid])
       });

@@ -98,15 +98,9 @@ class _CommentScreenState extends State<CommentScreen> {
                                                       .spaceBetween,
                                               children: [
                                                 InkWell(
-                                                  onTap: () =>
-                                                      Navigator.of(context)
-                                                          .pushReplacement(
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          ProfileScreen(
-                                                              uid: user['uid']),
-                                                    ),
-                                                  ),
+                                                  onTap: () => Get.to(() =>
+                                                      ProfileScreen(
+                                                          uid: user['uid'])),
                                                   child: Row(
                                                     children: [
                                                       //Profile pic
@@ -161,7 +155,9 @@ class _CommentScreenState extends State<CommentScreen> {
                                                               comment.id);
                                                     },
                                                     onLongPress: () {
-                                                      commentController.updateCommentLikes(comment);
+                                                      commentController
+                                                          .updateCommentLikes(
+                                                              comment);
                                                       Get.to(
                                                         () => UserListScreen(
                                                             title:

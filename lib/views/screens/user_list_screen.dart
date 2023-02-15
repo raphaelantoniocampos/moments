@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:moments/views/screens/profile_screen.dart';
 
 import '../../constants.dart';
@@ -59,12 +60,8 @@ class _UserListScreenState extends State<UserListScreen> {
                         var docs = snapshot.data!.docs;
                         var user = docs[0].data();
                         return InkWell(
-                          onTap: () => Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  ProfileScreen(uid: user['uid']),
-                            ),
-                          ),
+                          onTap: () =>
+                              Get.to(() => ProfileScreen(uid: user['uid'])),
                           child: ListTile(
                             leading: CircleAvatar(
                               backgroundColor: primaryColor,

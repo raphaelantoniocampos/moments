@@ -52,7 +52,7 @@ class _LikePostButtonState extends State<LikePostButton> {
               Icons.favorite_border,
               color: widget.post.likes.contains(user?.uid)
                   ? Colors.pinkAccent
-                  : secondaryColor,
+                  : Colors.black,
               size: 30,
             ),
             const SizedBox(
@@ -63,7 +63,8 @@ class _LikePostButtonState extends State<LikePostButton> {
               style: TextStyle(
                   color: widget.post.likes.contains(user?.uid)
                       ? Colors.pinkAccent
-                      : secondaryColor),
+                      : Colors.black,
+              fontWeight: FontWeight.bold),
             ),
           ],
         ),

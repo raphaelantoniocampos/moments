@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:moments/constants.dart';
 import 'package:moments/views/screens/sign_up_screen.dart';
 
@@ -118,13 +119,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: const Text("Don't have an account? "),
                   ),
                   GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const SignUpScreen(),
-                        ),
-                      );
-                    },
+                    onTap: () => Get.to(() => const SignUpScreen()),
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 8),
                       child: const Text('Sign up',

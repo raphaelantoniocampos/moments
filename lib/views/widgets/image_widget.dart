@@ -8,7 +8,7 @@ class ImageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(5.0),
         child: Image.network(
           url,
           fit: BoxFit.cover,

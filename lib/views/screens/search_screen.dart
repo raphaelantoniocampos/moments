@@ -52,159 +52,49 @@ class SearchScreen extends StatelessWidget {
         ),
         body: searchController.showUsers.value == true
             ? ListView.builder(
-            itemCount: searchController.searchedUsers.length,
-            itemBuilder: (context, index) {
-              User user = searchController.searchedUsers[index];
-              return InkWell(
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => ProfileScreen(uid: user.uid),
-                  ),
-                ),
-                child: ListTile(
-                  leading: CircleAvatar(
-                    backgroundImage: NetworkImage(user.profilePic),
-                  ),
-                  title: Text(user.username),
-                ),
-              );
-            })
-        // FutureBuilder(
-        //         future: FirebaseFirestore.instance
-        //             .collection('users')
-        //             .where('username',
-        //                 isGreaterThanOrEqualTo: _searchController.text)
-        //             .get(),
-        //         builder: (context,
-        //             AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot) {
-        //           if (!snapshot.hasData) {
-        //             return const LoadingScreen();
-        //           }
-        //           if (snapshot.connectionState == ConnectionState.waiting) {
-        //             return const LoadingScreen();
-        //           }
-        //           return
-        //           ListView.builder(
-        //               itemCount: snapshot.data!.docs.length,
-        //               itemBuilder: (context, index) {
-        //                 return InkWell(
-        //                   onTap: () => Navigator.of(context).push(
-        //                     MaterialPageRoute(
-        //                       builder: (context) => ProfileScreen(
-        //                           uid: (snapshot.data! as dynamic).docs[index]
-        //                               ['uid']),
-        //                     ),
-        //                   ),
-        //                   child: ListTile(
-        //                     leading: CircleAvatar(
-        //                       backgroundImage: NetworkImage(
-        //                           (snapshot.data! as dynamic).docs[index]
-        //                               ['profilePic']),
-        //                     ),
-        //                     title: Text((snapshot.data! as dynamic).docs[index]
-        //                         ['username']),
-        //                   ),
-        //                 );
-        //               });
-        //         })
-            : MasonryGridView.count(
-          crossAxisCount: 3,
-          itemCount: searchController.publicPostList.length,
-          itemBuilder: (context, index) {
-            Post post = searchController.publicPostList[index];
-            return SizedBox(
-              height: MediaQuery.of(context).size.height * 0.35,
-              width: double.infinity,
-              child: InkWell(
-                onTap: () => Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => DisplayPostScreen(post: post),
-                  ),
-                ),
-                child: Stack(children: [
-                  Image.network(
-                      post.isVideo ? post.thumbnail : post.downloadUrl),
-                  Center(
-                    child: Icon(
-                      Icons.play_arrow,
-                      color: post.isVideo
-                          ? Colors.white
-                          : Colors.transparent,
-                      size: 40,
+                itemCount: searchController.searchedUsers.length,
+                itemBuilder: (context, index) {
+                  User user = searchController.searchedUsers[index];
+                  return InkWell(
+                    onTap: () => Get.to(() => ProfileScreen(uid: user.uid)),
+                    child: ListTile(
+                      leading: CircleAvatar(
+                        backgroundImage: NetworkImage(user.profilePic),
+                      ),
+                      title: Text(user.username),
                     ),
-                  ),
-                ]),
+                  );
+                })
+            : MasonryGridView.count(
+                crossAxisCount: 3,
+                itemCount: searchController.publicPostList.length,
+                itemBuilder: (context, index) {
+                  Post post = searchController.publicPostList[index];
+                  return SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.35,
+                    width: double.infinity,
+                    child: InkWell(
+                      onTap: () => Get.to(() => DisplayPostScreen(post: post)),
+                      child: Stack(children: [
+                        Image.network(
+                            post.isVideo ? post.thumbnail : post.downloadUrl),
+                        Center(
+                          child: Icon(
+                            Icons.play_arrow,
+                            color: post.isVideo
+                                ? Colors.white
+                                : Colors.transparent,
+                            size: 40,
+                          ),
+                        ),
+                      ]),
+                    ),
+                  );
+                },
+                mainAxisSpacing: 0,
+                crossAxisSpacing: 0,
               ),
-            );
-          },
-          mainAxisSpacing: 0,
-          crossAxisSpacing: 0,
-        ),
-        //   FutureBuilder(
-        //       future: FirebaseFirestore.instance
-        //           .collection('posts')
-        //           .where('isPublic', isEqualTo: true)
-        //           .get(),
-        //       builder: (context,
-        //           AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
-        //               snapshot) {
-        //         if (!snapshot.hasData) {
-        //           return const LoadingScreen();
-        //         }
-        //         if (snapshot.connectionState == ConnectionState.waiting) {
-        //           return const LoadingScreen();
-        //         }
-        //         if (snapshot.connectionState == ConnectionState.none) {
-        //           return const LoadingScreen();
-        //         }
-        //         return
-        //           MasonryGridView.count(
-        //           crossAxisCount: 3,
-        //           itemCount: (snapshot.data! as dynamic).docs.length,
-        //           itemBuilder: (context, index) => SizedBox(
-        //             height: MediaQuery.of(context).size.height * 0.35,
-        //             width: double.infinity,
-        //             child: InkWell(
-        //               onTap: () {
-        //                 Navigator.of(context).push(
-        //                   MaterialPageRoute(
-        //                     builder: (context) => DisplayPostScreen(
-        //                       post: Post.fromSnap(
-        //                           (snapshot.data! as dynamic).docs[index]),
-        //                     ),
-        //                   ),
-        //                 );
-        //               },
-        //               child: Stack(children: [
-        //                 Image.network(
-        //                   (snapshot.data! as dynamic).docs[index]['isVideo']
-        //                       ? (snapshot.data! as dynamic).docs[index]
-        //                           ['thumbnail']
-        //                       : (snapshot.data! as dynamic).docs[index]
-        //                           ['downloadUrl'],
-        //                 ),
-        //                 Center(
-        //                   child: Icon(
-        //                     Icons.play_arrow,
-        //                     color: (snapshot.data! as dynamic).docs[index]
-        //                             ['isVideo']
-        //                         ? Colors.white
-        //                         : Colors.transparent,
-        //                     size: 40,
-        //                   ),
-        //                 ),
-        //               ]),
-        //             ),
-        //           ),
-        //           mainAxisSpacing: 0,
-        //           crossAxisSpacing: 0,
-        //         );
-        // })
-        // ,
       );
     });
   }
 }
-
-
-

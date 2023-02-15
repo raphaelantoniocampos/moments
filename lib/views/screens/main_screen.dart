@@ -103,13 +103,7 @@ class _MainScreenState extends State<MainScreen> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () async {
-            final file = await Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => CameraScreen(),
-              ),
-            );
-
+            final file = await Get.to(() => const CameraScreen());
             createPost(file);
           },
           child: const Icon(

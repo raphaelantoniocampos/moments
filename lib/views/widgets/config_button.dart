@@ -8,6 +8,7 @@ import '../screens/login_screen.dart';
 
 class ConfigButton extends StatelessWidget {
   final Color color;
+
   ConfigButton({Key? key, this.color = primaryColor}) : super(key: key);
 
   @override
@@ -25,14 +26,7 @@ class ConfigButton extends StatelessWidget {
               shrinkWrap: true,
               children: [
                 InkWell(
-                  onTap: () async {
-                    await authController.signOut();
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (context) => const LoginScreen(),
-                      ),
-                    );
-                  },
+                  onTap: () => Get.offAll(() => const LoginScreen()),
                   child: Container(
                     padding: const EdgeInsets.symmetric(
                         vertical: 12, horizontal: 16),
@@ -44,7 +38,10 @@ class ConfigButton extends StatelessWidget {
           ),
         );
       },
-      icon: Icon(Icons.settings, color: color,),
+      icon: Icon(
+        Icons.settings,
+        color: color,
+      ),
     );
   }
 }

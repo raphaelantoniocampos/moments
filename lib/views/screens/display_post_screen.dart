@@ -1,11 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:moments/views/screens/profile_screen.dart';
 import 'package:moments/views/widgets/image_widget.dart';
 import 'package:moments/views/widgets/like_post_button.dart';
+import 'package:moments/views/widgets/profile_button.dart';
 
 import '../../constants.dart';
 import '../../models/post.dart';
+import '../widgets/comment_post_button.dart';
 import '../widgets/video_widget.dart';
 import 'loading_screen.dart';
 
@@ -38,54 +41,65 @@ class _DisplayPostScreenState extends State<DisplayPostScreen> {
             var docs = snapshot.data!.docs;
             var user = docs[0].data();
             return Scaffold(
-                backgroundColor: Colors.black,
-                body: Stack(
+                backgroundColor: backgroundColor,
+                body: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    widget.post.isVideo
-                        ? VideoWidget(post: widget.post)
-                        : ImageWidget(url: widget.post.downloadUrl),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
+                    Stack(
+                      // alignment: AlignmentDirectional.bottomCenter,
                       children: [
-                        Row(
+                        widget.post.isVideo
+                            ? VideoWidget(post: widget.post)
+                            : ImageWidget(url: widget.post.downloadUrl),
+                        Column(
                           mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            InkWell(
-                              onTap: () => Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) =>
-                                      ProfileScreen(uid: widget.post.uid),
-                                ),
-                              ),
+                            Padding(
+                              padding: const EdgeInsets.all(14.0),
+                              child:
+                                  ProfileButton(post: widget.post, user: user),
+                            ),
+                            const SizedBox(
+                              height: 600,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(14),
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  CircleAvatar(
-                                    radius: 16,
-                                    backgroundImage: NetworkImage(
-                                      user['profilePic'],
-                                    ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
+                                    child: LikePostButton(post: widget.post),
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.only(left: 2),
-                                    child: Text(
-                                      user['username'],
-                                      style: const TextStyle(
-                                          color: backgroundColor),
-                                    ),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
+                                    child: CommentPostButton(post: widget.post),
                                   ),
                                 ],
                               ),
                             ),
-                            LikePostButton(post: widget.post)
+                            const SizedBox(
+                              height: 30,
+                            ),
+                            SizedBox(
+                              width: double.infinity,
+                              child: Center(
+                                child: Text(
+                                  widget.post.description,
+                                  style: const TextStyle(color: Colors.black),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ),
                           ],
                         ),
-                        const SizedBox(
-                          height: 24,
-                        )
                       ],
+                    ),
+                    const SizedBox(
+                      height: 24,
                     ),
                   ],
                 )
