@@ -136,8 +136,7 @@ class UserController extends GetxController {
         'asked': FieldValue.arrayRemove([authController.user.uid])
       });
 
-      // _user.value.update('friends', (value) => value + 1);
-      // _user.value.update('asked', (value) => value - 1);
+      _user.value['friends'].add(authController.user.uid);
       _user.value.update('isFriend', (value) => true);
       _user.value.update('askedCurrentUser', (value) => false);
       _user.value.update('wasAsked', (value) => false);

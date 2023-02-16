@@ -13,7 +13,7 @@ import '../../models/post.dart';
 import '../../models/user.dart';
 import '../../providers/user_provider.dart';
 import '../screens/delete_post_screen.dart';
-import '../screens/display_post_screen.dart';
+import '../screens/post_screen.dart';
 import 'like_animation.dart';
 import 'loading_post.dart';
 
@@ -193,7 +193,7 @@ class _PostCardState extends State<PostCard> {
                     //Post section
                     GestureDetector(
                       onTap: () =>
-                          Get.to(() => DisplayPostScreen(post: widget.post)),
+                          Get.to(() => PostScreen(post: widget.post)),
                       onDoubleTap: () async {
                         // postController.likePost(widget.post.postId);
                         // setState(() {

@@ -6,6 +6,7 @@ import 'package:moments/views/widgets/config_button.dart';
 import 'package:provider/provider.dart';
 
 import '../../constants.dart';
+import '../../models/user.dart';
 import '../../providers/user_provider.dart';
 import '../widgets/image_widget.dart';
 import '../widgets/post_card.dart';
@@ -34,7 +35,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return GetBuilder<UserController>(
         init: UserController(),
         builder: (controller) {
-          final model.User? currentUser = Provider.of<UserProvider>(context).getUser;
+          final model.User? currentUser =
+              Provider.of<UserProvider>(context).getUser;
           if (controller.user.isEmpty || currentUser == null) {
             return const Center(child: CircularProgressIndicator());
           }
@@ -66,123 +68,72 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                     ],
                   ),
+                  const SizedBox(
+                    height: 20,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        children: [
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 12.0),
-                            child: InkWell(
-                              onTap: (){
-                                Get.to(
-                                      () => ImageWidget(
-                                    url: controller.user['profilePic'],
-                                  ),
-                                );
-                              },
-                              child: CircleAvatar(
-                                radius: 30,
-                                backgroundColor: secondaryColor,
-                                backgroundImage:
-                                    NetworkImage(controller.user['profilePic']),
+                      Expanded(
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 12.0),
+                              child: InkWell(
+                                onTap: () {
+                                  Get.to(
+                                    () => ImageWidget(
+                                      url: controller.user['profilePic'],
+                                    ),
+                                  );
+                                },
+                                child: CircleAvatar(
+                                  radius: 30,
+                                  backgroundColor: secondaryColor,
+                                  backgroundImage: NetworkImage(
+                                      controller.user['profilePic']),
+                                ),
                               ),
                             ),
-                          ),
-                          Text(
-                            controller.user['username'],
-                            style: const TextStyle(
-                                fontSize: 13,
-                                // fontWeight: FontWeight.bold,
-                                color: primaryColor),
-                          ),
-                        ],
-                      ),
-                      InkWell(
-                        child: Text(
-                          '${controller.user['friends'].length} friends',
-                          style: const TextStyle(
-                              fontSize: 13,
-                              // fontWeight: FontWeight.bold,
-                              color: primaryColor),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    controller.user['username'],
+                                    style: const TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: primaryColor),
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  InkWell(
+                                    onTap: () {
+                                      Get.to(() => UserListScreen(
+                                          title: 'Friends',
+                                          uidList: controller.user['friends']));
+                                    },
+                                    child: Text(
+                                      '${controller.user['friends'].length} friends',
+                                      style: const TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w400,
+                                        color: secondaryColor,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                        onTap: () {
-                          Get.to(() => UserListScreen(title: 'Friends',
-                              uidList: controller.user['friends']));
-                        },
                       ),
                       Padding(
                         padding: const EdgeInsets.only(right: 12),
-                        child: widget.uid == authController.user.uid
-                            ? TextButton(
-                                onPressed: () {},
-                                child: const Text(
-                                  'edit',
-                                  style: TextStyle(
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.bold,
-                                      color: primaryColor),
-                                ),
-                              )
-                            : controller.user['isFriend']
-                                ? TextButton(
-                                    onPressed: () => userController.addFriend(),
-                                    child: const Text(
-                                      'remove friend',
-                                      style: TextStyle(
-                                          fontSize: 13,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.redAccent),
-                                    ),
-                                  )
-                                : controller.user['wasAsked']
-                                    ? TextButton(
-                                        onPressed: () =>
-                                            userController.addFriend(),
-                                        child: const Text(
-                                          'asked',
-                                          style: TextStyle(
-                                              fontSize: 13,
-                                              fontWeight: FontWeight.bold,
-                                              color: primaryColor),
-                                        ),
-                                      )
-                                    : controller.user['friends'].length >= limitFriends
-                                        ? TextButton(
-                                            onPressed: () {},
-                                            child: const Text(
-                                              'user limited',
-                                              style: TextStyle(
-                                                  fontSize: 13,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: Colors.redAccent),
-                                            ),
-                                          )
-                                        : currentUser.friends.length < limitFriends
-                                            ? TextButton(
-                                                onPressed: () =>
-                                                    userController.addFriend(),
-                                                child: const Text(
-                                                  'add friend',
-                                                  style: TextStyle(
-                                                      fontSize: 13,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: primaryColor),
-                                                ),
-                                              )
-                                            : TextButton(
-                                                onPressed: () {},
-                                                child: const Text(
-                                                  'max connections',
-                                                  style: TextStyle(
-                                                      fontSize: 13,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: Colors.redAccent),
-                                                ),
-                                              ),
+                        child: buildButton(controller, currentUser),
                       ),
                     ],
                   ),
@@ -203,31 +154,200 @@ class _ProfileScreenState extends State<ProfileScreen> {
           );
         });
   }
-}
 
-Column buildStatColumn(int num, String label) {
-  return Column(
-    mainAxisSize: MainAxisSize.min,
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      Text(
-        num.toString(),
-        style: const TextStyle(
-          fontSize: 18,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      Padding(
-        padding: const EdgeInsets.only(top: 4),
-        child: Text(
-          label,
-          style: const TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w400,
-            color: secondaryColor,
+  Widget buildButton(UserController controller, User currentUser) {
+    final isCurrentUser = widget.uid == authController.user.uid;
+    final isFriend = controller.user['isFriend'];
+    final wasAsked = controller.user['wasAsked'];
+    final friendCount = controller.user['friends'].length;
+    final currentUserFriendCount = currentUser.friends.length;
+
+    if (isCurrentUser) {
+      return ElevatedButton(
+        onPressed: () {},
+        style: ElevatedButton.styleFrom(
+          foregroundColor: primaryColor,
+          backgroundColor: Colors.white,
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
           ),
         ),
-      ),
-    ],
-  );
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: const [
+            Icon(
+              Icons.edit,
+              size: 15,
+            ),
+            SizedBox(
+              width: 6,
+            ),
+            Text(
+              'Edit',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      );
+    } else if (isFriend) {
+      return ElevatedButton(
+        onPressed: () => userController.addFriend(),
+        style: ElevatedButton.styleFrom(
+          foregroundColor: Colors.redAccent,
+          backgroundColor: Colors.white,
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: const [
+            Icon(
+              Icons.person_remove,
+              size: 15,
+            ),
+            SizedBox(
+              width: 6,
+            ),
+            Text(
+              'Remove friend',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      );
+    } else if (wasAsked) {
+      return ElevatedButton(
+        onPressed: () => userController.addFriend(),
+        style: ElevatedButton.styleFrom(
+          foregroundColor: primaryColor,
+          backgroundColor: Colors.white,
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: const [
+            Icon(
+              Icons.watch_later_outlined,
+              size: 15,
+            ),
+            SizedBox(
+              width: 6,
+            ),
+            Text(
+              'Asked',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      );
+    } else if (friendCount >= limitFriends) {
+      return ElevatedButton(
+        onPressed: () {},
+        style: ElevatedButton.styleFrom(
+          foregroundColor: Colors.redAccent,
+          backgroundColor: Colors.white,
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: const [
+            Icon(
+              Icons.block,
+              size: 15,
+            ),
+            SizedBox(
+              width: 6,
+            ),
+            Text(
+              'User limited',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      );
+    } else if (currentUserFriendCount < limitFriends) {
+      return ElevatedButton(
+        onPressed: () => userController.addFriend(),
+        style: ElevatedButton.styleFrom(
+          foregroundColor: Colors.white,
+          backgroundColor: primaryColor,
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: const [
+            Icon(
+              Icons.person_add,
+              size: 15,
+            ),
+            SizedBox(
+              width: 6,
+            ),
+            Text(
+              'Add friend',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      );
+    } else {
+      return ElevatedButton(
+        onPressed: () {},
+        style: ElevatedButton.styleFrom(
+          foregroundColor: primaryColor,
+          backgroundColor: Colors.white,
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: const [
+            Icon(
+              Icons.block,
+              size: 15,
+            ),
+            SizedBox(
+              width: 6,
+            ),
+            Text(
+              'Max friends',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+  }
 }

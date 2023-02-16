@@ -40,7 +40,6 @@ class _MainScreenState extends State<MainScreen> {
   @override
   void initState() {
     super.initState();
-    // AuthController authController = Get.put(AuthController());
     addData();
   }
 
@@ -105,7 +104,7 @@ class _MainScreenState extends State<MainScreen> {
             createPost(file);
           },
           child: const Icon(
-            Icons.add,
+            Icons.camera_alt_outlined,
             size: 30,
           ),
         ),

@@ -8,7 +8,7 @@ import '../../controllers/search_controller.dart';
 import '../../models/post.dart';
 import '../../models/user.dart';
 import '../widgets/config_button.dart';
-import 'display_post_screen.dart';
+import 'post_screen.dart';
 
 class SearchScreen extends StatelessWidget {
   SearchScreen({Key? key}) : super(key: key);
@@ -71,7 +71,7 @@ class SearchScreen extends StatelessWidget {
                     height: MediaQuery.of(context).size.height * 0.35,
                     width: double.infinity,
                     child: InkWell(
-                      onTap: () => Get.to(() => DisplayPostScreen(post: post)),
+                      onTap: () => Get.to(() => PostScreen(post: post)),
                       child: Stack(children: [
                         Image.network(
                             post.isVideo ? post.thumbnail : post.downloadUrl),
