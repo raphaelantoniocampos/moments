@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:video_player/video_player.dart';
-import 'package:chewie/chewie.dart';
 
 import '../../models/post.dart';
-import '../screens/loading_screen.dart';
 
 class VideoWidget extends StatefulWidget {
   final Post post;
@@ -12,21 +9,21 @@ class VideoWidget extends StatefulWidget {
   const VideoWidget({Key? key, required this.post}) : super(key: key);
 
   @override
-  State<VideoWidget> createState() => _VideoWidgetState();
+  _VideoWidgetState createState() => _VideoWidgetState();
 }
 
 class _VideoWidgetState extends State<VideoWidget> {
   late VideoPlayerController _controller;
+  Future<void>? _initializeVideoFuture;
 
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.network(widget.post.downloadUrl)
-      ..initialize().then((value) {
-        setState(() {});
-        _controller.play();
-        _controller.setVolume(1);
-      });
+    _controller = VideoPlayerController.network(widget.post.downloadUrl);
+    _initializeVideoFuture = _controller.initialize().then((_) {
+      _controller.setVolume(1);
+      _controller.play();
+    });
   }
 
   @override
@@ -38,25 +35,22 @@ class _VideoWidgetState extends State<VideoWidget> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: _controller.initialize(),
+      future: _initializeVideoFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const LoadingScreen();
-        }
-        if (snapshot.connectionState == ConnectionState.done) {
-          return SizedBox.expand(
-            child: FittedBox(
-              fit: BoxFit.cover,
-              child: SizedBox(
-                width: _controller.value.size?.width ?? 0,
-                height: _controller.value.size?.height ?? 0,
-                child: VideoPlayer(_controller),
-              ),
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.connectionState == ConnectionState.done) {
+          return Center(
+            child: AspectRatio(
+              aspectRatio: _controller.value.aspectRatio,
+              child: VideoPlayer(_controller),
             ),
           );
+        } else {
+          return const SizedBox();
         }
-        return const LoadingScreen();
       },
     );
   }
 }
+

@@ -9,7 +9,6 @@ import '../../constants.dart';
 import '../../providers/user_provider.dart';
 import '../widgets/image_widget.dart';
 import '../widgets/post_card.dart';
-import 'loading_screen.dart';
 import '../../models/user.dart' as model;
 
 class ProfileScreen extends StatefulWidget {
@@ -37,7 +36,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         builder: (controller) {
           final model.User? currentUser = Provider.of<UserProvider>(context).getUser;
           if (controller.user.isEmpty || currentUser == null) {
-            return const LoadingScreen();
+            return const Center(child: CircularProgressIndicator());
           }
           return Scaffold(
             body: SingleChildScrollView(

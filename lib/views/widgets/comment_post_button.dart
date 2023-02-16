@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../constants.dart';
 import '../../controllers/post_controller.dart';
 import '../../models/post.dart';
 import '../screens/comment_screen.dart';

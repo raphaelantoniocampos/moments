@@ -6,9 +6,7 @@ import '../widgets/config_button.dart';
 import '../widgets/post_card.dart';
 
 class FeedScreen extends StatelessWidget {
-  FeedScreen({Key? key}) : super(key: key);
-
-  final PostController postController = Get.put(PostController());
+  const FeedScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,32 +18,39 @@ class FeedScreen extends StatelessWidget {
           ConfigButton(),
         ],
       ),
-      body: Obx(
-        () {
-          if (postController.postList.isEmpty) {
-            return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Text(
-                        'No posts here yet'),
-                    Text('Try adding some friends or using the Search Tab'),
-                  ],
-                ),);
-          }
+      body: _buildBody(),
+    );
+  }
+
+  Widget _buildBody() {
+    return Obx(
+          () {
+        final postList = Get.find<PostController>().postList;
+        if (postList.isEmpty) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Text('No posts here yet'),
+                Text('Try adding some friends or using the Search Tab'),
+              ],
+            ),
+          );
+        } else {
           return ListView.builder(
             scrollDirection: Axis.vertical,
             shrinkWrap: true,
-            itemCount: postController.postList.length,
+            itemCount: postList.length,
             itemBuilder: (context, index) {
-              final data = postController.postList[index];
+              final post = postList[index];
               return PostCard(
-                post: data,
+                post: post,
               );
             },
           );
-        },
-      ),
+        }
+      },
     );
   }
 }
+

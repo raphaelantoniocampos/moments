@@ -1,17 +1,14 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:moments/views/screens/profile_screen.dart';
 import 'package:get/get.dart';
 
 import '../../constants.dart';
-import '../../controllers/post_controller.dart';
 import '../../controllers/search_controller.dart';
 import '../../models/post.dart';
 import '../../models/user.dart';
 import '../widgets/config_button.dart';
 import 'display_post_screen.dart';
-import 'loading_screen.dart';
 
 class SearchScreen extends StatelessWidget {
   SearchScreen({Key? key}) : super(key: key);

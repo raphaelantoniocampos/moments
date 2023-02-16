@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:moments/constants.dart';
-import 'package:moments/controllers/auth_controller.dart';
 
 import '../screens/login_screen.dart';
 

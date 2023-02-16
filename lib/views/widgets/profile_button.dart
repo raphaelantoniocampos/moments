@@ -5,16 +5,15 @@ import '../screens/profile_screen.dart';
 import 'image_widget.dart';
 
 class ProfileButton extends StatelessWidget {
-  final Post post;
   final Map<String, dynamic> user;
 
-  const ProfileButton({Key? key, required this.post, required this.user})
+  const ProfileButton({Key? key, required this.user})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => Get.to(() => ProfileScreen(uid: post.uid)),
+      onTap: () => Get.to(() => ProfileScreen(uid: user['uid'])),
       child: Row(
         children: [
           InkWell(

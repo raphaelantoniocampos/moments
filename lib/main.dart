@@ -4,15 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:moments/constants.dart';
 import 'package:moments/providers/user_provider.dart';
 import 'package:get/get.dart';
-import 'package:moments/views/screens/loading_screen.dart';
-import 'package:moments/views/screens/login_screen.dart';
 
 import 'controllers/auth_controller.dart';
-import 'views/screens/main_screen.dart';
 import 'package:provider/provider.dart';
 
 List<CameraDescription> cameras = [];
-// String myUid = '';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -61,7 +57,7 @@ class MomentsApp extends StatelessWidget {
           colorScheme:
               ColorScheme.fromSwatch().copyWith(secondary: primaryColor),
         ),
-        home: const LoadingScreen(),
+        home: const Center(child: CircularProgressIndicator()),
       ),
     );
   }

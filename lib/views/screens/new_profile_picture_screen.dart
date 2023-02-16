@@ -8,7 +8,6 @@ import '../../constants.dart';
 import '../../controllers/user_controller.dart';
 import '../../models/post.dart';
 import 'camera_screen.dart';
-import 'loading_screen.dart';
 
 class NewProfilePictureScreen extends StatefulWidget {
   const NewProfilePictureScreen({Key? key}) : super(key: key);
@@ -44,7 +43,7 @@ class _NewProfilePictureScreenState extends State<NewProfilePictureScreen> {
   @override
   Widget build(BuildContext context) {
     return isLoading
-        ? const LoadingScreen()
+        ? const Center(child: CircularProgressIndicator())
         : Scaffold(
             appBar: AppBar(actions: [
               ConfigButton(),

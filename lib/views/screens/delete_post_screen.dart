@@ -14,88 +14,83 @@ class DeletePostScreen extends StatefulWidget {
   const DeletePostScreen({Key? key, required this.postId}) : super(key: key);
 
   @override
-  State<DeletePostScreen> createState() => _DeletePostScreenState();
+  _DeletePostScreenState createState() => _DeletePostScreenState();
 }
 
 class _DeletePostScreenState extends State<DeletePostScreen> {
-  PostController postController = Get.put(PostController());
-  double maxTime = 5;
-  double currentTime = 0;
-
-  void waitToDelete() {
-    Timer.periodic(const Duration(milliseconds: 100), (Timer timer) {
-      setState(() {
-        if (currentTime >= maxTime) {
-          timer.cancel();
-          confirmDelete();
-          // Navigator.of(context).pop();
-        } else {
-          currentTime += 0.1;
-        }
-      });
-    });
-  }
-
-  void confirmDelete() {
-    showDialog(
-        context: context,
-        builder: (context) => Dialog(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      'Confirm delete',
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ElevatedButton(
-                          style:
-                              ElevatedButton.styleFrom(primary: primaryColor),
-                          onPressed: () async {
-                            await postController.deletePost(widget.postId);
-                            Navigator.of(context)
-                              ..pop()
-                              ..pop();
-                          },
-                          child: const Text(
-                            'Delete',
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ElevatedButton(
-                          style:
-                              ElevatedButton.styleFrom(primary: secondaryColor),
-                          onPressed: () {
-                            Navigator.of(context)
-                              ..pop()
-                              ..pop();
-                          },
-                          child: const Text(
-                            'Cancel',
-                          ),
-                        ),
-                      ),
-                    ],
-                  )
-                ],
-              ),
-            ));
-  }
+  late final PostController _postController;
+  final double _maxTime = 5;
+  double _currentTime = 0;
+  late Timer _timer;
 
   @override
   void initState() {
-    waitToDelete();
-    setState(() {});
     super.initState();
+    _timer = Timer.periodic(const Duration(milliseconds: 100), _updateTimer);
+    _postController = Get.put(PostController());
+  }
+
+  void _updateTimer(Timer timer) {
+    setState(() {
+      if (_currentTime >= _maxTime) {
+        timer.cancel();
+        _confirmDelete();
+      } else {
+        _currentTime += 0.1;
+      }
+    });
+  }
+
+  void _confirmDelete() {
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                'Confirm delete',
+                style: TextStyle(fontSize: 20),
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(backgroundColor: primaryColor),
+                    onPressed: () async {
+                      await _postController.deletePost(widget.postId);
+                      Navigator.of(context)..pop()..pop();
+                    },
+                    child: const Text('Delete'),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(primary: secondaryColor),
+                    onPressed: () {
+                      Navigator.of(context)..pop()..pop();
+                    },
+                    child: const Text('Cancel'),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
   }
 
   @override
@@ -113,12 +108,12 @@ class _DeletePostScreenState extends State<DeletePostScreen> {
               child: Center(
                 child: CircularProgressIndicator(
                   color: primaryColor,
-                  value: currentTime / maxTime,
+                  value: _currentTime / _maxTime,
                 ),
               ),
             ),
             Text(
-              NumberFormat('###.##', "en_US").format(currentTime),
+              NumberFormat('###.##', "en_US").format(_currentTime),
               style: const TextStyle(fontSize: 20),
             ),
           ],
@@ -127,3 +122,4 @@ class _DeletePostScreenState extends State<DeletePostScreen> {
     );
   }
 }
+

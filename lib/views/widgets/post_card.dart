@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:moments/views/widgets/comment_post_button.dart';
-import 'package:moments/views/widgets/image_widget.dart';
 import 'package:moments/views/widgets/like_post_button.dart';
 import 'package:moments/views/widgets/profile_button.dart';
 import 'package:provider/provider.dart';
@@ -13,16 +12,12 @@ import '../../controllers/user_controller.dart';
 import '../../models/post.dart';
 import '../../models/user.dart';
 import '../../providers/user_provider.dart';
-import '../screens/comment_screen.dart';
 import '../screens/delete_post_screen.dart';
 import '../screens/display_post_screen.dart';
-import '../screens/loading_screen.dart';
-import '../screens/profile_screen.dart';
 import 'like_animation.dart';
 import 'loading_post.dart';
 
 class PostCard extends StatefulWidget {
-  // final Map<String, dynamic> snap;
   final Post post;
 
   const PostCard({Key? key, required this.post}) : super(key: key);
@@ -32,9 +27,7 @@ class PostCard extends StatefulWidget {
 }
 
 class _PostCardState extends State<PostCard> {
-  final PostController postController = Get.put(
-    PostController(),
-  );
+  final PostController postController = Get.put(PostController());
   final UserController profileController = Get.put(UserController());
 
   bool isLikeAnimating = false;
@@ -45,7 +38,7 @@ class _PostCardState extends State<PostCard> {
     final User? user = Provider.of<UserProvider>(context).getUser;
     isLikeAnimating = false;
     return user == null
-        ? const LoadingScreen()
+        ? const Center(child: CircularProgressIndicator())
         : FutureBuilder(
             future: firebaseFirestore
                 .collection('users')
@@ -59,141 +52,142 @@ class _PostCardState extends State<PostCard> {
               var docs = snapshot.data!.docs;
               var user = docs[0].data();
               return Container(
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   color: backgroundColor,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 2,
+                      blurRadius: 4,
+                      offset: const Offset(0, 2), // changes position of shadow
+                    ),
+                  ],
                 ),
-                padding: const EdgeInsets.symmetric(vertical: 10),
+                padding: const EdgeInsets.all(12),
                 child: Column(
                   children: [
                     //Header section
-                    Container(
-                      padding:
-                          const EdgeInsets.symmetric(vertical: 4, horizontal: 8)
-                              .copyWith(right: 0),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              ProfileButton(post: widget.post, user: user),
-                              IconButton(
-                                  onPressed: () {
-                                    showDialog(
-                                      barrierColor: blackTransparent,
-                                      context: context,
-                                      builder: (context) => Dialog(
-                                        child: ListView(
-                                          padding: const EdgeInsets.symmetric(
-                                            vertical: 16,
-                                          ),
-                                          shrinkWrap: true,
-                                          children: [
-                                            InkWell(
-                                              onTap: () {},
-                                              child: Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 12,
-                                                        horizontal: 16),
-                                                child: const Text(
-                                                    'Add description'),
-                                              ),
-                                            ),
-                                            InkWell(
-                                              onTap: () {
-                                                profileController
-                                                    .changeProfilePic(
-                                                        widget.post);
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 12,
-                                                        horizontal: 16),
-                                                child: const Text(
-                                                    'Use as profile picture'),
-                                              ),
-                                            ),
-                                            InkWell(
-                                              onTap: () {
-                                                profileController
-                                                    .changeCoverPic(
-                                                        widget.post);
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 12,
-                                                        horizontal: 16),
-                                                child: const Text(
-                                                    'Use as cover picture'),
-                                              ),
-                                            ),
-                                            InkWell(
-                                              onTap: () {
-                                                postController.makePublic(
-                                                    widget.post.postId);
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 12,
-                                                        horizontal: 16),
-                                                child: const Text(
-                                                    'Make/unmake public'),
-                                              ),
-                                            ),
-                                            InkWell(
-                                              onTap: () async {
-                                                Get.to(() => DeletePostScreen(
-                                                        postId:
-                                                            widget.post.postId))
-                                                    ?.then((value) =>
-                                                        Navigator.of(context)
-                                                            .pop());
-                                              },
-                                              child: Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 12,
-                                                        horizontal: 16),
-                                                child: const Text('Delete'),
-                                              ),
-                                            ),
-                                            InkWell(
-                                              onTap: () {},
-                                              child: Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 12,
-                                                        horizontal: 16),
-                                                child: const Text('Report'),
-                                              ),
-                                            ),
-                                          ],
+                    Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            ProfileButton(user: user),
+                            IconButton(
+                                onPressed: () {
+                                  showDialog(
+                                    barrierColor: blackTransparent,
+                                    context: context,
+                                    builder: (context) => Dialog(
+                                      child: ListView(
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 16,
                                         ),
+                                        shrinkWrap: true,
+                                        children: [
+                                          InkWell(
+                                            onTap: () {},
+                                            child: Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 12,
+                                                      horizontal: 16),
+                                              child:
+                                                  const Text('Add description'),
+                                            ),
+                                          ),
+                                          InkWell(
+                                            onTap: () {
+                                              profileController
+                                                  .changeProfilePic(
+                                                      widget.post);
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 12,
+                                                      horizontal: 16),
+                                              child: const Text(
+                                                  'Use as profile picture'),
+                                            ),
+                                          ),
+                                          InkWell(
+                                            onTap: () {
+                                              profileController
+                                                  .changeCoverPic(widget.post);
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 12,
+                                                      horizontal: 16),
+                                              child: const Text(
+                                                  'Use as cover picture'),
+                                            ),
+                                          ),
+                                          InkWell(
+                                            onTap: () {
+                                              postController.makePublic(
+                                                  widget.post.postId);
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 12,
+                                                      horizontal: 16),
+                                              child: const Text(
+                                                  'Make/unmake public'),
+                                            ),
+                                          ),
+                                          InkWell(
+                                            onTap: () async {
+                                              Get.to(() => DeletePostScreen(
+                                                  postId: widget.post
+                                                      .postId))?.then((value) =>
+                                                  Navigator.of(context).pop());
+                                            },
+                                            child: Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 12,
+                                                      horizontal: 16),
+                                              child: const Text('Delete'),
+                                            ),
+                                          ),
+                                          InkWell(
+                                            onTap: () {},
+                                            child: Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 12,
+                                                      horizontal: 16),
+                                              child: const Text('Report'),
+                                            ),
+                                          ),
+                                        ],
                                       ),
-                                    );
-                                  },
-                                  icon: const Icon(Icons.more_vert)),
-                            ],
-                          ),
-                          //Description
-                          SizedBox(
-                            width: double.infinity,
-                            child: Center(
-                              child: Text(
-                                widget.post.description,
-                                style: const TextStyle(color: Colors.black),
-                                textAlign: TextAlign.center,
-                              ),
+                                    ),
+                                  );
+                                },
+                                icon: const Icon(Icons.more_vert)),
+                          ],
+                        ),
+                        //Description
+                        SizedBox(
+                          width: double.infinity,
+                          child: Center(
+                            child: Text(
+                              widget.post.description,
+                              style: const TextStyle(color: Colors.black),
+                              textAlign: TextAlign.center,
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
 
                     //Post section
@@ -208,29 +202,25 @@ class _PostCardState extends State<PostCard> {
                       },
                       child: Stack(alignment: Alignment.center, children: [
                         Container(
-                          decoration: widget.post.isPublic
-                              ? const BoxDecoration(
-                                  border: Border(
-                                    top: BorderSide(
-                                        width: 2, color: Colors.greenAccent),
-                                    left: BorderSide(
-                                        width: 2, color: Colors.greenAccent),
-                                    right: BorderSide(
-                                        width: 2, color: Colors.greenAccent),
-                                    bottom: BorderSide(
-                                        width: 2, color: Colors.greenAccent),
-                                  ),
-                                )
-                              : null,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[200],
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                              width: 2,
+                              color: widget.post.isPublic ? Colors.greenAccent : Colors.blue,
+                            ),
+                          ),
                           height: MediaQuery.of(context).size.height * 0.60,
                           width: double.infinity,
-                          child: widget.post.isVideo
-                              ? Image.network(widget.post.thumbnail,
-                                  fit: BoxFit.cover)
-                              : Image.network(
-                                  widget.post.downloadUrl,
-                                  fit: BoxFit.cover,
-                                ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(20),
+                            child: widget.post.isVideo
+                                ? Image.network(widget.post.thumbnail, fit: BoxFit.cover)
+                                : Image.network(
+                              widget.post.downloadUrl,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
                         ),
                         Icon(
                           Icons.play_arrow,
@@ -291,7 +281,7 @@ class _PostCardState extends State<PostCard> {
                           //         widget.post.likes.contains(user.uid)
                           //             ? const Icon(
                           //                 Icons.favorite_border,
-                          //                 color: Colors.pinkAccent,
+                          //                 color: likeColor,
                           //                 size: 30,
                           //               )
                           //             : const Icon(
@@ -307,7 +297,7 @@ class _PostCardState extends State<PostCard> {
                           //           style: TextStyle(
                           //               color:
                           //                   widget.post.likes.contains(user.uid)
-                          //                       ? Colors.pinkAccent
+                          //                       ? likeColor
                           //                       : secondaryColor),
                           //         ),
                           //       ],
@@ -320,9 +310,11 @@ class _PostCardState extends State<PostCard> {
                                 .add_Hm()
                                 .format(widget.post.datePublished.toDate()),
                             style: const TextStyle(
-                                fontSize: 10,
-                                color: Colors.black,
-                                fontStyle: FontStyle.italic),
+                              fontSize: 12,
+                              color: Colors.black,
+                              fontStyle: FontStyle.italic,
+                              fontWeight: FontWeight.w300,
+                            ),
                           ),
                         ],
                       ),

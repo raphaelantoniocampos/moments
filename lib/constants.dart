@@ -7,7 +7,6 @@ import 'package:moments/views/screens/profile_screen.dart';
 import 'package:moments/views/screens/search_screen.dart';
 
 import 'controllers/auth_controller.dart';
-import 'main.dart';
 
 
 //FIREBASE
@@ -28,6 +27,7 @@ const appBarElevation = 0.0;
 const backgroundColor = Colors.white;
 const searchColor = Color.fromRGBO(38, 38, 38, 1);
 const blueColor = Color.fromRGBO(0, 149, 246, 1);
+const likeColor = Colors.pinkAccent;
 // const primaryColor = Color.fromRGBO(196, 138, 0, 1.0);
 // const primaryColor = Color.fromRGBO(255, 56, 56, 0.9019607843137255);
 const primaryColor = Color.fromRGBO(80, 150, 255, 0.9019607843137255);

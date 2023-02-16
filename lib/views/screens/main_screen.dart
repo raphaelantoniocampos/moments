@@ -5,12 +5,10 @@ import 'package:get/get.dart';
 import 'package:moments/providers/user_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../../controllers/auth_controller.dart';
 import '../../controllers/post_controller.dart';
 import '../../models/user.dart' as model;
 import '../../constants.dart';
 import 'camera_screen.dart';
-import 'loading_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -55,7 +53,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     final model.User? user = Provider.of<UserProvider>(context).getUser;
     if (user == null || _isLoading) {
-      return const LoadingScreen();
+      return const Center(child: CircularProgressIndicator());
     } else {
       return Scaffold(
         body: pages[_page],
