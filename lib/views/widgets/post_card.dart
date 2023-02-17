@@ -86,7 +86,7 @@ class _PostCardState extends State<PostCard> {
                                     builder: (context) => Dialog(
                                       child: Container(
                                         decoration: BoxDecoration(
-                                          color: randomColor,
+                                          color: Colors.white,
                                           border: Border.all(width: 1.5),
                                           boxShadow: const [
                                             BoxShadow(

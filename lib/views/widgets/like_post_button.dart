@@ -52,7 +52,8 @@ class _LikePostButtonState extends State<LikePostButton> {
           splashColor: Colors.white,
           highlightColor: Colors.white,
           radius: 30,
-          child: Container(
+          child:
+          Container(
             decoration: BoxDecoration(
               color: Colors.white,
               border: Border.all(

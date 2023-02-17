@@ -109,14 +109,29 @@ class _MainScreenState extends State<MainScreen> {
           },
           currentIndex: _page,
         ),
-        floatingActionButton: FloatingActionButton(
+        floatingActionButton:
+        FloatingActionButton(
           onPressed: () async {
             final file = await Get.to(() => const CameraScreen());
             createPost(file);
           },
-          child: const Icon(
-            Icons.camera_alt_outlined,
-            size: 30,
+          backgroundColor: const Color(0xFF2E3030),
+          foregroundColor: Colors.white,
+          shape: const CircleBorder(
+            side: BorderSide(
+              color: Colors.black,
+              width: 1,
+            ),
+          ),
+          elevation: 0,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              const Icon(
+                Icons.camera_alt_outlined,
+                size: 30,
+              ),
+            ],
           ),
         ),
       );

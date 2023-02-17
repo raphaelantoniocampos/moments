@@ -23,7 +23,17 @@ class _UserListScreenState extends State<UserListScreen> {
     final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        backgroundColor: Colors.grey[300],
+        title: Text(
+          widget.title.toUpperCase(),
+          style: TextStyle(
+              color: Colors.black,
+              fontFamily: 'Heuvetica Neue',
+              fontWeight: FontWeight.w700,
+              fontSize: 18),
+        ),
+        centerTitle: true,
+        elevation: 0,
       ),
       body: SingleChildScrollView(
         child: SizedBox(
@@ -41,7 +51,7 @@ class _UserListScreenState extends State<UserListScreen> {
                     builder: (context,
                         AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
                             snapshot) {
-                      if (!snapshot.hasData) {
+                      if (!snapshot.hasData || snapshot.connectionState == ConnectionState.waiting) {
                         return const ListTile(
                           leading: CircleAvatar(
                             backgroundColor: primaryColor,
@@ -49,31 +59,9 @@ class _UserListScreenState extends State<UserListScreen> {
                           ),
                         );
                       }
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const ListTile(
-                          leading: CircleAvatar(
-                            backgroundColor: primaryColor,
-                            backgroundImage: NetworkImage(initialProfilePic),
-                          ),
-                        );
-                      }
-                      if (snapshot.connectionState == ConnectionState.done) {
                         var docs = snapshot.data!.docs;
                         var user = docs[0].data();
                         return ProfileButton(user: user);
-                          InkWell(
-                          onTap: () =>
-                              Get.to(() => ProfileScreen(uid: user['uid'])),
-                          child: ListTile(
-                            leading: CircleAvatar(
-                              backgroundColor: primaryColor,
-                              backgroundImage: NetworkImage(user['profilePic']),
-                            ),
-                            title: Text('${user['username']}'),
-                          ),
-                        );
-                      }
-                      return const ListTile();
                     });
               }),
         ),
