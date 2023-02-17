@@ -28,16 +28,16 @@ const backgroundColor = Colors.white;
 const searchColor = Color.fromRGBO(38, 38, 38, 1);
 const blueColor = Color.fromRGBO(0, 149, 246, 1);
 const likeColor = Colors.pinkAccent;
-const primaryColor = Color(0xFF2E3030);
+const primaryColor = Color(0xFF2196F3); // Azul
 // const primaryColor = Color.fromRGBO(80, 150, 255, 0.9019607843137255);
 const secondaryColor = Colors.black;
 const blackTransparent = Color.fromRGBO(18, 18, 18, 0.2);
 const listColors = [
   // Color(0xFF212121), // Preto
-  Color(0xFFE0E0E0), // Cinza Claro
+  // Color(0xFFE0E0E0), // Cinza Claro
   Color(0xFF9E9E9E), // Cinza Escuro
   Color(0xFFFF9800), // Laranja
-  Color(0xFFFFEB3B), // Amarelo
+  // Color(0xFFFFEB3B), // Amarelo
   Color(0xFF2196F3), // Azul
   Color(0xFF4CAF50), // Verde
 ];

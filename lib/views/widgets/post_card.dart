@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:moments/views/widgets/comment_post_button.dart';
-import 'package:moments/views/widgets/like_post_button.dart';
+import 'package:moments/views/widgets/like_button.dart';
 import 'package:moments/views/widgets/profile_button.dart';
 import 'package:provider/provider.dart';
 import '../../constants.dart';
@@ -39,6 +39,7 @@ class _PostCardState extends State<PostCard> {
   Widget build(BuildContext context) {
     final randomColor = listColors[Random().nextInt(listColors.length)];
     final User? user = Provider.of<UserProvider>(context).getUser;
+    final Color textColor = widget.post.isPublic ? Colors.white : Colors.black;
     isLikeAnimating = false;
     return user == null
         ? const Center(child: CircularProgressIndicator())
@@ -54,9 +55,10 @@ class _PostCardState extends State<PostCard> {
               }
               var docs = snapshot.data!.docs;
               var user = docs[0].data();
+
               return Container(
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: widget.post.isPublic ? randomColor : Colors.white,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(width: 2),
                   boxShadow: const [
@@ -78,6 +80,16 @@ class _PostCardState extends State<PostCard> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             ProfileButton(user: user),
+                            widget.post.isPublic?Text(
+                              'PUBLIC POST',
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: textColor,
+                                letterSpacing: 1,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Helvetica Neue',
+                              ),
+                            ): const SizedBox(),
                             IconButton(
                                 onPressed: () {
                                   showDialog(
@@ -248,7 +260,7 @@ class _PostCardState extends State<PostCard> {
                                     ),
                                   );
                                 },
-                                icon: const Icon(Icons.more_vert)),
+                                icon: const Icon(Icons.more_vert), color: textColor,),
                           ],
                         ),
                         //Description
@@ -258,9 +270,9 @@ class _PostCardState extends State<PostCard> {
                           child: Center(
                             child: Text(
                               widget.post.description,
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 12,
-                                color: Colors.black,
+                                color: textColor,
                                 letterSpacing: 1,
                                 fontWeight: FontWeight.bold,
                                 fontFamily: 'Helvetica Neue',
@@ -288,9 +300,7 @@ class _PostCardState extends State<PostCard> {
                               borderRadius: BorderRadius.circular(12),
                               border: Border.all(
                                 width: 1.5,
-                                color: widget.post.isPublic
-                                    ? Colors.greenAccent
-                                    : Colors.black,
+                                color: Colors.black,
                               ),
                               boxShadow: const [
                                 BoxShadow(
@@ -401,9 +411,9 @@ class _PostCardState extends State<PostCard> {
                             DateFormat.yMMMMd()
                                 .add_Hm()
                                 .format(widget.post.datePublished.toDate()),
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 12,
-                              color: Colors.black,
+                              color: textColor,
                               letterSpacing: 1,
                               fontWeight: FontWeight.bold,
                               fontFamily: 'Helvetica Neue',

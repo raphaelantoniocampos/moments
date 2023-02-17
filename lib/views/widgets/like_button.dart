@@ -11,19 +11,23 @@ import '../../providers/user_provider.dart';
 import '../screens/user_list_screen.dart';
 import 'like_animation.dart';
 
-class LikeButton extends StatelessWidget {
+class LikeButton extends StatefulWidget {
   final Comment? comment;
   final Post? post;
 
   const LikeButton({Key? key, this.comment, this.post}) : super(key: key);
 
+  @override
+  State<LikeButton> createState() => _LikeButtonState();
+}
 
+class _LikeButtonState extends State<LikeButton> {
   @override
   Widget build(BuildContext context) {
     final User? user = Provider.of<UserProvider>(context).getUser;
 
-    if (comment != null) {
-      final bool isLiked = comment!.likes.contains(user?.uid);
+    if (widget.comment != null) {
+      final bool isLiked = widget.comment!.likes.contains(user?.uid);
       final CommentController commentController = Get.put(CommentController());
 
     return LikeAnimation(
@@ -33,10 +37,10 @@ class LikeButton extends StatelessWidget {
         message: isLiked ? 'Unlike comment' : 'Like comment',
         child: InkResponse(
           onTap: () {
-            commentController.likeComment(comment!.id);
+            commentController.likeComment(widget.comment!.id);
           },
           onLongPress: () {
-            commentController.updateCommentLikes(comment!);
+            commentController.updateCommentLikes(widget.comment!);
             Get.to(
                   () => UserListScreen(
                   title: 'Comment likes', uidList: commentController.commentUidList),
@@ -67,7 +71,7 @@ class LikeButton extends StatelessWidget {
                   width: 5,
                 ),
                 Text(
-                  '${comment!.likes.length}',
+                  '${widget.comment!.likes.length}',
                   style: TextStyle(
                     color: isLiked ? likeColor : Colors.black,
                     fontWeight: FontWeight.bold,
@@ -83,8 +87,8 @@ class LikeButton extends StatelessWidget {
       ),
     );
   }
-    else if (post != null){
-      final bool isLiked = post!.likes.contains(user?.uid);
+    else if (widget.post != null){
+      final bool isLiked = widget.post!.likes.contains(user?.uid);
       final PostController postController = Get.put(PostController());
       return LikeAnimation(
         isAnimating: isLiked,
@@ -93,18 +97,24 @@ class LikeButton extends StatelessWidget {
           message: isLiked ? 'Unlike post' : 'Like post',
           child: InkResponse(
             onTap: () {
-              postController.likePost(post!.postId);
+              postController.likePost(widget.post!.postId);
               if (isLiked) {
-                post!.likes.remove(user?.uid);
+                setState(() {
+                  widget.post!.likes.remove(user?.uid);
+                });
+
               } else {
-                post!.likes.add(user?.uid);
+                setState(() {
+                  widget.post!.likes.add(user?.uid);
+                });
+
               }
             },
             onLongPress: () {
               Get.to(
                     () => UserListScreen(
                   title: 'Post likes',
-                  uidList: post!.likes,
+                  uidList: widget.post!.likes,
                 ),
               );
             },
@@ -133,7 +143,7 @@ class LikeButton extends StatelessWidget {
                     width: 5,
                   ),
                   Text(
-                    '${post!.likes.length}',
+                    '${widget.post!.likes.length}',
                     style: TextStyle(
                       color: isLiked ? likeColor : Colors.black,
                       fontWeight: FontWeight.bold,

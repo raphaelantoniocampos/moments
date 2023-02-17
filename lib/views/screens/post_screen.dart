@@ -1,11 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../constants.dart';
 import '../../models/post.dart';
 import '../widgets/comment_post_button.dart';
 import '../widgets/image_widget.dart';
-import '../widgets/like_post_button.dart';
+import '../widgets/like_button.dart';
 import '../widgets/profile_button.dart';
 import '../widgets/video_widget.dart';
 
@@ -52,8 +53,7 @@ class _PostScreenState extends State<PostScreen> {
                 showDetails = !showDetails;
               });
             },
-            child:
-            Stack(
+            child: Stack(
               children: [
                 widget.post.isVideo
                     ? VideoWidget(post: widget.post)
@@ -98,7 +98,9 @@ class _PostScreenState extends State<PostScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Padding(
-                                padding: const EdgeInsets.all(16),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                ),
                                 child: Text(
                                   widget.post.description,
                                   style: const TextStyle(
@@ -116,7 +118,9 @@ class _PostScreenState extends State<PostScreen> {
                                   textAlign: TextAlign.center,
                                 ),
                               ),
-                              const SizedBox(height: 8),
+                              const SizedBox(
+                                height: 24,
+                              ),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -125,10 +129,24 @@ class _PostScreenState extends State<PostScreen> {
                                   CommentPostButton(post: widget.post),
                                 ],
                               ),
+                              const SizedBox(
+                                height: 24,
+                              ),
+                              Text(
+                                DateFormat.yMMMMd()
+                                    .add_Hm()
+                                    .format(widget.post.datePublished.toDate()),
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.white,
+                                  letterSpacing: 1,
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'Helvetica Neue',
+                                ),
+                              ),
                             ],
                           ),
                         ),
-
                         const SizedBox(
                           height: 24,
                         ),

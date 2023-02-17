@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:moments/views/screens/user_list_screen.dart';
-import 'package:moments/views/widgets/like_post_button.dart';
+import 'package:moments/views/widgets/like_button.dart';
 import 'package:moments/views/widgets/profile_button.dart';
 
 import 'package:moments/controllers/comment_controller.dart';
