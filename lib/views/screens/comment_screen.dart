@@ -80,41 +80,57 @@ class _CommentScreenState extends State<CommentScreen> {
                                       return const ListTile(
                                         leading: CircleAvatar(
                                           backgroundColor: primaryColor,
-                                          backgroundImage: NetworkImage(initialProfilePic),
+                                          backgroundImage:
+                                              NetworkImage(initialProfilePic),
                                         ),
                                       );
                                     }
-                                      final user =
-                                          snapshot.data!.docs[0].data();
-                                      return Container(
-                                        margin: const EdgeInsets.all(8),
-                                        padding: const EdgeInsets.all(16),
-                                        decoration: BoxDecoration(
-                                          border: Border.all(color: Colors.white),
-                                        ),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            ProfileButton(user: user),
-                                            const SizedBox(height: 16,),
-                                            Text(
-                                              comment.text,
-                                              style: const TextStyle(
-                                                fontFamily: 'Heuvetica Neue',
-                                                fontWeight: FontWeight.w400,
-                                                color: Colors.black,
-                                                fontSize: 16,
-                                                letterSpacing: 1,
-                                              ),
+                                    final user = snapshot.data!.docs[0].data();
+                                    return Container(
+                                      margin: const EdgeInsets.all(8),
+                                      padding: const EdgeInsets.all(16),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(color: Colors.white),
+                                      ),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          ProfileButton(user: user),
+                                          const SizedBox(
+                                            height: 16,
+                                          ),
+                                          Text(
+                                            comment.text,
+                                            style: const TextStyle(
+                                              fontFamily: 'Heuvetica Neue',
+                                              fontWeight: FontWeight.w400,
+                                              color: Colors.black,
+                                              fontSize: 16,
+                                              letterSpacing: 1,
                                             ),
-                                            const SizedBox(height: 16,),
-                                            SizedBox(
+                                          ),
+                                          const SizedBox(
+                                            height: 16,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              SizedBox(
                                                 width: 60,
-                                                child: LikeButton(comment: comment,))
-                                          ],
-                                        ),
-                                      );
+                                                child: LikeButton(
+                                                  comment: comment,
+                                                ),
+                                              ),
+                                              Text(tago.format(
+                                                  comment.datePublished
+                                                      .toDate()))
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    );
                                   });
                             });
                       }),
