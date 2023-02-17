@@ -43,6 +43,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           return Scaffold(
             body: SingleChildScrollView(
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Stack(
                     children: [
@@ -166,11 +167,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
       return ElevatedButton(
         onPressed: () {},
         style: ElevatedButton.styleFrom(
-          foregroundColor: primaryColor,
-          backgroundColor: Colors.white,
+          foregroundColor: Colors.white,
+          backgroundColor: primaryColor,
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          side: const BorderSide(
+            color: Colors.black,
+            width: 2.0,
           ),
         ),
         child: Row(
@@ -188,6 +193,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
+                fontFamily: 'Helvetica Neue',
               ),
             ),
           ],
@@ -197,11 +203,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
       return ElevatedButton(
         onPressed: () => userController.addFriend(),
         style: ElevatedButton.styleFrom(
-          foregroundColor: Colors.redAccent,
-          backgroundColor: Colors.white,
+          foregroundColor: Colors.white,
+          backgroundColor: Colors.red,
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          side: const BorderSide(
+            color: Colors.black,
+            width: 2.0,
           ),
         ),
         child: Row(
@@ -219,6 +229,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
+                fontFamily: 'Helvetica Neue',
               ),
             ),
           ],
@@ -232,7 +243,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
           backgroundColor: Colors.white,
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          side: const BorderSide(
+            color: Colors.black,
+            width: 2.0,
           ),
         ),
         child: Row(
@@ -250,6 +265,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
+                fontFamily: 'Helvetica Neue',
               ),
             ),
           ],
@@ -259,11 +275,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
       return ElevatedButton(
         onPressed: () {},
         style: ElevatedButton.styleFrom(
-          foregroundColor: Colors.redAccent,
-          backgroundColor: Colors.white,
+          foregroundColor: Colors.white,
+          backgroundColor: Colors.red,
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          side: const BorderSide(
+            color: Colors.black,
+            width: 2.0,
           ),
         ),
         child: Row(
@@ -281,6 +301,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
+                fontFamily: 'Helvetica Neue',
               ),
             ),
           ],
@@ -294,7 +315,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
           backgroundColor: primaryColor,
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          side: const BorderSide(
+            color: Colors.black,
+            width: 2.0,
           ),
         ),
         child: Row(
@@ -312,6 +337,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
+                fontFamily: 'Helvetica Neue',
               ),
             ),
           ],
@@ -321,11 +347,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
       return ElevatedButton(
         onPressed: () {},
         style: ElevatedButton.styleFrom(
-          foregroundColor: primaryColor,
-          backgroundColor: Colors.white,
+          foregroundColor: Colors.white,
+          backgroundColor: Colors.red,
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          side: const BorderSide(
+            color: Colors.black,
+            width: 2.0,
           ),
         ),
         child: Row(
@@ -343,6 +373,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
+                fontFamily: 'Helvetica Neue',
               ),
             ),
           ],

@@ -60,7 +60,7 @@ class _MainScreenState extends State<MainScreen> {
         BottomNavigationBar(
           backgroundColor: backgroundColor,
           type: BottomNavigationBarType.fixed,
-          selectedItemColor: primaryColor,
+          selectedItemColor: Colors.white,
           unselectedItemColor: Colors.black,
           selectedLabelStyle: const TextStyle(
             fontWeight: FontWeight.bold,

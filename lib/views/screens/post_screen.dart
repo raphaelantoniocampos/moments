@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -34,8 +36,9 @@ class _PostScreenState extends State<PostScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final randomColor = listColors[Random().nextInt(listColors.length)];
     return Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: randomColor,
       body: FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
         future: _userFuture,
         builder: (context, snapshot) {

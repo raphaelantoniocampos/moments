@@ -23,7 +23,7 @@ class _UserListScreenState extends State<UserListScreen> {
     final size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.grey[300],
+        backgroundColor: backgroundColor,
         title: Text(
           widget.title.toUpperCase(),
           style: TextStyle(

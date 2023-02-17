@@ -2,11 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:moments/views/screens/user_list_screen.dart';
+import 'package:moments/views/widgets/comment_card.dart';
 import 'package:moments/views/widgets/like_button.dart';
 import 'package:moments/views/widgets/profile_button.dart';
 
 import 'package:moments/controllers/comment_controller.dart';
 import '../../constants.dart';
+import 'package:timeago/timeago.dart' as tago;
 
 class CommentScreen extends StatefulWidget {
   final String postId;
@@ -38,7 +40,7 @@ class _CommentScreenState extends State<CommentScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.grey[300],
+        backgroundColor: backgroundColor,
         title: const Text(
           "COMMENTS",
           style: TextStyle(
@@ -86,51 +88,8 @@ class _CommentScreenState extends State<CommentScreen> {
                                       );
                                     }
                                     final user = snapshot.data!.docs[0].data();
-                                    return Container(
-                                      margin: const EdgeInsets.all(8),
-                                      padding: const EdgeInsets.all(16),
-                                      decoration: BoxDecoration(
-                                        border: Border.all(color: Colors.white),
-                                      ),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          ProfileButton(user: user),
-                                          const SizedBox(
-                                            height: 16,
-                                          ),
-                                          Text(
-                                            comment.text,
-                                            style: const TextStyle(
-                                              fontFamily: 'Heuvetica Neue',
-                                              fontWeight: FontWeight.w400,
-                                              color: Colors.black,
-                                              fontSize: 16,
-                                              letterSpacing: 1,
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            height: 16,
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              SizedBox(
-                                                width: 60,
-                                                child: LikeButton(
-                                                  comment: comment,
-                                                ),
-                                              ),
-                                              Text(tago.format(
-                                                  comment.datePublished
-                                                      .toDate()))
-                                            ],
-                                          )
-                                        ],
-                                      ),
-                                    );
+                                    return
+                                      CommentCard(user: user, comment: comment);
                                   });
                             });
                       }),

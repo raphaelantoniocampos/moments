@@ -16,7 +16,7 @@ class ProfileButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final randomColor = listColors[Random().nextInt(listColors.length)];
     return Container(
-      // width: 140,
+      width: 140,
       height: 42,
       decoration: BoxDecoration(
           color: Colors.white,

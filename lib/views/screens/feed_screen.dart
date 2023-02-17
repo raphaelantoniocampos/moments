@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moments/constants.dart';
 import 'package:moments/controllers/post_controller.dart';
 import 'package:get/get.dart';
 
@@ -12,6 +13,7 @@ class FeedScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: backgroundColor,
         centerTitle: true,
         title: const Text("moments"),
         actions: [

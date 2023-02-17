@@ -34,10 +34,10 @@ const secondaryColor = Colors.black;
 const blackTransparent = Color.fromRGBO(18, 18, 18, 0.2);
 const listColors = [
   // Color(0xFF212121), // Preto
-  // Color(0xFFE0E0E0), // Cinza Claro
+  Color(0xFFE0E0E0), // Cinza Claro
   Color(0xFF9E9E9E), // Cinza Escuro
   Color(0xFFFF9800), // Laranja
-  // Color(0xFFFFEB3B), // Amarelo
+  Color(0xffffcc01), // Amarelo
   Color(0xFF2196F3), // Azul
   Color(0xFF4CAF50), // Verde
 ];
@@ -57,3 +57,4 @@ List<Widget> pages = [
 const int publicLimit = 1;
 const int hideLimit = 5;
 const int limitFriends = 150;
+
