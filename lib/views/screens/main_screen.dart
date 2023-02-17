@@ -56,38 +56,49 @@ class _MainScreenState extends State<MainScreen> {
     } else {
       return Scaffold(
         body: pages[_page],
-        bottomNavigationBar: BottomNavigationBar(
+        bottomNavigationBar:
+        BottomNavigationBar(
           backgroundColor: backgroundColor,
           type: BottomNavigationBarType.fixed,
           selectedItemColor: primaryColor,
+          unselectedItemColor: Colors.black,
+          selectedLabelStyle: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 12,
+            letterSpacing: 1
+          ),
+          unselectedLabelStyle: const TextStyle(
+            fontSize: 12,
+            letterSpacing: 1,
+          ),
           items: const [
             BottomNavigationBarItem(
               icon: Icon(
                 Icons.search,
                 size: 30,
               ),
-              label: 'search',
+              label: 'SEARCH',
             ),
             BottomNavigationBarItem(
               icon: Icon(
                 Icons.home,
                 size: 30,
               ),
-              label: 'home',
+              label: 'HOME',
             ),
             BottomNavigationBarItem(
               icon: Icon(
                 Icons.message,
                 size: 30,
               ),
-              label: 'messages',
+              label: 'MESSAGES',
             ),
             BottomNavigationBarItem(
               icon: Icon(
                 Icons.person,
                 size: 30,
               ),
-              label: 'profile',
+              label: 'PROFILE',
             ),
           ],
           onTap: (index) {

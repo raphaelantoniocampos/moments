@@ -88,7 +88,9 @@ class _CommentScreenState extends State<CommentScreen> {
                                       return Container(
                                         padding: const EdgeInsets.symmetric(
                                             horizontal: 12, vertical: 8),
-                                        child: Column(
+                                        child:
+                                        Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             ProfileButton(user: user),
                                             Row(

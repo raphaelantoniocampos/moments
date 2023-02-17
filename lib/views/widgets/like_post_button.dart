@@ -45,29 +45,45 @@ class _LikePostButtonState extends State<LikePostButton> {
           },
           onLongPress: () {
             Get.to(
-              () => UserListScreen(
+                  () => UserListScreen(
                   title: 'Post likes', uidList: widget.post.likes),
             );
           },
-          child: Row(
-            children: [
-              Icon(
-                isLiked ? Icons.favorite : Icons.favorite_border,
-                color: isLiked ? likeColor : null,
-                size: 30,
+          splashColor: Colors.white,
+          highlightColor: Colors.white,
+          radius: 30,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(
+                color: isLiked ? likeColor : Colors.black,
+                width: 2,
               ),
-              const SizedBox(
-                width: 5,
-              ),
-              Text(
-                '${widget.post.likes.length}',
-                style: TextStyle(
-                    color: widget.post.likes.contains(user?.uid)
-                        ? likeColor
-                        : Colors.black,
-                    fontWeight: FontWeight.bold),
-              ),
-            ],
+              borderRadius: BorderRadius.circular(50),
+            ),
+            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+            child: Row(
+              children: [
+                Icon(
+                  isLiked ? Icons.favorite : Icons.favorite_border,
+                  color: isLiked ? likeColor : Colors.black,
+                  size: 20,
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                Text(
+                  '${widget.post.likes.length}',
+                  style: TextStyle(
+                    color: isLiked ? likeColor : Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12,
+                    letterSpacing: 1,
+                    fontFamily: 'Helvetica Neue',
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

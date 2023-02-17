@@ -28,17 +28,16 @@ const backgroundColor = Colors.white;
 const searchColor = Color.fromRGBO(38, 38, 38, 1);
 const blueColor = Color.fromRGBO(0, 149, 246, 1);
 const likeColor = Colors.pinkAccent;
-// const primaryColor = Color.fromRGBO(196, 138, 0, 1.0);
-// const primaryColor = Color.fromRGBO(255, 56, 56, 0.9019607843137255);
-const primaryColor = Color.fromRGBO(80, 150, 255, 0.9019607843137255);
-// const primaryColor = Colors.black;
-const secondaryColor = Colors.grey;
+const primaryColor = Colors.blue;
+// const primaryColor = Color.fromRGBO(80, 150, 255, 0.9019607843137255);
+const secondaryColor = Colors.black;
 const blackTransparent = Color.fromRGBO(18, 18, 18, 0.2);
+const listColors = [Colors.greenAccent, Colors.orangeAccent, Colors.redAccent, Colors.blueAccent, Colors.yellow];
 
 //HOME SCREEN ITENS
 List<Widget> pages = [
   SearchScreen(),
-  FeedScreen(),
+  const FeedScreen(),
   const Center(
     child: Text('Messages'),
   ),

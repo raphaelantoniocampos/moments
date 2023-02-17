@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -35,6 +37,7 @@ class _PostCardState extends State<PostCard> {
 
   @override
   Widget build(BuildContext context) {
+    final randomColor = listColors[Random().nextInt(listColors.length)];
     final User? user = Provider.of<UserProvider>(context).getUser;
     isLikeAnimating = false;
     return user == null
@@ -53,14 +56,15 @@ class _PostCardState extends State<PostCard> {
               var user = docs[0].data();
               return Container(
                 decoration: BoxDecoration(
-                  color: backgroundColor,
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
+                  border: Border.all(width: 2),
+                  boxShadow: const [
                     BoxShadow(
-                      color: Colors.grey.withOpacity(0.5),
-                      spreadRadius: 2,
-                      blurRadius: 4,
-                      offset: const Offset(0, 2), // changes position of shadow
+                      color: Colors.black,
+                      spreadRadius: 5,
+                      // blurRadius: 4,
+                      offset: Offset(0, 2), // changes position of shadow
                     ),
                   ],
                 ),
@@ -80,95 +84,166 @@ class _PostCardState extends State<PostCard> {
                                     barrierColor: blackTransparent,
                                     context: context,
                                     builder: (context) => Dialog(
-                                      child: ListView(
-                                        padding: const EdgeInsets.symmetric(
-                                          vertical: 16,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: randomColor,
+                                          border: Border.all(width: 1.5),
+                                          boxShadow: const [
+                                            BoxShadow(
+                                              color: Colors.black,
+                                              offset: Offset(1.5, 1.5),
+                                            ),
+                                          ],
                                         ),
-                                        shrinkWrap: true,
-                                        children: [
-                                          InkWell(
-                                            onTap: () {},
-                                            child: Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 12,
-                                                      horizontal: 16),
-                                              child:
-                                                  const Text('Add description'),
-                                            ),
+                                        child: ListView(
+                                          padding: const EdgeInsets.symmetric(
+                                            vertical: 16,
                                           ),
-                                          InkWell(
-                                            onTap: () {
-                                              profileController
-                                                  .changeProfilePic(
-                                                      widget.post);
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 12,
-                                                      horizontal: 16),
-                                              child: const Text(
-                                                  'Use as profile picture'),
+                                          shrinkWrap: true,
+                                          children: [
+                                            InkWell(
+                                              onTap: () {},
+                                              child: Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 12,
+                                                        horizontal: 16),
+                                                child: const Text(
+                                                  'Add description',
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    color: Colors.black,
+                                                    letterSpacing: 1,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily:
+                                                        'Helvetica Neue',
+                                                  ),
+                                                ),
+                                              ),
                                             ),
-                                          ),
-                                          InkWell(
-                                            onTap: () {
-                                              profileController
-                                                  .changeCoverPic(widget.post);
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 12,
-                                                      horizontal: 16),
-                                              child: const Text(
-                                                  'Use as cover picture'),
+                                            InkWell(
+                                              onTap: () {
+                                                profileController
+                                                    .changeProfilePic(
+                                                        widget.post);
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 12,
+                                                        horizontal: 16),
+                                                child: const Text(
+                                                  'Use as profile picture',
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    color: Colors.black,
+                                                    letterSpacing: 1,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily:
+                                                        'Helvetica Neue',
+                                                  ),
+                                                ),
+                                              ),
                                             ),
-                                          ),
-                                          InkWell(
-                                            onTap: () {
-                                              postController.makePublic(
-                                                  widget.post.postId);
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 12,
-                                                      horizontal: 16),
-                                              child: const Text(
-                                                  'Make/unmake public'),
+                                            InkWell(
+                                              onTap: () {
+                                                profileController
+                                                    .changeCoverPic(
+                                                        widget.post);
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 12,
+                                                        horizontal: 16),
+                                                child: const Text(
+                                                  'Use as cover picture',
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    color: Colors.black,
+                                                    letterSpacing: 1,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily:
+                                                        'Helvetica Neue',
+                                                  ),
+                                                ),
+                                              ),
                                             ),
-                                          ),
-                                          InkWell(
-                                            onTap: () async {
-                                              Get.to(() => DeletePostScreen(
-                                                  postId: widget.post
-                                                      .postId))?.then((value) =>
-                                                  Navigator.of(context).pop());
-                                            },
-                                            child: Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 12,
-                                                      horizontal: 16),
-                                              child: const Text('Delete'),
+                                            InkWell(
+                                              onTap: () {
+                                                postController.makePublic(
+                                                    widget.post.postId);
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 12,
+                                                        horizontal: 16),
+                                                child: const Text(
+                                                  'Make/unmake public',
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    color: Colors.black,
+                                                    letterSpacing: 1,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily:
+                                                        'Helvetica Neue',
+                                                  ),
+                                                ),
+                                              ),
                                             ),
-                                          ),
-                                          InkWell(
-                                            onTap: () {},
-                                            child: Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      vertical: 12,
-                                                      horizontal: 16),
-                                              child: const Text('Report'),
+                                            InkWell(
+                                              onTap: () async {
+                                                Get.to(() => DeletePostScreen(
+                                                        postId:
+                                                            widget.post.postId))
+                                                    ?.then((value) =>
+                                                        Navigator.of(context)
+                                                            .pop());
+                                              },
+                                              child: Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 12,
+                                                        horizontal: 16),
+                                                child: const Text(
+                                                  'Delete',
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    color: Colors.black,
+                                                    letterSpacing: 1,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily:
+                                                        'Helvetica Neue',
+                                                  ),
+                                                ),
+                                              ),
                                             ),
-                                          ),
-                                        ],
+                                            InkWell(
+                                              onTap: () {},
+                                              child: Container(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 12,
+                                                        horizontal: 16),
+                                                child: const Text(
+                                                  'Report',
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    color: Colors.black,
+                                                    letterSpacing: 1,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontFamily:
+                                                        'Helvetica Neue',
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   );
@@ -178,11 +253,18 @@ class _PostCardState extends State<PostCard> {
                         ),
                         //Description
                         SizedBox(
+                          height: 60,
                           width: double.infinity,
                           child: Center(
                             child: Text(
                               widget.post.description,
-                              style: const TextStyle(color: Colors.black),
+                              style: const TextStyle(
+                                fontSize: 12,
+                                color: Colors.black,
+                                letterSpacing: 1,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'Helvetica Neue',
+                              ),
                               textAlign: TextAlign.center,
                             ),
                           ),
@@ -192,8 +274,7 @@ class _PostCardState extends State<PostCard> {
 
                     //Post section
                     GestureDetector(
-                      onTap: () =>
-                          Get.to(() => PostScreen(post: widget.post)),
+                      onTap: () => Get.to(() => PostScreen(post: widget.post)),
                       onDoubleTap: () async {
                         // postController.likePost(widget.post.postId);
                         // setState(() {
@@ -203,23 +284,34 @@ class _PostCardState extends State<PostCard> {
                       child: Stack(alignment: Alignment.center, children: [
                         Container(
                           decoration: BoxDecoration(
-                            color: Colors.grey[200],
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(
-                              width: 2,
-                              color: widget.post.isPublic ? Colors.greenAccent : Colors.blue,
-                            ),
-                          ),
+                              color: Colors.black,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                width: 1.5,
+                                color: widget.post.isPublic
+                                    ? Colors.greenAccent
+                                    : Colors.black,
+                              ),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.black,
+                                  spreadRadius: 1.5,
+                                  // blurRadius: 4,
+                                  offset: Offset(
+                                      1.5, 1.5), // changes position of shadow
+                                ),
+                              ]),
                           height: MediaQuery.of(context).size.height * 0.60,
                           width: double.infinity,
                           child: ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
+                            borderRadius: BorderRadius.circular(12),
                             child: widget.post.isVideo
-                                ? Image.network(widget.post.thumbnail, fit: BoxFit.cover)
+                                ? Image.network(widget.post.thumbnail,
+                                    fit: BoxFit.cover)
                                 : Image.network(
-                              widget.post.downloadUrl,
-                              fit: BoxFit.cover,
-                            ),
+                                    widget.post.downloadUrl,
+                                    fit: BoxFit.cover,
+                                  ),
                           ),
                         ),
                         Icon(
@@ -312,8 +404,9 @@ class _PostCardState extends State<PostCard> {
                             style: const TextStyle(
                               fontSize: 12,
                               color: Colors.black,
-                              fontStyle: FontStyle.italic,
-                              fontWeight: FontWeight.w300,
+                              letterSpacing: 1,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Helvetica Neue',
                             ),
                           ),
                         ],

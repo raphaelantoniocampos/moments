@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:moments/views/screens/profile_screen.dart';
+import 'package:moments/views/widgets/profile_button.dart';
 
 import '../../constants.dart';
 
@@ -25,7 +26,7 @@ class _UserListScreenState extends State<UserListScreen> {
         title: Text(widget.title),
       ),
       body: SingleChildScrollView(
-        child: Container(
+        child: SizedBox(
           height: size.height,
           width: size.width,
           child: ListView.builder(
@@ -59,7 +60,8 @@ class _UserListScreenState extends State<UserListScreen> {
                       if (snapshot.connectionState == ConnectionState.done) {
                         var docs = snapshot.data!.docs;
                         var user = docs[0].data();
-                        return InkWell(
+                        return ProfileButton(user: user);
+                          InkWell(
                           onTap: () =>
                               Get.to(() => ProfileScreen(uid: user['uid'])),
                           child: ListTile(

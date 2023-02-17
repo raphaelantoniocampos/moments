@@ -52,7 +52,8 @@ class _PostScreenState extends State<PostScreen> {
                 showDetails = !showDetails;
               });
             },
-            child: Stack(
+            child:
+            Stack(
               children: [
                 widget.post.isVideo
                     ? VideoWidget(post: widget.post)
@@ -84,45 +85,48 @@ class _PostScreenState extends State<PostScreen> {
                       ),
                     ),
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const SizedBox(height: 30),
                         Padding(
                           padding: const EdgeInsets.all(14),
                           child: ProfileButton(user: user),
                         ),
-                        const SizedBox(
-                          height: 600,
-                        ),
-                        Column(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.all(16),
-                              child: Text(
-                                widget.post.description,
-                                style: const TextStyle(
-                                  color: backgroundColor,
-                                  shadows: [
-                                    Shadow(
-                                      color: Colors.grey,
-                                      offset: Offset(1, 1),
-                                      blurRadius: 2,
-                                    ),
-                                  ],
+                        const Divider(thickness: 1, height: 500),
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(16),
+                                child: Text(
+                                  widget.post.description,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: 'Heuvetica Neue',
+                                    letterSpacing: 1,
+                                    // shadows: [
+                                    //   Shadow(
+                                    //     color: Colors.grey,
+                                    //     offset: Offset(1, 1),
+                                    //     blurRadius: 2,
+                                    //   ),
+                                    // ],
+                                  ),
+                                  textAlign: TextAlign.center,
                                 ),
-                                textAlign: TextAlign.center,
                               ),
-                            ),
-                            const SizedBox(height: 8),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                LikePostButton(post: widget.post),
-                                const SizedBox(width: 16),
-                                CommentPostButton(post: widget.post),
-                              ],
-                            ),
-                          ],
+                              const SizedBox(height: 8),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  LikePostButton(post: widget.post),
+                                  const SizedBox(width: 16),
+                                  CommentPostButton(post: widget.post),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
 
                         const SizedBox(

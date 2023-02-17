@@ -22,21 +22,38 @@ class _CommentPostButtonState extends State<CommentPostButton> {
       InkWell(
         onTap: () => Get.to(() =>
             CommentScreen(postId: widget.post.postId)),
-        child: Row(
-          children: [
-            const Icon(
-              Icons.mode_comment_outlined,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(
               color: Colors.black,
-              size: 27,
+              width: 2,
             ),
-            const SizedBox(
-              width: 5,
-            ),
-            Text(
-              widget.post.commentCount.toString(),
-              style: const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-            ),
-          ],
+            borderRadius: BorderRadius.circular(50),
+          ),
+          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+          child: Row(
+            children: [
+              const Icon(
+                Icons.mode_comment_outlined,
+                color: Colors.black,
+                size: 20,
+              ),
+              const SizedBox(
+                width: 5,
+              ),
+              Text(
+                widget.post.commentCount.toString(),
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
+                  letterSpacing: 1,
+                  fontFamily: 'Helvetica Neue',
+                ),
+              ),
+            ],
+          ),
         ),
       );
   }

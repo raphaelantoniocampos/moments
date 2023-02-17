@@ -10,11 +10,15 @@ class ImageWidget extends StatelessWidget {
       child: Container(
         decoration:
         BoxDecoration(
-          boxShadow: [
+          border: Border.all(
+            width: 1,
+            color: Colors.black,
+          ),
+          boxShadow: const [
             BoxShadow(
-              color: Colors.black.withOpacity(0.3),
-              offset: const Offset(0, 3),
-              blurRadius: 6,
+              color: Colors.black,
+              offset: Offset(1, 1),
+              blurRadius: 0,
             ),
           ],
           borderRadius: BorderRadius.circular(10),
