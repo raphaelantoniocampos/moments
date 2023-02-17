@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:moments/views/screens/user_list_screen.dart';
+import 'package:moments/views/widgets/like_post_button.dart';
 import 'package:moments/views/widgets/profile_button.dart';
 
 import 'package:moments/controllers/comment_controller.dart';
@@ -107,108 +108,10 @@ class _CommentScreenState extends State<CommentScreen> {
                                                 letterSpacing: 1,
                                               ),
                                             ),
-                                            SizedBox(height: 16,),
-                                            GestureDetector(
-                                              onTap: () {
-                                                commentController
-                                                    .likeComment(
-                                                        comment.id);
-                                              },
-                                              onLongPress: () {
-                                                commentController
-                                                    .updateCommentLikes(
-                                                        comment);
-                                                Get.to(
-                                                  () => UserListScreen(
-                                                      title:
-                                                          'Comment likes',
-                                                      uidList:
-                                                          commentController
-                                                              .commentUidList),
-                                                );
-                                              },
-                                              child: Container(
+                                            const SizedBox(height: 16,),
+                                            SizedBox(
                                                 width: 60,
-                                                decoration: BoxDecoration(
-                                                  color: Colors.white,
-                                                  border: Border.all(
-                                                    color: comment.likes
-                                                            .contains(
-                                                                authController
-                                                                    .user
-                                                                    .uid)
-                                                        ? likeColor
-                                                        : Colors.black,
-                                                    width: 2,
-                                                  ),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          50),
-                                                ),
-                                                padding: const EdgeInsets
-                                                        .symmetric(
-                                                    vertical: 5,
-                                                    horizontal: 10),
-                                                child: Row(
-                                                  children: [
-                                                    Icon(
-                                                      comment.likes.contains(
-                                                              authController
-                                                                  .user.uid)
-                                                          ? Icons.favorite
-                                                          : Icons
-                                                              .favorite_border,
-                                                      color: comment.likes
-                                                              .contains(
-                                                                  authController
-                                                                      .user
-                                                                      .uid)
-                                                          ? likeColor
-                                                          : Colors.black,
-                                                      size: 20,
-                                                    ),
-                                                    const SizedBox(
-                                                      width: 5,
-                                                    ),
-                                                    Text(
-                                                      '${comment.likes.length}',
-                                                      style: TextStyle(
-                                                        color: comment.likes
-                                                                .contains(
-                                                                    authController
-                                                                        .user
-                                                                        .uid)
-                                                            ? likeColor
-                                                            : Colors.black,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 12,
-                                                        letterSpacing: 1,
-                                                        fontFamily:
-                                                            'Helvetica Neue',
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              // Row(
-                                              //   children: [
-                                              //     Icon(
-                                              //       Icons.favorite_border,
-                                              //       size: 20,
-                                              //       color: comment.likes
-                                              //               .contains(
-                                              //                   authController
-                                              //                       .user
-                                              //                       .uid)
-                                              //           ? likeColor
-                                              //           : secondaryColor,
-                                              //     ),
-                                              //     Text(
-                                              //         ' ${comment.likes.length}'),
-                                              //   ],
-                                              // ),
-                                            ),
+                                                child: LikeButton(comment: comment,))
                                           ],
                                         ),
                                       );

@@ -120,7 +120,7 @@ class _PostScreenState extends State<PostScreen> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  LikePostButton(post: widget.post),
+                                  LikeButton(post: widget.post),
                                   const SizedBox(width: 16),
                                   CommentPostButton(post: widget.post),
                                 ],

@@ -354,7 +354,7 @@ class _PostCardState extends State<PostCard> {
                               Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 5),
-                                child: LikePostButton(post: widget.post),
+                                child: LikeButton(post: widget.post),
                               ),
                               Padding(
                                 padding:
