@@ -43,11 +43,12 @@ class _CommentScreenState extends State<CommentScreen> {
         backgroundColor: backgroundColor,
         title: const Text(
           "COMMENTS",
-          style: TextStyle(
-              color: Colors.black,
-              fontFamily: 'Heuvetica Neue',
-              fontWeight: FontWeight.w700,
-              fontSize: 18),
+          // style:
+          // TextStyle(
+          //     color: Colors.black,
+          //     fontFamily: 'Heuvetica Neue',
+          //     fontWeight: FontWeight.w700,
+          //     fontSize: 18),
         ),
         centerTitle: true,
         elevation: 0,
@@ -104,7 +105,7 @@ class _CommentScreenState extends State<CommentScreen> {
                           labelText: "Comment",
                           labelStyle: TextStyle(
                               fontSize: 20,
-                              color: secondaryColor,
+                              color: Colors.black,
                               fontWeight: FontWeight.w700),
                           enabledBorder: UnderlineInputBorder(
                             borderSide: BorderSide(color: primaryColor),
@@ -122,7 +123,7 @@ class _CommentScreenState extends State<CommentScreen> {
                         },
                         icon: const Icon(
                           Icons.send,
-                          color: secondaryColor,
+                          color: Colors.black,
                         ),
                       ),
                     ),

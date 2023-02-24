@@ -57,17 +57,15 @@ class _PostCardState extends State<PostCard> {
 
               return Container(
                 decoration: BoxDecoration(
-                  // Color(0xFFE0E0E0), // Cinza Claro
-                  // Color(0xFF9E9E9E), // Cinza Escuro
-                  color: randomColor,
+                  color: widget.post.isPublic ? secondaryColor : backgroundColor,
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(width: 2),
                   boxShadow: const [
                     BoxShadow(
                       color: Colors.black,
-                      spreadRadius: 5,
+                      spreadRadius: 1,
                       // blurRadius: 4,
-                      offset: Offset(0, 2), // changes position of shadow
+                      offset: Offset(0, 0), // changes position of shadow
                     ),
                   ],
                 ),
@@ -86,7 +84,7 @@ class _PostCardState extends State<PostCard> {
                                     'PUBLIC POST',
                                     style: TextStyle(
                                       fontSize: 15,
-                                      color: Colors.white,
+                                      color: primaryColor,
                                       letterSpacing: 1,
                                       fontWeight: FontWeight.bold,
                                       fontFamily: 'Helvetica Neue',
@@ -101,7 +99,7 @@ class _PostCardState extends State<PostCard> {
                                   builder: (context) => Dialog(
                                     child: Container(
                                       decoration: BoxDecoration(
-                                        color: Colors.white,
+                                        color: backgroundColor,
                                         border: Border.all(width: 1.5),
                                         boxShadow: const [
                                           BoxShadow(
@@ -255,7 +253,7 @@ class _PostCardState extends State<PostCard> {
                                 );
                               },
                               icon: const Icon(Icons.more_vert),
-                              color: Colors.white,
+                              color: primaryColor,
                             ),
                           ],
                         ),
@@ -266,9 +264,9 @@ class _PostCardState extends State<PostCard> {
                           child: Center(
                             child: Text(
                               widget.post.description,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 fontSize: 12,
-                                color: Colors.white,
+                                color: primaryColor,
                                 letterSpacing: 1,
                                 fontWeight: FontWeight.bold,
                                 fontFamily: 'Helvetica Neue',
@@ -409,7 +407,7 @@ class _PostCardState extends State<PostCard> {
                                 .format(widget.post.datePublished.toDate()),
                             style: const TextStyle(
                               fontSize: 12,
-                              color: Colors.white,
+                              color: primaryColor,
                               letterSpacing: 1,
                               fontWeight: FontWeight.bold,
                               fontFamily: 'Helvetica Neue',

@@ -60,8 +60,8 @@ class _MainScreenState extends State<MainScreen> {
         BottomNavigationBar(
           backgroundColor: backgroundColor,
           type: BottomNavigationBarType.fixed,
-          selectedItemColor: Colors.white,
-          unselectedItemColor: Colors.black,
+          selectedItemColor: primaryColor,
+          unselectedItemColor: Colors.grey,
           selectedLabelStyle: const TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 12,
@@ -115,8 +115,8 @@ class _MainScreenState extends State<MainScreen> {
             final file = await Get.to(() => const CameraScreen());
             createPost(file);
           },
-          backgroundColor: const Color(0xFF2E3030),
-          foregroundColor: Colors.white,
+          backgroundColor: primaryColor,
+          foregroundColor: backgroundColor,
           shape: const CircleBorder(
             side: BorderSide(
               color: Colors.black,

@@ -91,7 +91,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 },
                                 child: CircleAvatar(
                                   radius: 30,
-                                  backgroundColor: secondaryColor,
+                                  backgroundColor: Colors.black,
                                   backgroundImage: NetworkImage(
                                       controller.user['profilePic']),
                                 ),
@@ -122,7 +122,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       style: const TextStyle(
                                         fontSize: 15,
                                         fontWeight: FontWeight.w400,
-                                        color: secondaryColor,
+                                        color: Colors.black,
                                       ),
                                     ),
                                   ),

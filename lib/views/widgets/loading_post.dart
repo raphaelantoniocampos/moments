@@ -78,7 +78,7 @@ class LoadingPost extends StatelessWidget {
                   onPressed: () {},
                   icon: const Icon(
                     Icons.favorite_border,
-                    color: secondaryColor,
+                    color: Colors.black,
                     size: 30,
                   ),
                 ),
@@ -90,7 +90,7 @@ class LoadingPost extends StatelessWidget {
                     children: const [
                       Icon(
                         Icons.mode_comment_outlined,
-                        color: secondaryColor,
+                        color: Colors.black,
                         size: 30,
                       ),
                       SizedBox(
@@ -98,7 +98,7 @@ class LoadingPost extends StatelessWidget {
                       ),
                       Text(
                         '.',
-                        style: TextStyle(color: secondaryColor),
+                        style: TextStyle(color: Colors.black),
                       ),
                     ],
                   ),

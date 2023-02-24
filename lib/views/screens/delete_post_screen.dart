@@ -72,7 +72,6 @@ class _DeletePostScreenState extends State<DeletePostScreen> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(primary: secondaryColor),
                     onPressed: () {
                       Navigator.of(context)..pop()..pop();
                     },

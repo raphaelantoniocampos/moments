@@ -42,21 +42,8 @@ class MomentsApp extends StatelessWidget {
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Moments',
-        theme: ThemeData.light().copyWith(
-          scaffoldBackgroundColor: backgroundColor,
-          primaryColor: primaryColor,
-          appBarTheme: const AppBarTheme(
-              backgroundColor: backgroundColor,
-              elevation: appBarElevation,
-              foregroundColor: primaryColor),
-          elevatedButtonTheme: ElevatedButtonThemeData(
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(primaryColor),
-            ),
-          ),
-          colorScheme:
-              ColorScheme.fromSwatch().copyWith(secondary: primaryColor),
-        ),
+        theme:
+        neoBrutalistTheme,
         home: const Center(child: CircularProgressIndicator()),
       ),
     );

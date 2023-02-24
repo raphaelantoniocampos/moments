@@ -40,7 +40,7 @@ class SearchScreen extends StatelessWidget {
             style: const TextStyle(color: Colors.black),
             decoration: const InputDecoration(
               hintText: 'Search for username',
-              hintStyle: TextStyle(color: secondaryColor),
+              hintStyle: TextStyle(color: Colors.black),
             ),
           ),
           actions: [

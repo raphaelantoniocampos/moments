@@ -390,7 +390,7 @@ class _CameraScreenState extends State<CameraScreen>
                                       const Text(
                                         'Tap for photo, hold for video',
                                         style:
-                                            TextStyle(color: backgroundColor),
+                                            TextStyle(color: Colors.white),
                                       )
                                     ],
                                   ),

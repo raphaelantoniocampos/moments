@@ -63,7 +63,7 @@ class _NewProfilePictureScreenState extends State<NewProfilePictureScreen> {
                       const Center(
                         child: Text(
                           'Take your profile pic',
-                          style: TextStyle(fontSize: 20, color: secondaryColor),
+                          style: TextStyle(fontSize: 20, color: Colors.black),
                         ),
                       ),
                       const SizedBox(
