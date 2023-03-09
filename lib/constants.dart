@@ -8,7 +8,6 @@ import 'package:moments/views/screens/search_screen.dart';
 
 import 'controllers/auth_controller.dart';
 
-
 //FIREBASE
 var firebaseAuth = FirebaseAuth.instance;
 var firebaseStorage = FirebaseStorage.instance;
@@ -27,8 +26,8 @@ const initialCoverPic =
 
 const backgroundColor = Color(0xFFF2F2F2); // branco sujo
 const primaryColor = Color(0xFF333333); // Preto
-const secondaryColor = Color(0xFFF5AEBD); // rosa pastel
-const buttonColor = Color(0xFFF5E1A4); // amarelo suave
+const secondaryColor = Color(0xFFA7D3A2); // verde pastel
+// const buttonColor = Color(0xFFF5E1A4); // amarelo suave
 const appBarElevation = 0.0; // Sem elevação
 
 ThemeData neoBrutalistTheme = ThemeData.light().copyWith(
@@ -40,8 +39,17 @@ ThemeData neoBrutalistTheme = ThemeData.light().copyWith(
     foregroundColor: primaryColor,
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
-    style: ButtonStyle(
-      backgroundColor: MaterialStateProperty.all(buttonColor),
+    style: ElevatedButton.styleFrom(
+      foregroundColor: Colors.white,
+      backgroundColor: primaryColor,
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      side: const BorderSide(
+        color: Colors.black,
+        width: 2.0,
+      ),
     ),
   ),
   textTheme: const TextTheme(
@@ -73,7 +81,10 @@ ThemeData neoBrutalistTheme = ThemeData.light().copyWith(
       color: backgroundColor,
       fontFamily: 'Heuvetica Neue',
     ),
-  ), colorScheme: ColorScheme.fromSwatch().copyWith(secondary: secondaryColor).copyWith(secondary: secondaryColor),
+  ),
+  colorScheme: ColorScheme.fromSwatch()
+      .copyWith(secondary: secondaryColor)
+      .copyWith(secondary: secondaryColor),
 );
 
 // fontFamily: 'Heuvetica Neue',
@@ -116,4 +127,3 @@ List<Widget> pages = [
 const int publicLimit = 1;
 const int hideLimit = 5;
 const int limitFriends = 150;
-

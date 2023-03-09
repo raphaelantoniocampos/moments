@@ -116,14 +116,20 @@ class _LoginScreenState extends State<LoginScreen> {
                 children: [
                   Container(
                     padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: const Text("Don't have an account? "),
+                    child: const Text(
+                      "Don't have an account? ",
+                      style: TextStyle(color: Colors.black),
+                    ),
                   ),
                   GestureDetector(
                     onTap: () => Get.to(() => const SignUpScreen()),
                     child: Container(
                       padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: const Text('Sign up',
-                          style: TextStyle(fontWeight: FontWeight.bold)),
+                      child: const Text(
+                        'Sign up',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, color: Colors.black),
+                      ),
                     ),
                   ),
                 ],

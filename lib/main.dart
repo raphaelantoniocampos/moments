@@ -42,8 +42,7 @@ class MomentsApp extends StatelessWidget {
       child: GetMaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Moments',
-        theme:
-        neoBrutalistTheme,
+        theme: neoBrutalistTheme,
         home: const Center(child: CircularProgressIndicator()),
       ),
     );

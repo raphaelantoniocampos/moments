@@ -110,6 +110,7 @@ class _PostScreenState extends State<PostScreen> {
                                     color: Colors.white,
                                     fontFamily: 'Heuvetica Neue',
                                     letterSpacing: 1,
+                                    fontWeight: FontWeight.bold
                                     // shadows: [
                                     //   Shadow(
                                     //     color: Colors.grey,
