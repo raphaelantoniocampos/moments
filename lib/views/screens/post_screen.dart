@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:moments/views/widgets/like_button.dart';
 
 import '../../constants.dart';
 import '../../models/post.dart';
 import '../widgets/comment_post_button.dart';
 import '../widgets/image_widget.dart';
-import '../widgets/like_post_button.dart';
 import '../widgets/profile_button.dart';
 import '../widgets/video_widget.dart';
 
@@ -117,7 +117,7 @@ class _PostScreenState extends State<PostScreen> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                LikePostButton(post: widget.post),
+                                LikeButton(post: widget.post),
                                 const SizedBox(width: 16),
                                 CommentPostButton(post: widget.post),
                               ],

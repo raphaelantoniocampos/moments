@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:moments/views/screens/user_list_screen.dart';
+import 'package:moments/views/widgets/comment_card.dart';
 import 'package:moments/views/widgets/profile_button.dart';
 
 import 'package:moments/controllers/comment_controller.dart';
@@ -63,7 +64,8 @@ class _CommentScreenState extends State<CommentScreen> {
                                               QuerySnapshot<
                                                   Map<String, dynamic>>>
                                           snapshot) {
-                                    if (snapshot.hasError) {
+                                    if (snapshot.hasError ||
+                                        !snapshot.hasData) {
                                       return const ListTile(
                                         leading: CircleAvatar(
                                           backgroundColor: primaryColor,
@@ -72,80 +74,9 @@ class _CommentScreenState extends State<CommentScreen> {
                                         ),
                                       );
                                     }
-                                    if (!snapshot.hasData) {
-                                      return const ListTile(
-                                        leading: CircleAvatar(
-                                          backgroundColor: primaryColor,
-                                          backgroundImage:
-                                              NetworkImage(initialProfilePic),
-                                        ),
-                                      );
-                                    }
-                                    if (snapshot.connectionState ==
-                                        ConnectionState.done) {
-                                      final user =
-                                          snapshot.data!.docs[0].data();
-                                      return Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 12, vertical: 8),
-                                        child: Column(
-                                          children: [
-                                            ProfileButton(user: user),
-                                            Row(
-                                              children: [
-                                                Container(
-                                                  width: 330,
-                                                  height: 40,
-                                                  alignment:
-                                                      Alignment.centerLeft,
-                                                  child: Text(comment.text),
-                                                ),
-                                                Expanded(
-                                                  child: GestureDetector(
-                                                    onTap: () {
-                                                      commentController
-                                                          .likeComment(
-                                                              comment.id);
-                                                    },
-                                                    onLongPress: () {
-                                                      commentController
-                                                          .updateCommentLikes(
-                                                              comment);
-                                                      Get.to(
-                                                        () => UserListScreen(
-                                                            title:
-                                                                'Comment likes',
-                                                            uidList:
-                                                                commentController
-                                                                    .commentUidList),
-                                                      );
-                                                    },
-                                                    child: Row(
-                                                      children: [
-                                                        Icon(
-                                                          Icons.favorite_border,
-                                                          size: 20,
-                                                          color: comment.likes
-                                                                  .contains(
-                                                                      authController
-                                                                          .user
-                                                                          .uid)
-                                                              ? likeColor
-                                                              : secondaryColor,
-                                                        ),
-                                                        Text(
-                                                            ' ${comment.likes.length}'),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    }
-                                    return const ListTile();
+                                    final user = snapshot.data!.docs[0].data();
+                                    return
+                                      CommentCard(user: user, comment: comment);
                                   });
                             });
                       }),

@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:moments/views/widgets/comment_post_button.dart';
-import 'package:moments/views/widgets/like_post_button.dart';
+import 'package:moments/views/widgets/like_button.dart';
 import 'package:moments/views/widgets/profile_button.dart';
 import 'package:provider/provider.dart';
 import '../../constants.dart';
@@ -262,7 +262,7 @@ class _PostCardState extends State<PostCard> {
                               Padding(
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 5),
-                                child: LikePostButton(post: widget.post),
+                                child: LikeButton(post: widget.post),
                               ),
                               Padding(
                                 padding:
