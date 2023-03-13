@@ -76,11 +76,8 @@ class UserController extends GetxController {
 
   getPostsData() async {
     _postList.value = [];
-    var canView = [true];
-
-    if (_user.value['isFriend'] || _uid.value == authController.user.uid) {
-      canView.add(false);
-    }
+    var canView = [_user.value['isFriend'] || _uid.value == authController.user.uid];
+    
 
     var postsDoc = await firebaseFirestore
         .collection('posts')

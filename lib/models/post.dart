@@ -54,4 +54,30 @@ class Post {
       commentCount: snapshot['commentCount'],
     );
   }
+
+  Post copyWith({
+    String? description,
+    String? uid,
+    String? postId,
+    dynamic datePublished,
+    String? downloadUrl,
+    dynamic likes,
+    bool? isVideo,
+    String? thumbnail,
+    bool? isPublic,
+    int? commentCount,
+  }) {
+    return Post(
+      description: description ?? this.description,
+      uid: uid ?? this.uid,
+      postId: postId ?? this.postId,
+      datePublished: datePublished ?? this.datePublished,
+      downloadUrl: downloadUrl ?? this.downloadUrl,
+      likes: likes ?? this.likes,
+      isVideo: isVideo ?? this.isVideo,
+      thumbnail: thumbnail ?? this.thumbnail,
+      isPublic: isPublic ?? this.isPublic,
+      commentCount: commentCount ?? this.commentCount,
+    );
+  }
 }

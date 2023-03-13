@@ -11,45 +11,32 @@ import '../models/post.dart';
 import '../constants.dart';
 
 class PostController extends GetxController {
-  final Rx<List<Post>> _postList = Rx<List<Post>>([]);
-
-  List<Post> get postList => _postList.value;
+  Future<List<Post>> get postList async {
+    List friends = await getUserFriends();
+    QuerySnapshot query = await firebaseFirestore
+        .collection('posts')
+        .where('uid', whereIn: friends)
+        .orderBy('datePublished', descending: true)
+        .get();
+    List<Post> retValue = [];
+    for (var element in query.docs) {
+      retValue.add(Post.fromSnap(element));
+    }
+    return retValue;
+  }
 
   @override
   void onInit() {
     super.onInit();
-    updateData();
   }
 
-
-  updateData() async {
-    List friends = [''];
-    friends = await getUserFriends();
-    if(friends.isNotEmpty){
-      _postList.bindStream(
-        firebaseFirestore
-            .collection('posts')
-            .where('uid', whereIn: friends)
-            .orderBy('datePublished', descending: true)
-            .snapshots()
-            .map((QuerySnapshot query) {
-          List<Post> retValue = [];
-          for (var element in query.docs) {
-            retValue.add(Post.fromSnap(element));
-          }
-          return retValue;
-        }),
-      );
-    }
-  }
-
-  getUserFriends() async {
+  Future<List<String>> getUserFriends() async {
     DocumentSnapshot userDoc = await firebaseFirestore
         .collection('users')
         .doc(firebaseAuth.currentUser!.uid)
         .get();
     final userData = userDoc.data()! as dynamic;
-    List friends = userData['friends'];
+    List<String> friends = List<String>.from(userData['friends']);
     return friends;
   }
 
@@ -57,8 +44,9 @@ class PostController extends GetxController {
     DocumentSnapshot doc =
         await firebaseFirestore.collection('posts').doc(postId).get();
     var uid = authController.user.uid;
+    var liked = (doc.data()! as dynamic)['likes'].contains(uid);
 
-    if ((doc.data()! as dynamic)['likes'].contains(uid)) {
+    if (liked) {
       await firebaseFirestore.collection('posts').doc(postId).update({
         'likes': FieldValue.arrayRemove([uid])
       });
