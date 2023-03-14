@@ -19,20 +19,30 @@ class CommentCard extends StatelessWidget {
     CommentController(),
   );
 
+
+
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       child: Column(
         children: [
-          ProfileButton(user: user),
+          Stack(
+            children: [
+              ProfileButton(user: user),
+              IconButton(
+                onPressed: () {},
+                icon: Icon(Icons.play_circle),
+              ),
+            ],
+          ),
           Row(
             children: [
               Container(
                 width: 330,
                 height: 40,
                 alignment: Alignment.centerLeft,
-                child: Text(comment.text),
+                child: Text(comment.audioUrl),
               ),
               Expanded(
                 child: LikeButton(

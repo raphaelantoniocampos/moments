@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:moments/models/comment.dart';
 import 'package:uuid/uuid.dart';
@@ -10,7 +13,9 @@ class CommentController extends GetxController {
   List<dynamic> _commentUidList = [];
 
   List<Comment> get comments => _comments.value;
+
   List get commentUidList => _commentUidList;
+
   set setCommentUidList(List<dynamic> value) {
     _commentUidList = value;
   }
@@ -38,25 +43,36 @@ class CommentController extends GetxController {
     }));
   }
 
-  updateCommentLikes(Comment comment){
-    if(comment.likes.isNotEmpty){
+  updateCommentLikes(Comment comment) {
+    if (comment.likes.isNotEmpty) {
       setCommentUidList = [];
     }
-    for (var uid in comment.likes){
+    for (var uid in comment.likes) {
       commentUidList.add(uid);
     }
   }
 
-  postComment(String commentText) async {
+  Future <String> uploadCommentToStorage(String path, String id) async {
+    final Reference reference = firebaseStorage.ref().child('comments').child(id);
+    final TaskSnapshot taskSnapshot = await reference.putFile(File(path));
+    final String downloadUrl = await taskSnapshot.ref.getDownloadURL();
+    return downloadUrl;
+
+  }
+
+  postComment(String path) async {
     try {
-      if (commentText.isNotEmpty) {
+      if (path.isNotEmpty) {
         String id = const Uuid().v1();
+        final String audioUrl = await uploadCommentToStorage(path, id);
         Comment comment = Comment(
             uid: authController.user.uid,
             id: id,
-            text: commentText.trim(),
+            audioUrl: audioUrl,
             datePublished: DateTime.now(),
-            likes: []);
+            likes: [],
+            // duration: duration,
+        );
 
         await firebaseFirestore
             .collection('posts')
@@ -76,6 +92,7 @@ class CommentController extends GetxController {
       }
     } catch (e) {
       Get.snackbar('Error while commenting', e.toString());
+      // print('Error while commenting ${e.toString()}');
     }
   }
 
@@ -108,4 +125,6 @@ class CommentController extends GetxController {
       });
     }
   }
+
+
 }
