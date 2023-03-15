@@ -27,11 +27,6 @@ class CommentScreen extends StatefulWidget {
 }
 
 class _CommentScreenState extends State<CommentScreen> {
-  late FlutterSoundRecorder _recordingSession;
-  final recordingPlayer = AssetsAudioPlayer();
-  late String pathToAudio;
-  bool _playAudio = false;
-  String _timerText = '00:00:00';
 
   // final TextEditingController _commentController = TextEditingController();
   bool isLoading = false;
@@ -40,64 +35,64 @@ class _CommentScreenState extends State<CommentScreen> {
     CommentController(),
   );
 
-  void initializer() async {
-    pathToAudio = 'sdcard/Download/temp.wav';
-    Directory directory = Directory(path.dirname(pathToAudio));
-    if (!directory.existsSync()) {
-      directory.createSync();
-    }
-    _recordingSession = FlutterSoundRecorder();
-    await _recordingSession.openRecorder();
-    await _recordingSession.setSubscriptionDuration(const Duration(
-        milliseconds: 10));
-  }
+  // void initializer() async {
+  //   pathToAudio = 'sdcard/Download/temp.wav';
+  //   Directory directory = Directory(path.dirname(pathToAudio));
+  //   if (!directory.existsSync()) {
+  //     directory.createSync();
+  //   }
+  //   _recordingSession = FlutterSoundRecorder();
+  //   await _recordingSession.openRecorder();
+  //   await _recordingSession.setSubscriptionDuration(const Duration(
+  //       milliseconds: 10));
+  // }
 
   @override
   void initState() {
     commentController.updatePostId(widget.postId);
-    initializer();
-    getPermissionStatus();
+    // initializer();
+    // getPermissionStatus();
     super.initState();
   }
 
-  getPermissionStatus() async {
-    await Permission.microphone.request();
-    await Permission.storage.request();
-    await Permission.manageExternalStorage.request();
-    var status = await Permission.microphone.request();
-    var status2 = await Permission.storage.request();
-    var status3 = await Permission.manageExternalStorage.request();
-    if (status.isGranted) {
-      print(' storage request ${status2.isGranted}');
-      print(' external request ${status3.isGranted}');
-      debugPrint('Microphone Permission: Granted');
-    } else {
-      debugPrint('Microphone Permission: Denied');
-    }
-  }
+  // getPermissionStatus() async {
+  //   await Permission.microphone.request();
+  //   await Permission.storage.request();
+  //   await Permission.manageExternalStorage.request();
+  //   var status = await Permission.microphone.request();
+  //   var status2 = await Permission.storage.request();
+  //   var status3 = await Permission.manageExternalStorage.request();
+  //   if (status.isGranted) {
+  //     print(' storage request ${status2.isGranted}');
+  //     print(' external request ${status3.isGranted}');
+  //     debugPrint('Microphone Permission: Granted');
+  //   } else {
+  //     debugPrint('Microphone Permission: Denied');
+  //   }
+  // }
 
-  Future<void> startRecording() async {
-    _recordingSession.openRecorder();
-    await _recordingSession.startRecorder(
-      toFile: 'path/to/recording.wav',
-      codec: Codec.pcm16WAV,
-    );
-    // StreamSubscription _recorderSubscription =
-    _recordingSession.onProgress!.listen((e) {
-      var date = DateTime.fromMillisecondsSinceEpoch(
-          e.duration.inMilliseconds,
-          isUtc: true);
-      var timeText = DateFormat('mm:ss:SS', 'en_GB').format(date);
-      setState(() {
-        _timerText = timeText.substring(0, 8);
-      });
-    });
-  }
-
-  Future<String?> stopRecording() async {
-    _recordingSession.closeRecorder();
-    return await _recordingSession.stopRecorder();
-  }
+  // Future<void> startRecording() async {
+  //   _recordingSession.openRecorder();
+  //   await _recordingSession.startRecorder(
+  //     toFile: 'path/to/recording.wav',
+  //     codec: Codec.pcm16WAV,
+  //   );
+  //   // StreamSubscription _recorderSubscription =
+  //   _recordingSession.onProgress!.listen((e) {
+  //     var date = DateTime.fromMillisecondsSinceEpoch(
+  //         e.duration.inMilliseconds,
+  //         isUtc: true);
+  //     var timeText = DateFormat('mm:ss:SS', 'en_GB').format(date);
+  //     setState(() {
+  //       _timerText = timeText.substring(0, 8);
+  //     });
+  //   });
+  // }
+  //
+  // Future<String?> stopRecording() async {
+  //   _recordingSession.closeRecorder();
+  //   return await _recordingSession.stopRecorder();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -156,18 +151,18 @@ class _CommentScreenState extends State<CommentScreen> {
                 children: [
                   GestureDetector(
                     onLongPress: () {
-                      startRecording();
+                      commentController.startRecording();
                     },
                     onLongPressUp: (){
-                      stopRecording();
-                      commentController.postComment(pathToAudio);
+                      commentController.stopRecording();
+                      commentController.postComment(widget.postId);
                     },
                     child: Icon(
                       Icons.play_circle,
                       size: 40,
                     ),
                   ),
-                  Text(_timerText)
+                  // Text(_timerText)
                 ],
               ),
               const SizedBox(
