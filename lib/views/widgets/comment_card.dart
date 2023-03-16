@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
 import 'package:moments/views/widgets/like_button.dart';
 import 'package:moments/views/widgets/profile_button.dart';
@@ -20,13 +21,22 @@ class CommentCard extends StatelessWidget {
   );
 
 
-
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       child: Column(
         children: [
+          ListTile(
+            title: Text(comment.audioUrl),
+            subtitle: comment.audioUrl != null
+                ? ElevatedButton(
+                    onPressed: () async {
+                      // await launch(comment.audioUrl);
+                    },
+                    child: Text('Play Audio'))
+                : SizedBox.shrink(),
+          ),
           Stack(
             children: [
               ProfileButton(user: user),

@@ -2,15 +2,14 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_sound/public/flutter_sound_recorder.dart';
 import 'package:get/get.dart';
 import 'package:moments/models/comment.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:uuid/uuid.dart';
-
 import '../constants.dart';
-
-
 
 class CommentController extends GetxController {
   final Rx<List<Comment>> _comments = Rx<List<Comment>>([]);
@@ -31,17 +30,29 @@ class CommentController extends GetxController {
 
   bool get isRecording => _isRecording;
 
-
   String _postId = "";
 
+  Future<bool> getPermissionStatus() async {
+    await Permission.microphone.request();
+    var status = await Permission.microphone.request();
+    if (status.isGranted) {
+      debugPrint('Microphone Permission: Granted');
+      return true;
+    }
+    debugPrint('Microphone Permission: Denied');
+    return false;
+  }
+
   Future<void> startRecording() async {
-    var tempDir = await getTemporaryDirectory();
-    _path = '${tempDir.path}/comment_sound.aac';
-    _recorder = FlutterSoundRecorder();
-    await _recorder!.openRecorder();
-    await _recorder!.startRecorder(toFile: _path);
-    _isRecording = true;
-    update();
+    if (await getPermissionStatus()) {
+      var tempDir = await getTemporaryDirectory();
+      _path = '${tempDir.path}/comment_sound.aac';
+      _recorder = FlutterSoundRecorder();
+      await _recorder!.openRecorder();
+      await _recorder!.startRecorder(toFile: _path);
+      _isRecording = true;
+      update();
+    }
   }
 
   Future<void> stopRecording() async {
@@ -52,22 +63,24 @@ class CommentController extends GetxController {
     await _recorder!.closeRecorder();
   }
 
-  Future <String> uploadCommentToStorage(String path,String postId, String id) async {
-    final Reference reference = firebaseStorage.ref().child('comments').child(postId).child(id);
+  Future<String> uploadCommentToStorage(String path, String postId,
+      String id) async {
+    final Reference reference =
+    firebaseStorage.ref().child('comments').child(postId).child(id);
     final metadata = SettableMetadata(
-        contentType: 'audio/mp3',
-        customMetadata: {'picked-file-path': path});
-    final TaskSnapshot taskSnapshot = await reference.putFile(File(path), metadata);
+        contentType: 'audio/mp3', customMetadata: {'picked-file-path': path});
+    final TaskSnapshot taskSnapshot =
+    await reference.putFile(File(path), metadata);
     final String downloadUrl = await taskSnapshot.ref.getDownloadURL();
     return downloadUrl;
-
   }
 
   postComment(String postId) async {
     try {
       if (_path!.isNotEmpty) {
         String id = const Uuid().v1();
-        final String audioUrl = await uploadCommentToStorage(_path!, postId, id);
+        final String audioUrl =
+        await uploadCommentToStorage(_path!, postId, id);
         Comment comment = Comment(
           uid: authController.user.uid,
           id: id,
@@ -98,6 +111,7 @@ class CommentController extends GetxController {
       // print('Error while commenting ${e.toString()}');
     }
   }
+
 
   updatePostId(String id) {
     _postId = id;
@@ -158,6 +172,4 @@ class CommentController extends GetxController {
       });
     }
   }
-
-
 }

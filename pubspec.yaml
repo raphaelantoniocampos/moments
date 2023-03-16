@@ -55,6 +55,7 @@ dependencies:
   chewie: ^1.4.0
   flutter_sound: ^9.2.13
   assets_audio_player: ^3.0.6
+  audioplayers: ^3.0.1
 
 dev_dependencies:
   flutter_test:
